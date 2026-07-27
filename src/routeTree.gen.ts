@@ -12,7 +12,18 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardUploadRouteImport } from './routes/dashboard.upload'
+import { Route as DashboardTranscriptionRouteImport } from './routes/dashboard.transcription'
+import { Route as DashboardSummaryRouteImport } from './routes/dashboard.summary'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
+import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history'
+import { Route as DashboardHelpRouteImport } from './routes/dashboard.help'
+import { Route as DashboardEvaluationRouteImport } from './routes/dashboard.evaluation'
+import { Route as DashboardDatasetsRouteImport } from './routes/dashboard.datasets'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -29,41 +40,174 @@ const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardUploadRoute = DashboardUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardTranscriptionRoute = DashboardTranscriptionRouteImport.update({
+  id: '/transcription',
+  path: '/transcription',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSummaryRoute = DashboardSummaryRouteImport.update({
+  id: '/summary',
+  path: '/summary',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProfileRoute = DashboardProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardHelpRoute = DashboardHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardEvaluationRoute = DashboardEvaluationRouteImport.update({
+  id: '/evaluation',
+  path: '/evaluation',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardDatasetsRoute = DashboardDatasetsRouteImport.update({
+  id: '/datasets',
+  path: '/datasets',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard/datasets': typeof DashboardDatasetsRoute
+  '/dashboard/evaluation': typeof DashboardEvaluationRoute
+  '/dashboard/help': typeof DashboardHelpRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/summary': typeof DashboardSummaryRoute
+  '/dashboard/transcription': typeof DashboardTranscriptionRoute
+  '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard/datasets': typeof DashboardDatasetsRoute
+  '/dashboard/evaluation': typeof DashboardEvaluationRoute
+  '/dashboard/help': typeof DashboardHelpRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/summary': typeof DashboardSummaryRoute
+  '/dashboard/transcription': typeof DashboardTranscriptionRoute
+  '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard': typeof DashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
+  '/dashboard/datasets': typeof DashboardDatasetsRoute
+  '/dashboard/evaluation': typeof DashboardEvaluationRoute
+  '/dashboard/help': typeof DashboardHelpRoute
+  '/dashboard/history': typeof DashboardHistoryRoute
+  '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/summary': typeof DashboardSummaryRoute
+  '/dashboard/transcription': typeof DashboardTranscriptionRoute
+  '/dashboard/upload': typeof DashboardUploadRoute
+  '/dashboard/': typeof DashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/forgot-password' | '/login' | '/signup'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/dashboard/datasets'
+    | '/dashboard/evaluation'
+    | '/dashboard/help'
+    | '/dashboard/history'
+    | '/dashboard/profile'
+    | '/dashboard/settings'
+    | '/dashboard/summary'
+    | '/dashboard/transcription'
+    | '/dashboard/upload'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/forgot-password' | '/login' | '/signup'
-  id: '__root__' | '/' | '/forgot-password' | '/login' | '/signup'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/dashboard/datasets'
+    | '/dashboard/evaluation'
+    | '/dashboard/help'
+    | '/dashboard/history'
+    | '/dashboard/profile'
+    | '/dashboard/settings'
+    | '/dashboard/summary'
+    | '/dashboard/transcription'
+    | '/dashboard/upload'
+    | '/dashboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/forgot-password'
+    | '/login'
+    | '/signup'
+    | '/dashboard/datasets'
+    | '/dashboard/evaluation'
+    | '/dashboard/help'
+    | '/dashboard/history'
+    | '/dashboard/profile'
+    | '/dashboard/settings'
+    | '/dashboard/summary'
+    | '/dashboard/transcription'
+    | '/dashboard/upload'
+    | '/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
@@ -92,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -99,11 +250,112 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/upload': {
+      id: '/dashboard/upload'
+      path: '/upload'
+      fullPath: '/dashboard/upload'
+      preLoaderRoute: typeof DashboardUploadRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/transcription': {
+      id: '/dashboard/transcription'
+      path: '/transcription'
+      fullPath: '/dashboard/transcription'
+      preLoaderRoute: typeof DashboardTranscriptionRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/summary': {
+      id: '/dashboard/summary'
+      path: '/summary'
+      fullPath: '/dashboard/summary'
+      preLoaderRoute: typeof DashboardSummaryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/profile': {
+      id: '/dashboard/profile'
+      path: '/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/history': {
+      id: '/dashboard/history'
+      path: '/history'
+      fullPath: '/dashboard/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/help': {
+      id: '/dashboard/help'
+      path: '/help'
+      fullPath: '/dashboard/help'
+      preLoaderRoute: typeof DashboardHelpRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/evaluation': {
+      id: '/dashboard/evaluation'
+      path: '/evaluation'
+      fullPath: '/dashboard/evaluation'
+      preLoaderRoute: typeof DashboardEvaluationRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/datasets': {
+      id: '/dashboard/datasets'
+      path: '/datasets'
+      fullPath: '/dashboard/datasets'
+      preLoaderRoute: typeof DashboardDatasetsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
+interface DashboardRouteChildren {
+  DashboardDatasetsRoute: typeof DashboardDatasetsRoute
+  DashboardEvaluationRoute: typeof DashboardEvaluationRoute
+  DashboardHelpRoute: typeof DashboardHelpRoute
+  DashboardHistoryRoute: typeof DashboardHistoryRoute
+  DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardSummaryRoute: typeof DashboardSummaryRoute
+  DashboardTranscriptionRoute: typeof DashboardTranscriptionRoute
+  DashboardUploadRoute: typeof DashboardUploadRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardDatasetsRoute: DashboardDatasetsRoute,
+  DashboardEvaluationRoute: DashboardEvaluationRoute,
+  DashboardHelpRoute: DashboardHelpRoute,
+  DashboardHistoryRoute: DashboardHistoryRoute,
+  DashboardProfileRoute: DashboardProfileRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardSummaryRoute: DashboardSummaryRoute,
+  DashboardTranscriptionRoute: DashboardTranscriptionRoute,
+  DashboardUploadRoute: DashboardUploadRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
@@ -111,3 +363,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
