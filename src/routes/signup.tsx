@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Waves, User, Mail, Lock, ArrowRight } from "lucide-react";
+import { Waves, User, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { Backdrop } from "@/components/site/Backdrop";
 import { OrbSphere } from "@/components/site/OrbSphere";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [{ title: "Create account — AudioInsight AI" }, { name: "description", content: "Create your AudioInsight AI account." }] }),
@@ -18,11 +20,29 @@ export const Route = createFileRoute("/signup")({
 function SignupPage() {
   const nav = useNavigate();
   const [f, setF] = useState({ name: "", email: "", pw: "" });
-  const submit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!f.name || !f.email || f.pw.length < 6) return toast.error("Please complete the form (password 6+ chars).");
+    setLoading(true);
+    const { error, data } = await supabase.auth.signUp({
+      email: f.email,
+      password: f.pw,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+        data: { display_name: f.name },
+      },
+    });
+    setLoading(false);
+    if (error) return toast.error(error.message);
     toast.success("Account created!");
-    nav({ to: "/dashboard" });
+    if (data.session) nav({ to: "/dashboard" });
+    else toast.message("Check your email to confirm your account.");
+  };
+  const google = async () => {
+    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    if (res.error) return toast.error(res.error.message || "Google sign-in failed");
+    if (!res.redirected) nav({ to: "/dashboard" });
   };
   return (
     <div className="relative min-h-screen">
@@ -42,7 +62,14 @@ function SignupPage() {
             <CardContent className="p-8">
               <h2 className="text-xl font-semibold">Create account</h2>
               <p className="mt-1 text-sm text-muted-foreground">Start transcribing in seconds.</p>
-              <form onSubmit={submit} className="mt-6 space-y-4">
+              <Button type="button" variant="outline" onClick={google} className="mt-6 w-full border-white/15 bg-white/5">
+                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.68 4.1-5.5 4.1-3.3 0-6-2.73-6-6.1s2.7-6.1 6-6.1c1.88 0 3.14.8 3.86 1.5l2.63-2.53C16.86 3.4 14.66 2.4 12 2.4 6.9 2.4 2.8 6.5 2.8 11.6s4.1 9.2 9.2 9.2c5.31 0 8.83-3.73 8.83-8.99 0-.6-.06-1.06-.14-1.51H12z"/></svg>
+                Continue with Google
+              </Button>
+              <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
+                <span className="h-px flex-1 bg-white/10" /> or <span className="h-px flex-1 bg-white/10" />
+              </div>
+              <form onSubmit={submit} className="space-y-4">
                 <div className="space-y-2"><Label htmlFor="name">Full name</Label>
                   <div className="relative"><User className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input id="name" value={f.name} onChange={e => setF({ ...f, name: e.target.value })} className="pl-9" placeholder="Ada Lovelace" />
@@ -58,7 +85,10 @@ function SignupPage() {
                     <Input id="pw" type="password" value={f.pw} onChange={e => setF({ ...f, pw: e.target.value })} className="pl-9" placeholder="At least 6 characters" />
                   </div>
                 </div>
-                <Button type="submit" className="w-full bg-gradient-brand text-white shadow-glow">Create account <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                <Button type="submit" disabled={loading} className="w-full bg-gradient-brand text-white shadow-glow">
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  Create account <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </form>
               <p className="mt-6 text-center text-sm text-muted-foreground">Already have an account? <Link to="/login" className="text-foreground hover:underline">Sign in</Link></p>
             </CardContent>
