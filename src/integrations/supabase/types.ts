@@ -14,16 +14,208 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          default_language: string
+          default_model: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          default_language?: string
+          default_model?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          default_language?: string
+          default_model?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      recordings: {
+        Row: {
+          created_at: string
+          duration_sec: number | null
+          error: string | null
+          id: string
+          language: string | null
+          mime: string | null
+          model: string | null
+          name: string
+          size_bytes: number | null
+          status: string
+          storage_path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_sec?: number | null
+          error?: string | null
+          id?: string
+          language?: string | null
+          mime?: string | null
+          model?: string | null
+          name: string
+          size_bytes?: number | null
+          status?: string
+          storage_path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_sec?: number | null
+          error?: string | null
+          id?: string
+          language?: string | null
+          mime?: string | null
+          model?: string | null
+          name?: string
+          size_bytes?: number | null
+          status?: string
+          storage_path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      summaries: {
+        Row: {
+          action_items: Json
+          created_at: string
+          detailed_text: string
+          key_points: Json
+          model: string | null
+          recording_id: string
+          sentiment: Json | null
+          short_text: string
+          topics: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_items?: Json
+          created_at?: string
+          detailed_text?: string
+          key_points?: Json
+          model?: string | null
+          recording_id: string
+          sentiment?: Json | null
+          short_text?: string
+          topics?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_items?: Json
+          created_at?: string
+          detailed_text?: string
+          key_points?: Json
+          model?: string | null
+          recording_id?: string
+          sentiment?: Json | null
+          short_text?: string
+          topics?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "summaries_recording_id_fkey"
+            columns: ["recording_id"]
+            isOneToOne: true
+            referencedRelation: "recordings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transcripts: {
+        Row: {
+          created_at: string
+          latency_ms: number | null
+          model: string | null
+          recording_id: string
+          segments: Json | null
+          text: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          latency_ms?: number | null
+          model?: string | null
+          recording_id: string
+          segments?: Json | null
+          text?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          latency_ms?: number | null
+          model?: string | null
+          recording_id?: string
+          segments?: Json | null
+          text?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transcripts_recording_id_fkey"
+            columns: ["recording_id"]
+            isOneToOne: true
+            referencedRelation: "recordings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +342,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
