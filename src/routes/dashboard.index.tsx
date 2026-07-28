@@ -5,20 +5,58 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Upload, FileText, Sparkles, HardDrive, ArrowUpRight, Waves } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { formatDistanceToNow } from "date-fns";
 
 export const Route = createFileRoute("/dashboard/")({
   component: Overview,
 });
 
-const data = Array.from({ length: 14 }).map((_, i) => ({ d: "D" + (i + 1), uploads: 4 + ((i * 7) % 12), minutes: 20 + ((i * 13) % 60) }));
-const stats = [
-  { label: "Total Uploads", value: "248", icon: Upload, delta: "+12%" },
-  { label: "Total Summaries", value: "231", icon: Sparkles, delta: "+9%" },
-  { label: "Avg Processing", value: "42s", icon: FileText, delta: "-8%" },
-  { label: "Storage Used", value: "3.2 GB", icon: HardDrive, delta: "+180 MB" },
-];
-
 function Overview() {
+  const { data: rows = [] } = useQuery({
+    queryKey: ["recordings"],
+    queryFn: async () => {
+      const r = await (supabase.from("recordings") as any).select("*").order("created_at", { ascending: false });
+      if (r.error) throw r.error;
+      return r.data as any[];
+    },
+  });
+  const { data: summariesCount = 0 } = useQuery({
+    queryKey: ["summariesCount"],
+    queryFn: async () => {
+      const r = await (supabase.from("summaries") as any).select("recording_id", { count: "exact", head: true });
+      return r.count ?? 0;
+    },
+  });
+
+  const totalBytes = rows.reduce((s, r) => s + (r.size_bytes ?? 0), 0);
+  const gb = totalBytes / 1024 / 1024 / 1024;
+  const done = rows.filter((r) => r.status === "done").length;
+
+  // Build 14-day activity
+  const now = new Date();
+  const bucket = new Map<string, { uploads: number; minutes: number }>();
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(now); d.setDate(now.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    bucket.set(key, { uploads: 0, minutes: 0 });
+  }
+  rows.forEach((r) => {
+    const key = new Date(r.created_at).toISOString().slice(0, 10);
+    const b = bucket.get(key); if (!b) return;
+    b.uploads += 1;
+    b.minutes += (r.duration_sec ?? 0) / 60;
+  });
+  const data = Array.from(bucket.entries()).map(([k, v]) => ({ d: k.slice(5), uploads: v.uploads, minutes: Math.round(v.minutes) }));
+
+  const stats = [
+    { label: "Total Uploads", value: rows.length.toString(), icon: Upload, delta: `${done} done` },
+    { label: "Total Summaries", value: summariesCount.toString(), icon: Sparkles, delta: "AI generated" },
+    { label: "Processed", value: `${done}/${rows.length || 0}`, icon: FileText, delta: "recordings" },
+    { label: "Storage Used", value: `${gb < 0.01 ? (totalBytes / 1024 / 1024).toFixed(1) + " MB" : gb.toFixed(2) + " GB"}`, icon: HardDrive, delta: "your files" },
+  ];
+
   return (
     <PageShell
       title="Overview"
@@ -94,15 +132,19 @@ function Overview() {
             <h3 className="text-sm font-semibold">Recent activity</h3>
             <Link to="/dashboard/history" className="text-xs text-muted-foreground hover:text-foreground">View all <ArrowUpRight className="ml-1 inline h-3 w-3" /></Link>
           </div>
-          <ul className="divide-y divide-white/10">
-            {["team-sync-w42.wav","interview-anna.mp3","lecture-cnn.m4a","podcast-ep41.mp3","research-notes.wav"].map((n, i) => (
-              <li key={n} className="flex items-center justify-between py-3 text-sm">
-                <span className="flex items-center gap-2"><Waves className="h-4 w-4 text-muted-foreground" /> {n}</span>
-                <span className="text-xs text-muted-foreground">{["2m","14m","1h","3h","yesterday"][i]}</span>
-                <span className="text-xs text-emerald-300">Ready</span>
-              </li>
-            ))}
-          </ul>
+          {rows.length === 0 ? (
+            <div className="p-4 text-center text-sm text-muted-foreground">No recordings yet. <Link to="/dashboard/upload" className="text-foreground underline">Upload one</Link>.</div>
+          ) : (
+            <ul className="divide-y divide-white/10">
+              {rows.slice(0, 6).map((r) => (
+                <li key={r.id} className="flex items-center justify-between py-3 text-sm">
+                  <Link to="/dashboard/summary" search={{ id: r.id } as any} className="flex items-center gap-2 hover:text-foreground"><Waves className="h-4 w-4 text-muted-foreground" /> {r.name}</Link>
+                  <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(r.created_at), { addSuffix: true })}</span>
+                  <span className={"text-xs " + (r.status === "done" ? "text-emerald-300" : r.status === "failed" ? "text-red-300" : "text-amber-300")}>{r.status}</span>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
     </PageShell>

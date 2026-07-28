@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Waves, Mail, Lock, ArrowRight } from "lucide-react";
+import { Waves, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { Backdrop } from "@/components/site/Backdrop";
 import { OrbSphere } from "@/components/site/OrbSphere";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — AudioInsight AI" }, { name: "description", content: "Sign in to your AudioInsight AI workspace." }] }),
@@ -19,10 +21,27 @@ function LoginPage() {
   const nav = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
-  const submit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !pw) return toast.error("Please fill in both fields.");
-    toast.success("Signed in — welcome back!");
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pw });
+    setLoading(false);
+    if (error) return toast.error(error.message);
+    toast.success("Welcome back!");
+    nav({ to: "/dashboard" });
+  };
+  const google = async () => {
+    setGoogleLoading(true);
+    const res = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    if (res.error) {
+      setGoogleLoading(false);
+      toast.error(res.error.message || "Google sign-in failed");
+      return;
+    }
+    if (res.redirected) return;
     nav({ to: "/dashboard" });
   };
   return (
@@ -44,7 +63,22 @@ function LoginPage() {
             <CardContent className="p-8">
               <h2 className="text-xl font-semibold">Sign in</h2>
               <p className="mt-1 text-sm text-muted-foreground">Use your email and password.</p>
-              <form onSubmit={submit} className="mt-6 space-y-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={google}
+                disabled={googleLoading}
+                className="mt-6 w-full border-white/15 bg-white/5"
+              >
+                {googleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (
+                  <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.68 4.1-5.5 4.1-3.3 0-6-2.73-6-6.1s2.7-6.1 6-6.1c1.88 0 3.14.8 3.86 1.5l2.63-2.53C16.86 3.4 14.66 2.4 12 2.4 6.9 2.4 2.8 6.5 2.8 11.6s4.1 9.2 9.2 9.2c5.31 0 8.83-3.73 8.83-8.99 0-.6-.06-1.06-.14-1.51H12z"/></svg>
+                )}
+                Continue with Google
+              </Button>
+              <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-widest text-muted-foreground">
+                <span className="h-px flex-1 bg-white/10" /> or <span className="h-px flex-1 bg-white/10" />
+              </div>
+              <form onSubmit={submit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative"><Mail className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -59,7 +93,10 @@ function LoginPage() {
                     <Input id="pw" type="password" value={pw} onChange={e => setPw(e.target.value)} className="pl-9" placeholder="••••••••" />
                   </div>
                 </div>
-                <Button type="submit" className="w-full bg-gradient-brand text-white shadow-glow">Continue <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                <Button type="submit" disabled={loading} className="w-full bg-gradient-brand text-white shadow-glow">
+                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                  Continue <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
               </form>
               <p className="mt-6 text-center text-sm text-muted-foreground">Don't have an account? <Link to="/signup" className="text-foreground hover:underline">Sign up</Link></p>
             </CardContent>
