@@ -13,6 +13,7 @@ import { useSession } from "@/lib/use-session";
 import { useServerFn } from "@tanstack/react-start";
 import { transcribeRecording, summarizeRecording } from "@/lib/audio.functions";
 import { useQueryClient } from "@tanstack/react-query";
+import { prepareAudioForUpload } from "@/lib/audio-encode";
 
 export const Route = createFileRoute("/dashboard/upload")({ component: UploadPage });
 
@@ -25,7 +26,9 @@ function UploadPage() {
 
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState<"idle" | "uploading" | "transcribing" | "summarizing" | "done" | "error">("idle");
+  const [phase, setPhase] = useState<
+    "idle" | "preparing" | "uploading" | "transcribing" | "summarizing" | "done" | "error"
+  >("idle");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -38,13 +41,19 @@ function UploadPage() {
   async function run(f: File) {
     if (!user) return;
     setErrorMsg(null);
-    setPhase("uploading");
+    setPhase("preparing");
     setProgress(5);
     try {
-      const ext = (f.name.split(".").pop() || "mp3").toLowerCase();
+      const prepared = await prepareAudioForUpload(f);
+      if (prepared.transcoded) {
+        toast.info("Large file — compressed to 16 kHz mono for transcription.");
+      }
+      setPhase("uploading");
+      setProgress(20);
+      const ext = (prepared.file.name.split(".").pop() || "wav").toLowerCase();
       const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-      const up = await supabase.storage.from("recordings").upload(path, f, {
-        contentType: f.type || "audio/mpeg",
+      const up = await supabase.storage.from("recordings").upload(path, prepared.file, {
+        contentType: prepared.file.type || "audio/mpeg",
         upsert: false,
       });
       if (up.error) throw up.error;
@@ -54,8 +63,9 @@ function UploadPage() {
         user_id: user.id,
         name: f.name,
         storage_path: path,
-        mime: f.type || "audio/mpeg",
-        size_bytes: f.size,
+        mime: prepared.file.type || "audio/mpeg",
+        size_bytes: prepared.file.size,
+        duration_sec: prepared.durationSec || null,
         status: "uploaded",
         model: "openai/gpt-4o-mini-transcribe",
       }).select("id").single();
@@ -89,6 +99,7 @@ function UploadPage() {
   };
 
   const label =
+    phase === "preparing" ? "Preparing audio…" :
     phase === "uploading" ? "Uploading audio…" :
     phase === "transcribing" ? "Transcribing with Whisper…" :
     phase === "summarizing" ? "Generating AI summary…" :
