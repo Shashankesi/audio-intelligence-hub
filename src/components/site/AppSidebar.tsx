@@ -1,6 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Upload, History, BarChart3, Database, UserRound, Settings as SettingsIcon, LifeBuoy, Waves, FileText, Sparkles } from "lucide-react";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { LayoutDashboard, Upload, History, BarChart3, Database, UserRound, Settings as SettingsIcon, LifeBuoy, Waves, FileText, Sparkles, Zap } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useSession } from "@/lib/use-session";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const main = [
   { title: "Overview", url: "/dashboard", icon: LayoutDashboard, exact: true },
@@ -20,6 +24,17 @@ const secondary = [
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const active = (url: string, exact?: boolean) => (exact ? pathname === url : pathname === url || pathname.startsWith(url + "/"));
+  const { user } = useSession();
+  const { data: count = 0 } = useQuery({
+    queryKey: ["recordings-count"],
+    queryFn: async () => {
+      const r = await (supabase.from("recordings") as any).select("id", { count: "exact", head: true });
+      return r.count ?? 0;
+    },
+    enabled: !!user,
+  });
+  const name = (user?.user_metadata?.display_name as string) || user?.email?.split("@")[0] || "You";
+  const initial = (name[0] ?? "U").toUpperCase();
 
   return (
     <Sidebar collapsible="icon">
@@ -61,6 +76,23 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <div className="mx-2 mb-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+          <div className="flex items-center gap-2">
+            <Avatar className="h-8 w-8 border border-white/10">
+              <AvatarFallback className="bg-gradient-brand text-xs font-semibold text-white">{initial}</AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
+              <div className="truncate text-xs font-medium">{name}</div>
+              <div className="truncate text-[10px] text-muted-foreground">{user?.email ?? "—"}</div>
+            </div>
+          </div>
+          <div className="mt-2 flex items-center justify-between rounded-lg bg-white/5 px-2 py-1.5 text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">
+            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-fuchsia-300" /> {count} recordings</span>
+            <span className="rounded bg-emerald-400/15 px-1.5 py-0.5 text-emerald-300">Pro</span>
+          </div>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 }

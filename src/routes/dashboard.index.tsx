@@ -3,17 +3,21 @@ import { PageShell } from "@/components/site/PageShell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Upload, FileText, Sparkles, HardDrive, ArrowUpRight, Waves } from "lucide-react";
+import { Upload, FileText, Sparkles, HardDrive, ArrowUpRight, Waves, Zap, Clock, TrendingUp } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
+import { DashboardScene } from "@/components/site/DashboardScene";
+import { AnimatedCounter } from "@/components/site/AnimatedCounter";
+import { useSession } from "@/lib/use-session";
 
 export const Route = createFileRoute("/dashboard/")({
   component: Overview,
 });
 
 function Overview() {
+  const { user } = useSession();
   const { data: rows = [] } = useQuery({
     queryKey: ["recordings"],
     queryFn: async () => {
@@ -33,6 +37,11 @@ function Overview() {
   const totalBytes = rows.reduce((s, r) => s + (r.size_bytes ?? 0), 0);
   const gb = totalBytes / 1024 / 1024 / 1024;
   const done = rows.filter((r) => r.status === "done").length;
+  const totalMinutes = rows.reduce((s, r) => s + (r.duration_sec ?? 0), 0) / 60;
+
+  const hour = new Date().getHours();
+  const greeting = hour < 5 ? "Working late" : hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const name = (user?.user_metadata?.display_name as string) || (user?.email?.split("@")[0] ?? "there");
 
   // Build 14-day activity
   const now = new Date();
@@ -51,29 +60,67 @@ function Overview() {
   const data = Array.from(bucket.entries()).map(([k, v]) => ({ d: k.slice(5), uploads: v.uploads, minutes: Math.round(v.minutes) }));
 
   const stats = [
-    { label: "Total Uploads", value: rows.length.toString(), icon: Upload, delta: `${done} done` },
-    { label: "Total Summaries", value: summariesCount.toString(), icon: Sparkles, delta: "AI generated" },
-    { label: "Processed", value: `${done}/${rows.length || 0}`, icon: FileText, delta: "recordings" },
-    { label: "Storage Used", value: `${gb < 0.01 ? (totalBytes / 1024 / 1024).toFixed(1) + " MB" : gb.toFixed(2) + " GB"}`, icon: HardDrive, delta: "your files" },
+    { label: "Total Uploads", value: rows.length, icon: Upload, delta: `${done} processed`, tint: "from-fuchsia-400/30 to-purple-500/10" },
+    { label: "Summaries", value: summariesCount, icon: Sparkles, delta: "AI generated", tint: "from-cyan-400/30 to-sky-500/10" },
+    { label: "Minutes Processed", value: Math.round(totalMinutes), icon: Clock, delta: "of audio", tint: "from-emerald-400/30 to-teal-500/10" },
+    { label: "Storage Used", value: gb < 0.01 ? totalBytes / 1024 / 1024 : gb, icon: HardDrive, delta: gb < 0.01 ? "MB" : "GB", tint: "from-amber-400/30 to-orange-500/10", isFloat: true },
   ];
 
   return (
     <PageShell
-      title="Overview"
-      description="Your workspace at a glance."
+      title={`${greeting}, ${name}`}
+      description="Your intelligence workspace at a glance. Press ⌘K to jump anywhere."
       actions={<Button asChild className="bg-gradient-brand text-white shadow-glow"><Link to="/dashboard/upload"><Upload className="mr-2 h-4 w-4" /> New upload</Link></Button>}
     >
+      <div className="mb-6 grid gap-4 lg:grid-cols-3">
+        <Card className="glass border-white/10 lg:col-span-2 overflow-hidden">
+          <CardContent className="relative p-0">
+            <DashboardScene className="!h-56 !rounded-none !border-0" />
+            <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground"><Zap className="h-3 w-3" /> Live workspace</div>
+              <div className="mt-1 text-xl font-semibold">Ready to turn sound into structured insight.</div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="glass border-white/10">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
+              <span>Momentum</span><TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="mt-3 text-4xl font-bold text-gradient">
+              <AnimatedCounter value={done} />
+            </div>
+            <div className="text-xs text-muted-foreground">completed recordings</div>
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/5">
+              <motion.div
+                className="h-full bg-gradient-brand"
+                initial={{ width: 0 }}
+                animate={{ width: `${rows.length ? (done / rows.length) * 100 : 0}%` }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+              />
+            </div>
+            <div className="mt-2 flex justify-between text-[11px] text-muted-foreground">
+              <span>{rows.length - done} in progress</span>
+              <span>{rows.length ? Math.round((done / rows.length) * 100) : 0}% done</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-            <Card className="glass border-white/10">
-              <CardContent className="p-5">
+            <Card className="group glass relative overflow-hidden border-white/10 transition hover:-translate-y-0.5 hover:border-white/20 hover:shadow-glow">
+              <div className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br ${s.tint} opacity-70 blur-2xl transition group-hover:opacity-100`} />
+              <CardContent className="relative p-5">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                   <span className="uppercase tracking-widest">{s.label}</span>
                   <s.icon className="h-4 w-4" />
                 </div>
                 <div className="mt-3 flex items-end justify-between">
-                  <div className="text-2xl font-bold">{s.value}</div>
+                  <div className="text-2xl font-bold">
+                    <AnimatedCounter value={s.value} format={s.isFloat ? (n) => n.toFixed(2) : undefined} />
+                  </div>
                   <span className="text-xs text-emerald-300">{s.delta}</span>
                 </div>
               </CardContent>
