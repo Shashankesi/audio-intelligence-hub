@@ -211,7 +211,13 @@ export const deleteRecording = createServerFn({ method: "POST" })
       .eq("id", data.recordingId)
       .single();
     if (rec?.storage_path) {
-      await context.supabase.storage.from("recordings").remove([rec.storage_path]);
+      if (/\.[a-z0-9]{2,5}$/i.test(rec.storage_path)) {
+        await context.supabase.storage.from("recordings").remove([rec.storage_path]);
+      } else {
+        const listed = await context.supabase.storage.from("recordings").list(rec.storage_path, { limit: 200 });
+        const paths = (listed.data ?? []).map((o) => `${rec.storage_path}/${o.name}`);
+        if (paths.length) await context.supabase.storage.from("recordings").remove(paths);
+      }
     }
     const { error } = await context.supabase.from("recordings").delete().eq("id", data.recordingId);
     if (error) throw error;
