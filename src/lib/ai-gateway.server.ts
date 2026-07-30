@@ -17,13 +17,6 @@ export async function transcribeAudio(params: {
   filename: string;
   model?: string;
   language?: string;
-}): Promise<{ text: string }>;
-export async function transcribeAudio(params: {
-  bytes: ArrayBuffer;
-  mime: string;
-  filename: string;
-  model?: string;
-  language?: string;
 }): Promise<{ text: string }> {
   const key = process.env.LOVABLE_API_KEY;
   if (!key) throw new Error("LOVABLE_API_KEY missing");
