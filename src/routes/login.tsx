@@ -8,9 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Waves, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { Backdrop } from "@/components/site/Backdrop";
-import { OrbSphere } from "@/components/site/OrbSphere";
+import { ClientOnly } from "@/components/site/ClientOnly";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
+import { lazy, Suspense } from "react";
+
+const AuthScene = lazy(() => import("@/components/site/AuthScene"));
 
 export const Route = createFileRoute("/login")({
   head: () => ({ meta: [{ title: "Sign in — AudioInsight AI" }, { name: "description", content: "Sign in to your AudioInsight AI workspace." }] }),
@@ -47,19 +50,33 @@ function LoginPage() {
   return (
     <div className="relative min-h-screen">
       <Backdrop />
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <ClientOnly>
+          <Suspense fallback={null}>
+            <AuthScene />
+          </Suspense>
+        </ClientOnly>
+      </div>
       <div className="mx-auto grid min-h-screen max-w-6xl gap-10 px-6 py-10 md:grid-cols-2 md:items-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="hidden md:block">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 hidden md:block">
           <div className="mb-6 flex items-center gap-2">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand shadow-glow"><Waves className="h-5 w-5 text-white" /></span>
             <span className="text-lg font-semibold">AudioInsight AI</span>
           </div>
           <h1 className="text-3xl font-bold md:text-4xl">Welcome back.<br /><span className="text-gradient">Your audio is waiting.</span></h1>
           <p className="mt-3 max-w-md text-muted-foreground">Pick up where you left off — transcripts, summaries and decisions in one place.</p>
-          <div className="mt-10"><OrbSphere /></div>
+          <dl className="mt-10 grid max-w-md grid-cols-3 gap-3">
+            {[["60 min", "max meeting"], ["<2 min", "avg turnaround"], ["12+", "languages"]].map(([v, l]) => (
+              <div key={l} className="glass rounded-xl border border-white/10 px-3 py-4 text-center">
+                <dt className="text-lg font-semibold text-gradient">{v}</dt>
+                <dd className="mt-1 text-[11px] uppercase tracking-wide text-muted-foreground">{l}</dd>
+              </div>
+            ))}
+          </dl>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Card className="glass border-white/10">
+        <motion.div initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.1, type: "spring", stiffness: 90, damping: 16 }} className="relative z-10">
+          <Card className="glass border-white/10 shadow-glow">
             <CardContent className="p-8">
               <h2 className="text-xl font-semibold">Sign in</h2>
               <p className="mt-1 text-sm text-muted-foreground">Use your email and password.</p>

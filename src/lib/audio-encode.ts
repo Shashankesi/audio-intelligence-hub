@@ -76,48 +76,64 @@ function encodeWav16(pcm: Float32Array, sampleRate: number): Blob {
   return new Blob([buffer], { type: "audio/wav" });
 }
 
+/** Chunk length in seconds. 8 min of 16 kHz mono 16-bit WAV ≈ 15 MB. */
+const CHUNK_SEC = 480;
+/** Hard ceiling on recording length. */
+export const MAX_DURATION_SEC = 60 * 60 + 120; // 1 hour (+2 min grace)
+
 export type PreparedAudio = {
-  file: File;
+  /** One or more chunk files, in playback order. */
+  files: File[];
   durationSec: number;
   transcoded: boolean;
 };
 
 /**
- * Ensure the audio is small enough for the Gateway. If the raw file already
- * fits, upload as-is. Otherwise decode → mono → 16 kHz → WAV. Throws a
- * friendly Error if the result would still exceed the Gateway cap.
+ * Prepare audio for upload + transcription. Small short files upload as-is.
+ * Anything larger is decoded → mono → 16 kHz → split into ~8 minute WAV
+ * chunks, so recordings up to a full hour go through the Gateway's per-request
+ * size cap. Throws a friendly Error past the one-hour ceiling.
  */
 export async function prepareAudioForUpload(file: File): Promise<PreparedAudio> {
-  if (file.size <= GATEWAY_MAX_BYTES) {
-    return { file, durationSec: 0, transcoded: false };
-  }
-
-  let buf: AudioBuffer;
+  let buf: AudioBuffer | null = null;
   try {
     buf = await decodeAudioFile(file);
   } catch {
+    buf = null;
+  }
+
+  if (!buf) {
+    if (file.size <= GATEWAY_MAX_BYTES) return { files: [file], durationSec: 0, transcoded: false };
     throw new Error(
       "This file is over 24 MB and the browser couldn't decode it to shrink it. " +
-        "Please upload a shorter clip or export a smaller MP3/WAV.",
+        "Please re-export it as MP3 or WAV and try again.",
     );
+  }
+
+  if (buf.duration > MAX_DURATION_SEC) {
+    const minutes = Math.round(buf.duration / 60);
+    throw new Error(`Recording is ~${minutes} min long. Maximum supported length is 60 minutes.`);
+  }
+
+  // Short enough and already small: upload untouched for best fidelity.
+  if (file.size <= GATEWAY_MAX_BYTES && buf.duration <= CHUNK_SEC) {
+    return { files: [file], durationSec: buf.duration, transcoded: false };
   }
 
   const mono = downmixToMono(buf);
   const pcm = resampleLinear(mono, buf.sampleRate, TARGET_SR);
-  const wav = encodeWav16(pcm, TARGET_SR);
 
-  if (wav.size > GATEWAY_MAX_BYTES) {
-    const minutes = Math.round(buf.duration / 60);
-    throw new Error(
-      `Recording is ~${minutes} min long. Please split it into clips under ~25 minutes ` +
-        `each so it fits the transcription limit.`,
+  const base = file.name.replace(/\.[^.]+$/, "");
+  const samplesPerChunk = CHUNK_SEC * TARGET_SR;
+  const files: File[] = [];
+  for (let start = 0, i = 0; start < pcm.length; start += samplesPerChunk, i++) {
+    const slice = pcm.subarray(start, Math.min(start + samplesPerChunk, pcm.length));
+    const wav = encodeWav16(slice, TARGET_SR);
+    if (wav.size > GATEWAY_MAX_BYTES) throw new Error("Audio chunk too large to transcribe.");
+    files.push(
+      new File([wav], `${String(i).padStart(3, "0")}-${base}.wav`, { type: "audio/wav" }),
     );
   }
 
-  const base = file.name.replace(/\.[^.]+$/, "");
-  return {
-    file: new File([wav], `${base}.wav`, { type: "audio/wav" }),
-    durationSec: buf.duration,
-    transcoded: true,
-  };
+  return { files, durationSec: buf.duration, transcoded: true };
 }

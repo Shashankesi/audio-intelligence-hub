@@ -46,25 +46,41 @@ function UploadPage() {
     try {
       const prepared = await prepareAudioForUpload(f);
       if (prepared.transcoded) {
-        toast.info("Large file — compressed to 16 kHz mono for transcription.");
+        toast.info(
+          prepared.files.length > 1
+            ? `Long recording — split into ${prepared.files.length} parts for transcription.`
+            : "Large file — optimized to 16 kHz mono for transcription.",
+        );
       }
       setPhase("uploading");
       setProgress(20);
-      const ext = (prepared.file.name.split(".").pop() || "wav").toLowerCase();
-      const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
-      const up = await supabase.storage.from("recordings").upload(path, prepared.file, {
-        contentType: prepared.file.type || "audio/mpeg",
-        upsert: false,
-      });
-      if (up.error) throw up.error;
+      const single = prepared.files.length === 1;
+      const folder = `${user.id}/${crypto.randomUUID()}`;
+      let path = folder;
+      let totalBytes = 0;
+      for (let i = 0; i < prepared.files.length; i++) {
+        const part = prepared.files[i];
+        totalBytes += part.size;
+        const ext = (part.name.split(".").pop() || "wav").toLowerCase();
+        const objectPath = single
+          ? `${folder}.${ext}`
+          : `${folder}/${String(i).padStart(3, "0")}.${ext}`;
+        if (single) path = objectPath;
+        const up = await supabase.storage.from("recordings").upload(objectPath, part, {
+          contentType: part.type || "audio/mpeg",
+          upsert: false,
+        });
+        if (up.error) throw up.error;
+        setProgress(20 + Math.round(((i + 1) / prepared.files.length) * 15));
+      }
       setProgress(35);
 
       const ins = await (supabase.from("recordings") as any).insert({
         user_id: user.id,
         name: f.name,
         storage_path: path,
-        mime: prepared.file.type || "audio/mpeg",
-        size_bytes: prepared.file.size,
+        mime: prepared.files[0].type || "audio/mpeg",
+        size_bytes: totalBytes,
         duration_sec: prepared.durationSec || null,
         status: "uploaded",
         model: "openai/gpt-4o-mini-transcribe",
@@ -120,7 +136,7 @@ function UploadPage() {
               <input ref={inputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setPhase("idle"); setProgress(0); setFile(f); } }} />
               <UploadCloud className="mx-auto h-10 w-10 text-muted-foreground" />
               <p className="mt-3 text-sm">Drag & drop or <span className="text-gradient font-semibold">click to browse</span></p>
-              <p className="mt-1 text-xs text-muted-foreground">MP3, WAV, M4A, FLAC — up to 25 MB per file</p>
+              <p className="mt-1 text-xs text-muted-foreground">MP3, WAV, M4A, FLAC — meetings up to 60 minutes</p>
             </div>
 
             <AnimatePresence>
@@ -167,7 +183,7 @@ function UploadPage() {
             <ul className="mt-2 space-y-2 text-xs text-muted-foreground">
               <li>• Cleaner audio → better transcripts.</li>
               <li>• Mono at 16kHz is optimal for Whisper.</li>
-              <li>• Keep clips under 25 MB for now.</li>
+              <li>• Long meetings are auto-split into parts — up to 60 min.</li>
             </ul>
           </CardContent>
         </Card>
