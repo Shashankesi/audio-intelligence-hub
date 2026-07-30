@@ -136,7 +136,7 @@ function UploadPage() {
               <input ref={inputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setPhase("idle"); setProgress(0); setFile(f); } }} />
               <UploadCloud className="mx-auto h-10 w-10 text-muted-foreground" />
               <p className="mt-3 text-sm">Drag & drop or <span className="text-gradient font-semibold">click to browse</span></p>
-              <p className="mt-1 text-xs text-muted-foreground">MP3, WAV, M4A, FLAC — up to 25 MB per file</p>
+              <p className="mt-1 text-xs text-muted-foreground">MP3, WAV, M4A, FLAC — meetings up to 60 minutes</p>
             </div>
 
             <AnimatePresence>
@@ -183,7 +183,7 @@ function UploadPage() {
             <ul className="mt-2 space-y-2 text-xs text-muted-foreground">
               <li>• Cleaner audio → better transcripts.</li>
               <li>• Mono at 16kHz is optimal for Whisper.</li>
-              <li>• Keep clips under 25 MB for now.</li>
+              <li>• Long meetings are auto-split into parts — up to 60 min.</li>
             </ul>
           </CardContent>
         </Card>
