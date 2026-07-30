@@ -8,9 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Waves, User, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { Backdrop } from "@/components/site/Backdrop";
-import { OrbSphere } from "@/components/site/OrbSphere";
+import { ClientOnly } from "@/components/site/ClientOnly";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
+import { lazy, Suspense } from "react";
+
+const AuthScene = lazy(() => import("@/components/site/AuthScene"));
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [{ title: "Create account — AudioInsight AI" }, { name: "description", content: "Create your AudioInsight AI account." }] }),
@@ -47,18 +50,35 @@ function SignupPage() {
   return (
     <div className="relative min-h-screen">
       <Backdrop />
+      <div className="pointer-events-none absolute inset-0 opacity-60">
+        <ClientOnly>
+          <Suspense fallback={null}>
+            <AuthScene />
+          </Suspense>
+        </ClientOnly>
+      </div>
       <div className="mx-auto grid min-h-screen max-w-6xl gap-10 px-6 py-10 md:grid-cols-2 md:items-center">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="hidden md:block">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative z-10 hidden md:block">
           <div className="mb-6 flex items-center gap-2">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand shadow-glow"><Waves className="h-5 w-5 text-white" /></span>
             <span className="text-lg font-semibold">AudioInsight AI</span>
           </div>
           <h1 className="text-3xl font-bold md:text-4xl">Turn any recording into <span className="text-gradient">structured intelligence.</span></h1>
-          <p className="mt-3 max-w-md text-muted-foreground">Free while in research. Bring your Groq API key or use our shared pool.</p>
-          <div className="mt-10"><OrbSphere /></div>
+          <p className="mt-3 max-w-md text-muted-foreground">Upload up to 60 minutes of audio and get transcripts, action items and sentiment in minutes.</p>
+          <ul className="mt-10 max-w-md space-y-3">
+            {[
+              "Whisper-grade transcription with speaker-friendly formatting",
+              "Executive summaries, key points and owned action items",
+              "Searchable history, exports and evaluation dashboards",
+            ].map((t) => (
+              <li key={t} className="glass flex items-start gap-3 rounded-xl border border-white/10 px-4 py-3 text-sm text-muted-foreground">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-brand" />{t}
+              </li>
+            ))}
+          </ul>
         </motion.div>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Card className="glass border-white/10">
+        <motion.div initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.1, type: "spring", stiffness: 90, damping: 16 }} className="relative z-10">
+          <Card className="glass border-white/10 shadow-glow">
             <CardContent className="p-8">
               <h2 className="text-xl font-semibold">Create account</h2>
               <p className="mt-1 text-sm text-muted-foreground">Start transcribing in seconds.</p>
