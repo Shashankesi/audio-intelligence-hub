@@ -97,7 +97,16 @@ function SummaryPage() {
         </TabsList>
 
         <TabsContent value="short" className="mt-6">
-          <Card className="glass border-white/10"><CardContent className="p-6 text-sm leading-relaxed">{data.short_text}</CardContent></Card>
+          <Card className="glass relative overflow-hidden border-white/10">
+            <div className="absolute inset-x-0 top-0 h-24 bg-gradient-brand opacity-20 blur-3xl" />
+            <CardContent className="relative p-6 md:p-8">
+              <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">Executive summary</div>
+              <p className="text-base leading-relaxed md:text-lg">{data.short_text}</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {(data.topics ?? []).slice(0, 6).map((t: string) => <Badge key={t} className="bg-white/10 text-foreground">{t}</Badge>)}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="detailed" className="mt-6">
           <Card className="glass border-white/10"><CardContent className="p-6 md:p-8">
