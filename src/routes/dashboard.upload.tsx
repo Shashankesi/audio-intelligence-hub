@@ -12,7 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/lib/use-session";
 import { useServerFn } from "@tanstack/react-start";
 import { transcribeRecording, summarizeRecording } from "@/lib/audio.functions";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { prepareAudioForUpload } from "@/lib/audio-encode";
 
 export const Route = createFileRoute("/dashboard/upload")({ component: UploadPage });
@@ -23,6 +23,12 @@ function UploadPage() {
   const qc = useQueryClient();
   const transcribe = useServerFn(transcribeRecording);
   const summarize = useServerFn(summarizeRecording);
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile", user?.id],
+    enabled: !!user,
+    queryFn: async () => (await (supabase.from("profiles") as any).select("*").eq("id", user!.id).maybeSingle()).data,
+  });
 
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState(0);
@@ -83,7 +89,8 @@ function UploadPage() {
         size_bytes: totalBytes,
         duration_sec: prepared.durationSec || null,
         status: "uploaded",
-        model: "openai/gpt-4o-mini-transcribe",
+        model: profile?.default_model || "openai/gpt-4o-mini-transcribe",
+        language: profile?.default_language && profile.default_language !== "auto" ? profile.default_language : null,
       }).select("id").single();
       if (ins.error) throw ins.error;
       const recordingId = ins.data.id as string;
