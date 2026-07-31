@@ -150,15 +150,25 @@ export const summarizeRecording = createServerFn({ method: "POST" })
       .update({ status: "summarizing" })
       .eq("id", data.recordingId);
 
-    const prompt = `You are an expert meeting analyst. Analyze the transcript below and produce a structured summary as JSON.
+    const prompt = `You are a senior meeting analyst. Read the ENTIRE transcript below and produce a rich, faithful, structured analysis as JSON. Never invent facts that are not supported by the transcript; if something is unclear, say so explicitly.
 
-Rules:
-- short_text: 2-3 sentence executive summary.
-- detailed_text: 1-3 paragraphs covering context, discussion, decisions.
-- key_points: 3-7 bullet strings.
-- action_items: concrete tasks; owner is a name if mentioned, else null.
-- topics: 3-8 short topic tags.
-- sentiment.label one of positive|neutral|negative|mixed; score in [-1,1]; rationale one sentence.
+Field rules:
+- short_text: a crisp executive summary of 3-4 sentences answering: what was this about, what was decided, what happens next.
+- detailed_text: a THOROUGH multi-section write-up in Markdown, 400-900 words, using exactly these headings (omit a section only if the transcript truly has nothing for it):
+  ## Overview
+  ## Discussion by Topic
+  (a "### <topic>" subsection per major topic, each 2-5 sentences with concrete details: names, numbers, dates, tools, arguments raised on each side)
+  ## Decisions Made
+  (bulleted, each with the reasoning behind it)
+  ## Risks, Blockers & Open Questions
+  ## Next Steps
+  Write in clear, neutral prose. Quote short phrases from the transcript when a wording matters. Preserve all figures, deadlines and named entities exactly as spoken.
+- key_points: 6-10 self-contained, information-dense bullets (not vague headlines — include the actual fact or outcome).
+- action_items: every concrete commitment or task. text = imperative task including any deadline mentioned; owner = the person's name if identifiable, else null. Return an empty array only when there genuinely are none.
+- topics: 4-8 short tag-style topics (1-3 words each).
+- sentiment: label one of positive|neutral|negative|mixed; score in [-1,1]; rationale = one sentence citing what drove the tone.
+
+If the transcript is short or partly unintelligible, still fill every field, and note the limitation inside detailed_text.
 
 TRANSCRIPT:
 """${t.text.slice(0, 180_000)}"""`;
