@@ -191,3 +191,42 @@
 @utility animate-waveform {
   animation: waveform 1.1s ease-in-out infinite;
   }
+
+/* Rendered markdown for AI summaries */
+.prose-summary h2 {
+  margin-top: 1.6rem;
+  margin-bottom: 0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid oklch(1 0 0 / 0.08);
+}
+.prose-summary h2:first-child { margin-top: 0; }
+.prose-summary h3 {
+  margin-top: 1.1rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: oklch(0.82 0.14 295);
+}
+.prose-summary p { margin-bottom: 0.85rem; color: oklch(1 0 0 / 0.78); }
+.prose-summary ul, .prose-summary ol { margin: 0.5rem 0 1rem 1.1rem; }
+.prose-summary li { margin-bottom: 0.35rem; color: oklch(1 0 0 / 0.78); list-style: disc; }
+.prose-summary ol > li { list-style: decimal; }
+.prose-summary strong { color: oklch(1 0 0 / 0.95); font-weight: 600; }
+.prose-summary blockquote {
+  border-left: 2px solid oklch(0.72 0.19 295);
+  padding-left: 0.85rem;
+  font-style: italic;
+  color: oklch(1 0 0 / 0.7);
+  margin: 0.75rem 0;
+}
+.prose-summary code {
+  background: oklch(1 0 0 / 0.08);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.35rem;
+  font-size: 0.8em;
+}
+.prose-summary table { width: 100%; font-size: 0.8rem; border-collapse: collapse; margin: 0.75rem 0; }
+.prose-summary th, .prose-summary td { border: 1px solid oklch(1 0 0 / 0.1); padding: 0.4rem 0.6rem; text-align: left; }
