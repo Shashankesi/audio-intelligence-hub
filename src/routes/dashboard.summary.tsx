@@ -11,10 +11,22 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { summarizeRecording } from "@/lib/audio.functions";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export const Route = createFileRoute("/dashboard/summary")({
   validateSearch: z.object({ id: z.string().optional() }),
   component: SummaryPage,
+  head: () => ({
+    meta: [
+      { title: "Meeting Summary — AudioInsight AI" },
+      { name: "description", content: "Executive summary, decisions, action items, topics and sentiment extracted from your meeting audio." },
+      { property: "og:title", content: "Meeting Summary — AudioInsight AI" },
+      { property: "og:description", content: "AI-generated meeting insights: decisions, action items and sentiment." },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
 });
 
 function SummaryPage() {
@@ -88,11 +100,22 @@ function SummaryPage() {
           <Card className="glass border-white/10"><CardContent className="p-6 text-sm leading-relaxed">{data.short_text}</CardContent></Card>
         </TabsContent>
         <TabsContent value="detailed" className="mt-6">
-          <Card className="glass border-white/10"><CardContent className="p-6 whitespace-pre-wrap text-sm leading-relaxed">{data.detailed_text}</CardContent></Card>
+          <Card className="glass border-white/10"><CardContent className="p-6 md:p-8">
+            <div className="prose-summary max-w-none text-sm leading-relaxed">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.detailed_text || ""}</ReactMarkdown>
+            </div>
+          </CardContent></Card>
         </TabsContent>
         <TabsContent value="bullets" className="mt-6">
-          <Card className="glass border-white/10"><CardContent className="p-6 text-sm text-muted-foreground">
-            <ul className="space-y-1.5">{(data.key_points ?? []).map((k: string) => <li key={k}>• {k}</li>)}</ul>
+          <Card className="glass border-white/10"><CardContent className="p-6">
+            <ul className="grid gap-2.5 md:grid-cols-2">
+              {(data.key_points ?? []).map((k: string, i: number) => (
+                <li key={i} className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-gradient-brand text-[10px] font-bold text-white">{i + 1}</span>
+                  <span>{k}</span>
+                </li>
+              ))}
+            </ul>
           </CardContent></Card>
         </TabsContent>
         <TabsContent value="actions" className="mt-6">
