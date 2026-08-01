@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Share2, RefreshCw, FileText } from "lucide-react";
+import { Copy, Share2, RefreshCw, FileText, Download, ListChecks, Tags, Gauge } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +13,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { summarizeRecording } from "@/lib/audio.functions";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { downloadSummaryPdf } from "@/lib/summary-pdf";
+import { motion } from "framer-motion";
 
 export const Route = createFileRoute("/dashboard/summary")({
   validateSearch: z.object({ id: z.string().optional() }),
@@ -60,6 +62,25 @@ function SummaryPage() {
 
   const copy = () => { navigator.clipboard.writeText(data?.detailed_text || data?.short_text || ""); toast.success("Copied"); };
 
+  const exportPdf = () => {
+    if (!data) return;
+    try {
+      downloadSummaryPdf({
+        title: data?.recordings?.name || "Meeting Summary",
+        createdAt: data?.created_at,
+        short_text: data?.short_text,
+        detailed_text: data?.detailed_text,
+        key_points: data?.key_points ?? [],
+        action_items: data?.action_items ?? [],
+        topics: data?.topics ?? [],
+        sentiment: data?.sentiment ?? null,
+      });
+      toast.success("PDF downloaded");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not build the PDF");
+    }
+  };
+
   const sentiment = data?.sentiment as { label: string; score: number; rationale: string } | undefined;
   const s = sentiment?.score ?? 0;
   const positive = Math.max(0, Math.round(s * 100));
@@ -75,6 +96,7 @@ function SummaryPage() {
           <Button variant="outline" className="border-white/15 bg-white/5" asChild><Link to="/dashboard/transcription" search={{ id } as any}><FileText className="mr-2 h-4 w-4" /> Transcript</Link></Button>
           <Button variant="outline" className="border-white/15 bg-white/5" onClick={copy}><Copy className="mr-2 h-4 w-4" /> Copy</Button>
           <Button variant="outline" className="border-white/15 bg-white/5" onClick={() => { navigator.clipboard.writeText(window.location.href); toast.success("Link copied"); }}><Share2 className="mr-2 h-4 w-4" /> Share</Button>
+          <Button variant="outline" disabled={!data} className="border-white/15 bg-white/5" onClick={exportPdf}><Download className="mr-2 h-4 w-4" /> PDF</Button>
           <Button disabled={regen.isPending} className="bg-gradient-brand text-white shadow-glow" onClick={() => regen.mutate()}><RefreshCw className={"mr-2 h-4 w-4 " + (regen.isPending ? "animate-spin" : "")} /> Regenerate</Button>
         </div>
       }
@@ -86,6 +108,26 @@ function SummaryPage() {
           No summary yet. <Button size="sm" variant="link" onClick={() => regen.mutate()} className="px-1 text-foreground">Generate now</Button>
         </CardContent></Card>
       ) : (
+      <>
+      <div className="mb-6 grid gap-3 sm:grid-cols-3">
+        {[
+          { icon: ListChecks, label: "Action items", value: (data.action_items ?? []).length },
+          { icon: Tags, label: "Topics", value: (data.topics ?? []).length },
+          { icon: Gauge, label: "Sentiment", value: sentiment?.label ?? "—" },
+        ].map((m, i) => (
+          <motion.div key={m.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}>
+            <Card className="glass border-white/10">
+              <CardContent className="flex items-center gap-3 p-4">
+                <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-brand text-white"><m.icon className="h-4 w-4" /></span>
+                <div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{m.label}</div>
+                  <div className="text-lg font-semibold capitalize">{m.value}</div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </div>
       <Tabs defaultValue="short">
         <TabsList className="border border-white/10 bg-white/5 backdrop-blur">
           {[
@@ -154,6 +196,7 @@ function SummaryPage() {
           </CardContent></Card>
         </TabsContent>
       </Tabs>
+      </>
       )}
     </PageShell>
   );
