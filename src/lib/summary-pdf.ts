@@ -91,9 +91,12 @@ export function generateSummaryPdf(doc: SummaryDoc) {
   pdf.setFillColor(...BRAND);
   pdf.circle(W - 60, 34, 62, "F");
   pdf.setFillColor(...ACCENT);
-  pdf.circle(W - 10, 120, 40, "F");
-  pdf.setFillColor(14, 14, 22);
-  pdf.rect(0, 150, W, 2, "F");
+  pdf.circle(W - 10, 112, 34, "F");
+  // mask anything bleeding below the header band
+  pdf.setFillColor(255, 255, 255);
+  pdf.rect(0, 150, W, 40, "F");
+  pdf.setFillColor(...BRAND);
+  pdf.rect(0, 148, W, 2.5, "F");
 
   pdf.setFont("helvetica", "bold").setFontSize(9).setTextColor(190, 190, 215);
   pdf.text("AUDIOINSIGHT AI  ·  MEETING REPORT", M, 46);
@@ -151,9 +154,9 @@ export function generateSummaryPdf(doc: SummaryDoc) {
     heading("Key points");
     doc.key_points.forEach((k, i) => {
       need(20);
-      pdf.setFillColor(...BRAND);
-      pdf.circle(M + 4, y - 3, 2.2, "F");
-      body(`${i + 1}.  ${k}`, { indent: 16 });
+      pdf.setFont("helvetica", "bold").setFontSize(10).setTextColor(...BRAND);
+      pdf.text(`${i + 1}.`, M, y);
+      body(k, { indent: 20 });
       y += 2;
     });
   }
