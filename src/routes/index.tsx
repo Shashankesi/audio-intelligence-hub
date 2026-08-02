@@ -252,12 +252,11 @@ function LandingPage() {
 function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const yText = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const yText = useTransform(scrollYProgress, [0, 1], [0, 70]);
 
   return (
     <section ref={ref} className="relative mx-auto flex min-h-[100svh] max-w-7xl items-center px-6 pt-32 pb-16">
-      <motion.div style={{ y: yText, opacity }} className="grid w-full items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
+      <motion.div style={{ y: yText }} className="grid w-full items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
         <div>
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
             <Badge className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
