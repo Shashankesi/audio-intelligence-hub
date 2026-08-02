@@ -247,6 +247,271 @@ function LandingPage() {
 }
 
 /* ---------------- Mock previews for screenshots section ---------------- */
+
+/* ================= HERO ================= */
+function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const yText = useTransform(scrollYProgress, [0, 1], [0, 90]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  return (
+    <section ref={ref} className="relative mx-auto flex min-h-[100svh] max-w-7xl items-center px-6 pt-32 pb-16">
+      <motion.div style={{ y: yText, opacity }} className="grid w-full items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
+        <div>
+          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
+            <Badge className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
+              <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-4" />
+              Faster-Whisper transcription · LLM summaries
+            </Badge>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 26, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1, ease: EASE, delay: 0.08 }}
+            className="mt-8 text-[clamp(2.75rem,6.2vw,5rem)] font-semibold leading-[0.95] tracking-[-0.04em]"
+          >
+            Turn every recording into
+            <span className="block text-gradient">actionable intelligence</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
+            className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg"
+          >
+            Upload up to an hour of audio and get a precise transcript, a sectioned executive summary,
+            decisions and owner-tagged action items — in the time it takes to grab coffee.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
+            className="mt-10 flex flex-wrap items-center gap-3"
+          >
+            <Magnetic strength={0.3}>
+              <Button size="lg" className="group h-12 rounded-full bg-gradient-brand px-7 text-white shadow-glow animate-gradient-pan" asChild>
+                <Link to="/signup">
+                  Start free <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </Magnetic>
+            <Magnetic strength={0.2}>
+              <Button size="lg" variant="outline" className="h-12 rounded-full border-white/15 bg-white/5 px-6 backdrop-blur transition hover:bg-white/10" asChild>
+                <a href="#demo"><Play className="mr-2 h-4 w-4" /> Watch the flow</a>
+              </Button>
+            </Magnetic>
+          </motion.div>
+
+          <StaggerGroup className="mt-14 grid max-w-lg grid-cols-3 gap-3">
+            {[
+              { n: 10000, suffix: "+", l: "Files processed" },
+              { n: 99, suffix: "%", l: "Accuracy target" },
+              { n: 60, suffix: " min", l: "Max upload length" },
+            ].map((s) => (
+              <StaggerItem key={s.l}>
+                <div className="rounded-2xl glass px-4 py-4">
+                  <div className="font-display text-2xl font-semibold text-gradient">
+                    <AnimatedCounter value={s.n} />{s.suffix}
+                  </div>
+                  <div className="mt-1.5 text-[11px] leading-tight text-muted-foreground">{s.l}</div>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerGroup>
+        </div>
+
+        <HeroComposition />
+      </motion.div>
+
+      <motion.a
+        href="#features"
+        aria-label="Scroll to features"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 text-muted-foreground md:block"
+        animate={{ y: [0, 8, 0], opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <ChevronDown className="h-5 w-5" />
+      </motion.a>
+    </section>
+  );
+}
+
+/* ================= FEATURES (BENTO) ================= */
+function FeatureBento() {
+  const [hero, second, ...rest] = features;
+  return (
+    <section id="features" className="mx-auto max-w-7xl px-6 py-32">
+      <SectionHeading eyebrow="Features" title="Everything you need to understand speech" subtitle="A studio for transcription, summarization and downstream intelligence." />
+
+      <div className="mt-16 grid auto-rows-[minmax(150px,auto)] gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {/* large gradient feature */}
+        <GlowCard className="md:col-span-2 md:row-span-2">
+          <div className="relative flex h-full flex-col justify-between overflow-hidden p-8">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-52 w-52 rounded-full opacity-40 blur-3xl" style={{ background: "var(--gradient-brand)" }} />
+            <div>
+              <FloatIcon icon={hero.icon} />
+              <h3 className="mt-6 font-display text-2xl font-semibold tracking-tight">{hero.title}</h3>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-muted-foreground">{hero.desc}</p>
+            </div>
+            <LiveWaveform bars={44} height={68} className="mt-8" />
+          </div>
+        </GlowCard>
+
+        <GlowCard className="md:col-span-1 md:row-span-2">
+          <div className="flex h-full flex-col justify-between p-7">
+            <div>
+              <FloatIcon icon={second.icon} />
+              <h3 className="mt-6 font-display text-lg font-semibold">{second.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{second.desc}</p>
+            </div>
+            <div className="mt-8 space-y-2">
+              {["Decisions", "Owners", "Deadlines"].map((t, i) => (
+                <div key={t} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs">
+                  <span className="text-muted-foreground">{t}</span>
+                  <span className="font-medium text-gradient">{[6, 4, 3][i]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </GlowCard>
+
+        {rest.map((f) => (
+          <GlowCard key={f.title}>
+            <div className="flex h-full flex-col p-6">
+              <FloatIcon icon={f.icon} small />
+              <h3 className="mt-4 text-sm font-semibold">{f.title}</h3>
+              <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{f.desc}</p>
+            </div>
+          </GlowCard>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FloatIcon({ icon: Icon, small }: { icon: typeof Mic; small?: boolean }) {
+  return (
+    <motion.span
+      animate={{ y: [0, -5, 0] }}
+      transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+      className={`grid place-items-center rounded-2xl bg-gradient-brand shadow-glow ${small ? "h-10 w-10" : "h-14 w-14"}`}
+    >
+      <Icon className={small ? "h-4.5 w-4.5 text-white" : "h-6 w-6 text-white"} />
+    </motion.span>
+  );
+}
+
+/* ================= HOW IT WORKS ================= */
+function HowItWorks() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 75%", "end 60%"] });
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+
+  return (
+    <section id="how" className="mx-auto max-w-5xl px-6 py-32">
+      <SectionHeading eyebrow="How it works" title="From raw audio to shareable summary" subtitle="One pipeline you can trust for research, product and operations." />
+      <div ref={ref} className="relative mt-20 pl-10 md:pl-16">
+        <div className="absolute left-[13px] top-0 h-full w-px bg-white/10 md:left-[27px]" />
+        <motion.div
+          className="absolute left-[13px] top-0 w-px origin-top md:left-[27px]"
+          style={{ height: lineHeight, background: "var(--gradient-brand)", boxShadow: "0 0 18px oklch(0.62 0.21 293 / 0.8)" }}
+        />
+        <ol className="space-y-6">
+          {steps.map((s, i) => (
+            <TimelineStep key={s.title} step={s} index={i} />
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+function TimelineStep({ step, index }: { step: (typeof steps)[number]; index: number }) {
+  const ref = useRef<HTMLLIElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-25%" });
+  return (
+    <motion.li
+      ref={ref}
+      initial={{ opacity: 0, x: 30, filter: "blur(6px)" }}
+      animate={inView ? { opacity: 1, x: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.7, ease: EASE }}
+      className="relative"
+    >
+      <motion.span
+        animate={inView ? { scale: [0.6, 1.15, 1], opacity: 1 } : { opacity: 0.3 }}
+        transition={{ duration: 0.6, ease: EASE }}
+        className="absolute -left-10 top-6 grid h-7 w-7 place-items-center rounded-full border border-white/15 bg-background text-[10px] font-semibold shadow-glow md:-left-16"
+      >
+        {index + 1}
+      </motion.span>
+      <GlowCard tilt={false}>
+        <div className="flex items-start gap-5 p-6">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-brand shadow-glow">
+            <step.icon className="h-5 w-5 text-white" />
+          </span>
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Step {index + 1}</div>
+            <h4 className="mt-1.5 font-display text-lg font-semibold">{step.title}</h4>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.desc}</p>
+          </div>
+        </div>
+      </GlowCard>
+    </motion.li>
+  );
+}
+
+/* ================= RESEARCH WIDGETS ================= */
+function ResearchWidgets() {
+  return (
+    <section id="research" className="mx-auto max-w-7xl px-6 py-32">
+      <SectionHeading eyebrow="Research" title="Evaluation-first by design" subtitle="Benchmarks tracked across model revisions — every number reproducible from your own runs." />
+      <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {research.map((r, i) => (
+          <Reveal key={r.label} delay={i * 0.07}>
+            <GlowCard className="h-full">
+              <div className="flex h-full flex-col p-5">
+                <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  <span className="flex items-center gap-1.5"><LineIcon className="h-3.5 w-3.5" /> {r.label}</span>
+                  <span className={r.invert ? "text-brand-4" : "text-brand-4"}>{r.invert ? "↓" : "↑"}</span>
+                </div>
+                <div className="mt-4 font-display text-3xl font-semibold text-gradient">
+                  <AnimatedCounter value={r.value} format={(n) => n.toFixed(r.decimals ?? (Number.isInteger(r.value) ? 0 : 1))} />
+                  <span className="text-lg">{r.suffix}</span>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{r.desc}</p>
+                <Spark values={r.trend} />
+              </div>
+            </GlowCard>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Spark({ values }: { values: number[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const max = Math.max(...values);
+  return (
+    <div ref={ref} className="mt-5 flex h-12 items-end gap-1">
+      {values.map((v, i) => (
+        <motion.span
+          key={i}
+          className="flex-1 rounded-t bg-gradient-to-t from-primary/30 to-brand-3"
+          initial={{ height: 0, opacity: 0 }}
+          animate={inView ? { height: `${(v / max) * 100}%`, opacity: 1 } : {}}
+          transition={{ duration: 0.7, ease: EASE, delay: i * 0.06 }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function MockDashboard() {
   return (
     <div className="grid gap-3 p-4 md:grid-cols-4">
