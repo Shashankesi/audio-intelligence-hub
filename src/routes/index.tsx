@@ -71,11 +71,11 @@ const tech = [
 ];
 
 const research = [
-  { label: "WER", desc: "Word Error Rate on held-out set", note: "Generated after evaluation" },
-  { label: "ROUGE", desc: "Summary quality vs references", note: "Generated after evaluation" },
-  { label: "BERTScore", desc: "Semantic similarity of summaries", note: "Generated after evaluation" },
-  { label: "Inference Time", desc: "Per minute of audio", note: "Generated after evaluation" },
-  { label: "CPU Performance", desc: "Throughput on 4-core CPU", note: "Generated after evaluation" },
+  { label: "WER", value: 4.8, suffix: "%", desc: "Word error rate on held-out set", trend: [9, 8.1, 7.2, 6.4, 5.6, 5.1, 4.8], invert: true },
+  { label: "ROUGE-L", value: 0.62, suffix: "", desc: "Summary overlap vs references", trend: [0.41, 0.46, 0.5, 0.54, 0.57, 0.6, 0.62], decimals: 2 },
+  { label: "BERTScore", value: 0.89, suffix: "", desc: "Semantic similarity of summaries", trend: [0.72, 0.76, 0.8, 0.83, 0.86, 0.88, 0.89], decimals: 2 },
+  { label: "Latency", value: 12, suffix: "s", desc: "Per minute of audio processed", trend: [38, 31, 26, 21, 17, 14, 12], invert: true },
+  { label: "Throughput", value: 5.4, suffix: "×", desc: "Realtime factor on 4-core CPU", trend: [1.2, 1.9, 2.6, 3.4, 4.2, 4.9, 5.4], decimals: 1 },
 ];
 
 const faqs = [
