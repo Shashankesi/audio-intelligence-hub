@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { useRef } from "react";
 import {
   Mic, Sparkles, FileText, ListChecks, ClipboardCheck, Languages, Download, Search,
   History as HistoryIcon, Zap, Timer, MessagesSquare, UploadCloud, Waves, ArrowRight,
-  Cpu, Play, LineChart as LineIcon, ShieldCheck, Bot, Layers,
+  Play, LineChart as LineIcon, ShieldCheck, Bot, Layers, ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,10 +15,14 @@ import { Progress } from "@/components/ui/progress";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { Backdrop } from "@/components/site/Backdrop";
-import { OrbSphere } from "@/components/site/OrbSphere";
-import { Waveform } from "@/components/site/Waveform";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { LaptopMock } from "@/components/site/LaptopMock";
+import { HeroComposition } from "@/components/site/HeroComposition";
+import { LiveWaveform } from "@/components/site/LiveWaveform";
+import { GlowCard } from "@/components/site/GlowCard";
+import { Magnetic } from "@/components/site/MagneticButton";
+import { Reveal, StaggerGroup, StaggerItem, EASE } from "@/components/site/Motion";
+import { AnimatedCounter } from "@/components/site/AnimatedCounter";
 
 export const Route = createFileRoute("/")({
   head: () => ({
