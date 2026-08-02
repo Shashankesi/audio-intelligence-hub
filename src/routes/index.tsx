@@ -111,7 +111,7 @@ function LandingPage() {
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <UploadCloud className="h-4 w-4" /> Drop audio here or click to upload
                 </div>
-                <div className="mt-6"><Waveform bars={56} /></div>
+                <div className="mt-6"><LiveWaveform bars={56} height={64} /></div>
                 <div className="mt-6 space-y-2">
                   <div className="flex justify-between text-xs text-muted-foreground"><span>Transcribing</span><span>72%</span></div>
                   <Progress value={72} className="h-2" />
@@ -185,26 +185,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* RESEARCH */}
-      <section id="research" className="mx-auto max-w-6xl px-6 py-24">
-        <SectionHeading eyebrow="Research" title="Evaluation-first by design" subtitle="Metrics slots ready for your test suite. Numbers appear after your evaluation run." />
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {research.map((r) => (
-            <motion.div key={r.label} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-              <Card className="glass border-white/10">
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-                    <LineIcon className="h-3.5 w-3.5" /> {r.label}
-                  </div>
-                  <div className="mt-3 text-2xl font-bold text-gradient">—</div>
-                  <p className="mt-2 text-xs text-muted-foreground">{r.desc}</p>
-                  <div className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground/70">{r.note}</div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      </section>
+      <ResearchWidgets />
 
       {/* SCREENSHOTS */}
       <section className="mx-auto max-w-6xl px-6 py-24">
