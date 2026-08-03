@@ -249,6 +249,18 @@
   0%, 100% { transform: scaleY(0.3); }
   50% { transform: scaleY(1); }
 }
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.15; }
+  50% { transform: translate3d(0, -42px, 0); opacity: 0.85; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.75; }
+}
+@keyframes ripple-out {
+  from { transform: scale(0); opacity: 0.35; }
+  to { transform: scale(2.6); opacity: 0; }
+}
 
 @utility animate-blob {
   animation: blob 14s ease-in-out infinite;
@@ -272,6 +284,12 @@
 @utility animate-waveform {
   animation: waveform 1.1s ease-in-out infinite;
   }
+@utility animate-drift {
+  animation: drift 12s ease-in-out infinite;
+}
+@utility animate-twinkle {
+  animation: twinkle 4s ease-in-out infinite;
+}
 
 /* Rendered markdown for AI summaries */
 .prose-summary h2 {
