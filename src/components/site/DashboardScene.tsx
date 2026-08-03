@@ -1,6 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, Sphere, MeshDistortMaterial, Torus, Stars } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useRef } from "react";
 import type { Group } from "three";
 import { ClientOnly } from "./ClientOnly";
@@ -40,15 +39,12 @@ function Rig() {
 
 function Scene() {
   return (
-    <Canvas camera={{ position: [0, 0, 5.5], fov: 45 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
+    <Canvas camera={{ position: [0, 0, 5.5], fov: 45 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
       <ambientLight intensity={0.35} />
       <pointLight position={[3, 3, 3]} intensity={2.2} color="#c4b5fd" />
       <pointLight position={[-3, -2, -2]} intensity={1.6} color="#67e8f9" />
-      <Stars radius={30} depth={40} count={800} factor={3} fade speed={0.4} />
+      <Stars radius={30} depth={40} count={400} factor={3} fade speed={0.4} />
       <Rig />
-      <EffectComposer>
-        <Bloom intensity={0.75} luminanceThreshold={0.2} luminanceSmoothing={0.4} />
-      </EffectComposer>
     </Canvas>
   );
 }
