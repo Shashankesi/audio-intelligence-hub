@@ -1,6 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, MeshDistortMaterial, Environment, Torus, Sparkles } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useRef } from "react";
 import type { Group, Mesh } from "three";
 
@@ -65,9 +64,6 @@ export default function AuthScene() {
       <Rings />
       <Sparkles count={70} scale={7} size={2.5} speed={0.3} color="#a5b4fc" />
       <Environment preset="night" />
-      <EffectComposer>
-        <Bloom intensity={1.05} luminanceThreshold={0.12} luminanceSmoothing={0.4} />
-      </EffectComposer>
     </Canvas>
   );
 }

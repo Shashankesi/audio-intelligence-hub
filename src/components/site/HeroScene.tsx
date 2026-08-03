@@ -1,6 +1,5 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Float, MeshTransmissionMaterial, Sparkles, Torus } from "@react-three/drei";
-import { EffectComposer, Bloom, Vignette, ChromaticAberration } from "@react-three/postprocessing";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import type { Group, Mesh } from "three";
@@ -98,11 +97,6 @@ function Inner() {
       <Orbits />
       <Sparkles count={70} scale={7} size={2.4} speed={0.35} opacity={0.5} color="#a5b4fc" />
       <Environment preset="night" />
-      <EffectComposer>
-        <Bloom intensity={1.1} luminanceThreshold={0.12} luminanceSmoothing={0.5} mipmapBlur />
-        <ChromaticAberration offset={new THREE.Vector2(0.0006, 0.0009)} radialModulation={false} modulationOffset={0} />
-        <Vignette eskil={false} offset={0.18} darkness={0.65} />
-      </EffectComposer>
     </>
   );
 }

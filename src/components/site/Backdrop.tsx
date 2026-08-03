@@ -1,17 +1,25 @@
-import { motion } from "framer-motion";
+import { memo, useEffect, useRef } from "react";
 
 /**
  * Cinematic layered background: aurora ribbons, radial glows, grid lines,
- * drifting particles and a moving noise film. Deterministic positions keep
- * SSR and hydration in sync.
+ * drifting particles, tiny stars, a mouse spotlight and a moving noise film.
+ * Everything animates on the compositor (transform/opacity only) so scrolling
+ * stays buttery. Deterministic positions keep SSR and hydration in sync.
  */
-const PARTICLES = Array.from({ length: 26 }).map((_, i) => ({
+const PARTICLES = Array.from({ length: 18 }).map((_, i) => ({
   left: ((i * 61) % 100) + (i % 3),
   top: ((i * 43) % 100) + (i % 5),
   size: i % 4 === 0 ? 2.5 : 1.5,
-  dur: 9 + (i % 7) * 1.6,
-  delay: (i % 9) * 0.7,
+  dur: 11 + (i % 7) * 1.8,
+  delay: (i % 9) * 0.8,
   hue: i % 3,
+}));
+
+const STARS = Array.from({ length: 40 }).map((_, i) => ({
+  left: (i * 37.3) % 100,
+  top: (i * 53.7) % 100,
+  dur: 3 + (i % 5),
+  delay: (i % 11) * 0.45,
 }));
 
 const HUES = [
@@ -20,9 +28,36 @@ const HUES = [
   "oklch(0.86 0.21 160 / 0.75)",
 ];
 
-export function Backdrop() {
+function BackdropBase() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    let frame = 0;
+    const onMove = (e: PointerEvent) => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const el = ref.current;
+        if (!el) return;
+        el.style.setProperty("--mx", `${e.clientX}px`);
+        el.style.setProperty("--my", `${e.clientY}px`);
+      });
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none fixed inset-0 -z-10 overflow-hidden [contain:strict]"
+      style={{ ["--mx" as string]: "50vw", ["--my" as string]: "35vh" }}
+    >
       {/* base wash */}
       <div className="absolute inset-0" style={{ background: "var(--gradient-radial)" }} />
 
@@ -46,26 +81,45 @@ export function Backdrop() {
       {/* glowing horizon line */}
       <div className="absolute left-0 right-0 top-[62vh] h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
 
+      {/* tiny stars */}
+      {STARS.map((s, i) => (
+        <span
+          key={`s${i}`}
+          className="absolute h-px w-px rounded-full bg-white/70 animate-twinkle"
+          style={{ left: `${s.left}%`, top: `${s.top}%`, animationDuration: `${s.dur}s`, animationDelay: `${s.delay}s` }}
+        />
+      ))}
+
       {/* particles */}
       {PARTICLES.map((p, i) => (
-        <motion.span
+        <span
           key={i}
-          className="absolute rounded-full"
+          className="absolute rounded-full animate-drift will-change-transform"
           style={{
             left: `${p.left}%`,
             top: `${p.top}%`,
             height: p.size,
             width: p.size,
             background: HUES[p.hue],
-            boxShadow: `0 0 12px 2px ${HUES[p.hue]}`,
+            animationDuration: `${p.dur}s`,
+            animationDelay: `${p.delay}s`,
           }}
-          animate={{ y: [0, -42, 0], opacity: [0.15, 0.85, 0.15] }}
-          transition={{ duration: p.dur, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
         />
       ))}
+
+      {/* mouse spotlight */}
+      <div
+        className="absolute inset-0 hidden md:block"
+        style={{
+          background:
+            "radial-gradient(420px circle at var(--mx) var(--my), oklch(0.62 0.21 293 / 0.10), transparent 70%)",
+        }}
+      />
 
       {/* moving film grain */}
       <div className="noise-overlay animate-noise absolute -inset-[10%] opacity-[0.035] mix-blend-overlay" />
     </div>
   );
 }
+
+export const Backdrop = memo(BackdropBase);

@@ -21,6 +21,9 @@ const secondary = [
   { title: "Help", url: "/dashboard/help", icon: LifeBuoy },
 ];
 
+const navItemClass =
+  "relative rounded-xl transition-all duration-300 hover:bg-white/[0.06] hover:text-foreground data-[active=true]:bg-white/[0.08] data-[active=true]:shadow-[inset_0_1px_0_oklch(1_0_0/0.08)] data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-5 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-gradient-brand";
+
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const active = (url: string, exact?: boolean) => (exact ? pathname === url : pathname === url || pathname.startsWith(url + "/"));
@@ -37,13 +40,16 @@ export function AppSidebar() {
   const initial = (name[0] ?? "U").toUpperCase();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar
+      collapsible="icon"
+      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-[28px] [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-white/10 [&>[data-sidebar=sidebar]]:glass"
+    >
       <SidebarHeader>
-        <Link to="/" className="flex items-center gap-2 px-2 py-1.5">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-brand shadow-glow">
+        <Link to="/" className="group flex items-center gap-2.5 px-2 py-2">
+          <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-brand shadow-glow transition-transform duration-300 group-hover:scale-105">
             <Waves className="h-4 w-4 text-white" />
           </span>
-          <span className="text-sm font-semibold">AudioInsight</span>
+          <span className="truncate text-sm font-semibold tracking-tight group-data-[collapsible=icon]:hidden">AudioInsight</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
@@ -53,8 +59,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {main.map((i) => (
                 <SidebarMenuItem key={i.url}>
-                  <SidebarMenuButton asChild isActive={active(i.url, i.exact)}>
-                    <Link to={i.url}><i.icon /><span>{i.title}</span></Link>
+                  <SidebarMenuButton asChild isActive={active(i.url, i.exact)} tooltip={i.title} className={navItemClass}>
+                    <Link to={i.url}>
+                      <i.icon className="transition-transform duration-300 group-hover/menu-item:scale-110" />
+                      <span>{i.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -67,8 +76,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {secondary.map((i) => (
                 <SidebarMenuItem key={i.url}>
-                  <SidebarMenuButton asChild isActive={active(i.url)}>
-                    <Link to={i.url}><i.icon /><span>{i.title}</span></Link>
+                  <SidebarMenuButton asChild isActive={active(i.url)} tooltip={i.title} className={navItemClass}>
+                    <Link to={i.url}>
+                      <i.icon className="transition-transform duration-300 group-hover/menu-item:scale-110" />
+                      <span>{i.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

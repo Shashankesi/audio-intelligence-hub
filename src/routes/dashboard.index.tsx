@@ -3,14 +3,19 @@ import { PageShell } from "@/components/site/PageShell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { Suspense, lazy } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Upload, FileText, Sparkles, HardDrive, ArrowUpRight, Waves, Zap, Clock, TrendingUp } from "lucide-react";
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip, BarChart, Bar, CartesianGrid } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
-import { DashboardScene } from "@/components/site/DashboardScene";
+
 import { AnimatedCounter } from "@/components/site/AnimatedCounter";
 import { useSession } from "@/lib/use-session";
+
+const DashboardScene = lazy(() => import("@/components/site/DashboardScene").then((m) => ({ default: m.DashboardScene })));
+const MinutesArea = lazy(() => import("@/components/site/ActivityCharts").then((m) => ({ default: m.MinutesArea })));
+const UploadsBar = lazy(() => import("@/components/site/ActivityCharts").then((m) => ({ default: m.UploadsBar })));
 
 export const Route = createFileRoute("/dashboard/")({
   component: Overview,
@@ -73,16 +78,18 @@ function Overview() {
       actions={<Button asChild className="bg-gradient-brand text-white shadow-glow"><Link to="/dashboard/upload"><Upload className="mr-2 h-4 w-4" /> New upload</Link></Button>}
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-3">
-        <Card className="glass border-white/10 lg:col-span-2 overflow-hidden">
+        <Card className="glass rounded-[28px] border-white/10 lg:col-span-2 overflow-hidden">
           <CardContent className="relative p-0">
-            <DashboardScene className="!h-56 !rounded-none !border-0" />
+            <Suspense fallback={<Skeleton className="h-56 w-full rounded-none bg-white/5" />}>
+              <DashboardScene className="!h-56 !rounded-none !border-0" />
+            </Suspense>
             <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6">
               <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground"><Zap className="h-3 w-3" /> Live workspace</div>
               <div className="mt-1 text-xl font-semibold">Ready to turn sound into structured insight.</div>
             </div>
           </CardContent>
         </Card>
-        <Card className="glass border-white/10">
+        <Card className="glass rounded-[28px] border-white/10">
           <CardContent className="p-5">
             <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
               <span>Momentum</span><TrendingUp className="h-4 w-4" />
@@ -110,7 +117,7 @@ function Overview() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-            <Card className="group glass relative overflow-hidden border-white/10 transition hover:-translate-y-0.5 hover:border-white/20 hover:shadow-glow">
+            <Card className="group glass relative overflow-hidden rounded-[28px] border-white/10 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform hover:-translate-y-1 hover:border-white/20 hover:shadow-glow">
               <div className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br ${s.tint} opacity-70 blur-2xl transition group-hover:opacity-100`} />
               <CardContent className="relative p-5">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -130,50 +137,32 @@ function Overview() {
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        <Card className="glass border-white/10 lg:col-span-2">
+        <Card className="glass rounded-[28px] border-white/10 lg:col-span-2">
           <CardContent className="p-5">
             <div className="mb-2 flex items-center justify-between">
               <h3 className="text-sm font-semibold">Processing activity</h3>
               <span className="text-xs text-muted-foreground">Last 14 days</span>
             </div>
             <div className="h-64">
-              <ResponsiveContainer>
-                <AreaChart data={data}>
-                  <defs>
-                    <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="oklch(0.72 0.19 295)" stopOpacity={0.8} />
-                      <stop offset="100%" stopColor="oklch(0.72 0.19 295)" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid stroke="oklch(1 0 0 / 0.06)" vertical={false} />
-                  <XAxis dataKey="d" stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
-                  <YAxis stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
-                  <Tooltip contentStyle={{ background: "oklch(0.2 0.03 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }} />
-                  <Area type="monotone" dataKey="minutes" stroke="oklch(0.72 0.19 295)" fill="url(#g1)" />
-                </AreaChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}>
+                <MinutesArea data={data} />
+              </Suspense>
             </div>
           </CardContent>
         </Card>
-        <Card className="glass border-white/10">
+        <Card className="glass rounded-[28px] border-white/10">
           <CardContent className="p-5">
             <h3 className="mb-2 text-sm font-semibold">Uploads per day</h3>
             <div className="h-64">
-              <ResponsiveContainer>
-                <BarChart data={data}>
-                  <CartesianGrid stroke="oklch(1 0 0 / 0.06)" vertical={false} />
-                  <XAxis dataKey="d" stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
-                  <YAxis stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
-                  <Tooltip contentStyle={{ background: "oklch(0.2 0.03 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }} />
-                  <Bar dataKey="uploads" fill="oklch(0.75 0.17 220)" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}>
+                <UploadsBar data={data} />
+              </Suspense>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="mt-6 glass border-white/10">
+      <Card className="mt-6 glass rounded-[28px] border-white/10">
         <CardContent className="p-5">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold">Recent activity</h3>
