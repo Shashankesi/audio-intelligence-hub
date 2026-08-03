@@ -37,13 +37,16 @@ export function AppSidebar() {
   const initial = (name[0] ?? "U").toUpperCase();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar
+      collapsible="icon"
+      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-[28px] [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-white/10 [&>[data-sidebar=sidebar]]:glass"
+    >
       <SidebarHeader>
-        <Link to="/" className="flex items-center gap-2 px-2 py-1.5">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-gradient-brand shadow-glow">
+        <Link to="/" className="group flex items-center gap-2.5 px-2 py-2">
+          <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-brand shadow-glow transition-transform duration-300 group-hover:scale-105">
             <Waves className="h-4 w-4 text-white" />
           </span>
-          <span className="text-sm font-semibold">AudioInsight</span>
+          <span className="truncate text-sm font-semibold tracking-tight group-data-[collapsible=icon]:hidden">AudioInsight</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
@@ -53,8 +56,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {main.map((i) => (
                 <SidebarMenuItem key={i.url}>
-                  <SidebarMenuButton asChild isActive={active(i.url, i.exact)}>
-                    <Link to={i.url}><i.icon /><span>{i.title}</span></Link>
+                  <SidebarMenuButton asChild isActive={active(i.url, i.exact)} tooltip={i.title} className={navItemClass}>
+                    <Link to={i.url}>
+                      <i.icon className="transition-transform duration-300 group-hover/menu-item:scale-110" />
+                      <span>{i.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
