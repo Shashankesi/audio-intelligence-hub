@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/site/AppSidebar";
@@ -33,7 +33,6 @@ function DashboardLayout() {
   const nav = useNavigate();
   const { user, loading } = useSession();
   const { open, setOpen } = useCommandPalette();
-  const { location } = Route.useRouterState ? { location: { pathname: "" } } : { location: { pathname: "" } };
 
   useEffect(() => {
     if (!loading && !user) nav({ to: "/login" });
@@ -100,7 +99,7 @@ function DashboardLayout() {
 }
 
 function Breadcrumbs() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const pathname = useRouterState({ select: (s: { location: { pathname: string } }) => s.location.pathname });
   const leaf = pathname.replace(/^\/dashboard\/?/, "").split("/")[0] ?? "";
   return (
     <nav aria-label="Breadcrumb" className="hidden items-center gap-1.5 text-xs text-muted-foreground sm:flex">
