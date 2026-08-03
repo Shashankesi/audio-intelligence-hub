@@ -21,6 +21,9 @@ const secondary = [
   { title: "Help", url: "/dashboard/help", icon: LifeBuoy },
 ];
 
+const navItemClass =
+  "relative rounded-xl transition-all duration-300 hover:bg-white/[0.06] hover:text-foreground data-[active=true]:bg-white/[0.08] data-[active=true]:shadow-[inset_0_1px_0_oklch(1_0_0/0.08)] data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-5 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-gradient-brand";
+
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const active = (url: string, exact?: boolean) => (exact ? pathname === url : pathname === url || pathname.startsWith(url + "/"));
@@ -73,8 +76,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {secondary.map((i) => (
                 <SidebarMenuItem key={i.url}>
-                  <SidebarMenuButton asChild isActive={active(i.url)}>
-                    <Link to={i.url}><i.icon /><span>{i.title}</span></Link>
+                  <SidebarMenuButton asChild isActive={active(i.url)} tooltip={i.title} className={navItemClass}>
+                    <Link to={i.url}>
+                      <i.icon className="transition-transform duration-300 group-hover/menu-item:scale-110" />
+                      <span>{i.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
