@@ -54,6 +54,7 @@ export type Database = {
           mime: string | null
           model: string | null
           name: string
+          pinned: boolean
           size_bytes: number | null
           status: string
           storage_path: string
@@ -69,6 +70,7 @@ export type Database = {
           mime?: string | null
           model?: string | null
           name: string
+          pinned?: boolean
           size_bytes?: number | null
           status?: string
           storage_path: string
@@ -84,6 +86,7 @@ export type Database = {
           mime?: string | null
           model?: string | null
           name?: string
+          pinned?: boolean
           size_bytes?: number | null
           status?: string
           storage_path?: string
@@ -95,39 +98,69 @@ export type Database = {
       summaries: {
         Row: {
           action_items: Json
+          bullet_points: Json
+          confidence: number | null
           created_at: string
+          deadlines: Json
+          decisions: Json
           detailed_text: string
           key_points: Json
+          keywords: Json
+          meeting_minutes: string
           model: string | null
+          quotes: Json
           recording_id: string
+          risks: Json
           sentiment: Json | null
           short_text: string
+          suggestions: Json
+          timeline: Json
           topics: Json
           updated_at: string
           user_id: string
         }
         Insert: {
           action_items?: Json
+          bullet_points?: Json
+          confidence?: number | null
           created_at?: string
+          deadlines?: Json
+          decisions?: Json
           detailed_text?: string
           key_points?: Json
+          keywords?: Json
+          meeting_minutes?: string
           model?: string | null
+          quotes?: Json
           recording_id: string
+          risks?: Json
           sentiment?: Json | null
           short_text?: string
+          suggestions?: Json
+          timeline?: Json
           topics?: Json
           updated_at?: string
           user_id: string
         }
         Update: {
           action_items?: Json
+          bullet_points?: Json
+          confidence?: number | null
           created_at?: string
+          deadlines?: Json
+          decisions?: Json
           detailed_text?: string
           key_points?: Json
+          keywords?: Json
+          meeting_minutes?: string
           model?: string | null
+          quotes?: Json
           recording_id?: string
+          risks?: Json
           sentiment?: Json | null
           short_text?: string
+          suggestions?: Json
+          timeline?: Json
           topics?: Json
           updated_at?: string
           user_id?: string

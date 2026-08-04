@@ -2,12 +2,73 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
 
+/** Must match CHUNK_SEC in src/lib/audio-encode.ts — used to offset chunk timestamps. */
+const CHUNK_SEC = 480;
+
+const str = { type: "string" } as const;
+const strArr = { type: "array", items: { type: "string" } } as const;
+const obj = (props: Record<string, unknown>) => ({
+  type: "object",
+  additionalProperties: false,
+  required: Object.keys(props),
+  properties: props,
+});
+const objArr = (props: Record<string, unknown>) => ({ type: "array", items: obj(props) });
+const nullable = { type: ["string", "null"] } as const;
+
+const SUMMARY_JSON_SCHEMA = obj({
+  short_text: str,
+  detailed_text: str,
+  meeting_minutes: str,
+  bullet_points: strArr,
+  key_points: strArr,
+  topics: strArr,
+  keywords: strArr,
+  suggestions: strArr,
+  confidence: { type: "number" },
+  action_items: objArr({
+    text: str,
+    owner: nullable,
+    deadline: nullable,
+    priority: { type: "string", enum: ["high", "medium", "low"] },
+    status: { type: "string", enum: ["open", "in_progress", "done"] },
+  }),
+  decisions: objArr({ text: str, rationale: str }),
+  risks: objArr({ text: str, severity: { type: "string", enum: ["high", "medium", "low"] } }),
+  deadlines: objArr({ label: str, date: nullable, owner: nullable }),
+  quotes: objArr({ text: str, speaker: nullable, time: nullable }),
+  timeline: objArr({ time: str, title: str, detail: str }),
+  sentiment: obj({
+    label: { type: "string", enum: ["positive", "neutral", "negative", "mixed"] },
+    score: { type: "number" },
+    rationale: str,
+  }),
+});
+
 const SummarySchema = z.object({
   short_text: z.string(),
   detailed_text: z.string(),
+  meeting_minutes: z.string(),
+  bullet_points: z.array(z.string()),
   key_points: z.array(z.string()),
-  action_items: z.array(z.object({ text: z.string(), owner: z.string().nullable() })),
   topics: z.array(z.string()),
+  keywords: z.array(z.string()),
+  suggestions: z.array(z.string()),
+  confidence: z.number(),
+  action_items: z.array(
+    z.object({
+      text: z.string(),
+      owner: z.string().nullable(),
+      deadline: z.string().nullable(),
+      priority: z.enum(["high", "medium", "low"]),
+      status: z.enum(["open", "in_progress", "done"]),
+    }),
+  ),
+  decisions: z.array(z.object({ text: z.string(), rationale: z.string() })),
+  risks: z.array(z.object({ text: z.string(), severity: z.enum(["high", "medium", "low"]) })),
+  deadlines: z.array(z.object({ label: z.string(), date: z.string().nullable(), owner: z.string().nullable() })),
+  quotes: z.array(z.object({ text: z.string(), speaker: z.string().nullable(), time: z.string().nullable() })),
+  timeline: z.array(z.object({ time: z.string(), title: z.string(), detail: z.string() })),
   sentiment: z.object({
     label: z.enum(["positive", "neutral", "negative", "mixed"]),
     score: z.number(),
@@ -15,38 +76,14 @@ const SummarySchema = z.object({
   }),
 });
 
-const SUMMARY_JSON_SCHEMA = {
-  type: "object",
-  additionalProperties: false,
-  required: ["short_text", "detailed_text", "key_points", "action_items", "topics", "sentiment"],
-  properties: {
-    short_text: { type: "string" },
-    detailed_text: { type: "string" },
-    key_points: { type: "array", items: { type: "string" } },
-    action_items: {
-      type: "array",
-      items: {
-        type: "object",
-        additionalProperties: false,
-        required: ["text", "owner"],
-        properties: { text: { type: "string" }, owner: { type: ["string", "null"] } },
-      },
-    },
-    topics: { type: "array", items: { type: "string" } },
-    sentiment: {
-      type: "object",
-      additionalProperties: false,
-      required: ["label", "score", "rationale"],
-      properties: {
-        label: { type: "string", enum: ["positive", "neutral", "negative", "mixed"] },
-        score: { type: "number" },
-        rationale: { type: "string" },
-      },
-    },
-  },
-} as const;
-
 const SUMMARY_MODEL = "google/gemini-3.6-flash";
+const CHAT_MODEL = "google/gemini-3.6-flash";
+
+const clock = (s: number) => {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
+};
 
 export const transcribeRecording = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -62,10 +99,7 @@ export const transcribeRecording = createServerFn({ method: "POST" })
       .single();
     if (recErr || !rec) throw new Error("Recording not found");
 
-    await context.supabase
-      .from("recordings")
-      .update({ status: "transcribing" })
-      .eq("id", rec.id);
+    await context.supabase.from("recordings").update({ status: "transcribing" }).eq("id", rec.id);
 
     const started = Date.now();
     try {
@@ -88,7 +122,9 @@ export const transcribeRecording = createServerFn({ method: "POST" })
       }
 
       const parts: string[] = [];
-      for (const p of paths) {
+      const segments: { start: number; end: number; text: string }[] = [];
+      for (let i = 0; i < paths.length; i++) {
+        const p = paths[i];
         const dl = await supabaseAdmin.storage.from("recordings").download(p);
         if (dl.error || !dl.data) throw new Error(`Storage download failed: ${dl.error?.message}`);
         const bytes = await dl.data.arrayBuffer();
@@ -100,6 +136,10 @@ export const transcribeRecording = createServerFn({ method: "POST" })
           language: rec.language ?? undefined,
         });
         if (res.text.trim()) parts.push(res.text.trim());
+        const offset = paths.length > 1 ? i * CHUNK_SEC : 0;
+        for (const s of res.segments) {
+          segments.push({ start: s.start + offset, end: s.end + offset, text: s.text });
+        }
       }
       const text = parts.join("\n\n");
       if (!text.trim()) throw new Error("No speech detected in this recording");
@@ -110,6 +150,7 @@ export const transcribeRecording = createServerFn({ method: "POST" })
         recording_id: rec.id,
         user_id: context.userId,
         text,
+        segments: segments.length ? segments : null,
         model,
         latency_ms: latency,
       });
@@ -120,13 +161,10 @@ export const transcribeRecording = createServerFn({ method: "POST" })
         .update({ status: "transcribed", error: null })
         .eq("id", rec.id);
 
-      return { text, latency_ms: latency };
+      return { text, latency_ms: latency, segments: segments.length };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      await context.supabase
-        .from("recordings")
-        .update({ status: "failed", error: msg })
-        .eq("id", rec.id);
+      await context.supabase.from("recordings").update({ status: "failed", error: msg }).eq("id", rec.id);
       throw e;
     }
   });
@@ -139,45 +177,50 @@ export const summarizeRecording = createServerFn({ method: "POST" })
 
     const { data: t, error: tErr } = await context.supabase
       .from("transcripts")
-      .select("text, recording_id")
+      .select("text, segments, recording_id")
       .eq("recording_id", data.recordingId)
       .single();
     if (tErr || !t) throw new Error("Transcript not ready");
     if (!t.text || t.text.trim().length < 5) throw new Error("Transcript is empty");
 
-    await context.supabase
-      .from("recordings")
-      .update({ status: "summarizing" })
-      .eq("id", data.recordingId);
+    await context.supabase.from("recordings").update({ status: "summarizing" }).eq("id", data.recordingId);
 
-    const prompt = `You are a senior meeting analyst. Read the ENTIRE transcript below and produce a rich, faithful, structured analysis as JSON. Never invent facts that are not supported by the transcript; if something is unclear, say so explicitly.
+    const segs = (t.segments as { start: number; end: number; text: string }[] | null) ?? [];
+    const body = segs.length
+      ? segs.map((s) => `[${clock(s.start)}] ${s.text}`).join("\n").slice(0, 180_000)
+      : t.text.slice(0, 180_000);
+
+    const prompt = `You are a senior meeting analyst producing an executive-grade meeting intelligence report. Read the ENTIRE transcript and return JSON. Never invent facts; when something is uncertain, say so explicitly instead of guessing.
+
+${segs.length ? "Each line is prefixed with its [MM:SS] timestamp — use these real timestamps for timeline entries and quotes." : "No timestamps are available — use \"--:--\" for timeline and quote times."}
 
 Field rules:
-- short_text: a crisp executive summary of 3-4 sentences answering: what was this about, what was decided, what happens next.
-- detailed_text: a THOROUGH multi-section write-up in Markdown, 400-900 words, using exactly these headings (omit a section only if the transcript truly has nothing for it):
-  ## Overview
-  ## Discussion by Topic
-  (a "### <topic>" subsection per major topic, each 2-5 sentences with concrete details: names, numbers, dates, tools, arguments raised on each side)
-  ## Decisions Made
-  (bulleted, each with the reasoning behind it)
-  ## Risks, Blockers & Open Questions
-  ## Next Steps
-  Write in clear, neutral prose. Quote short phrases from the transcript when a wording matters. Preserve all figures, deadlines and named entities exactly as spoken.
-- key_points: 6-10 self-contained, information-dense bullets (not vague headlines — include the actual fact or outcome).
-- action_items: every concrete commitment or task. text = imperative task including any deadline mentioned; owner = the person's name if identifiable, else null. Return an empty array only when there genuinely are none.
-- topics: 4-8 short tag-style topics (1-3 words each).
-- sentiment: label one of positive|neutral|negative|mixed; score in [-1,1]; rationale = one sentence citing what drove the tone.
+- short_text: crisp 3-4 sentence executive summary: what this was about, what was decided, what happens next.
+- detailed_text: THOROUGH Markdown write-up, 400-900 words, with these headings: ## Overview, ## Discussion by Topic (### per topic, 2-5 sentences each with names, numbers, dates, tools, arguments on each side), ## Decisions Made, ## Risks, Blockers & Open Questions, ## Next Steps. Preserve figures, deadlines and named entities exactly.
+- meeting_minutes: formal Minutes of Meeting in Markdown: **Date/Time**, **Attendees** (names heard in the transcript, else "Not stated"), **Agenda**, numbered **Discussion** points, **Decisions**, **Action Items** table (Owner | Task | Deadline), **Next Meeting**.
+- bullet_points: 8-12 very short skimmable bullets (max ~12 words each).
+- key_points: 6-10 information-dense self-contained bullets including the actual fact or outcome.
+- action_items: every concrete commitment. text = imperative task; owner = person's name or null; deadline = date/relative deadline as spoken or null; priority high|medium|low; status open unless explicitly finished.
+- decisions: each decision with the reasoning behind it.
+- risks: risks, blockers and concerns with severity.
+- deadlines: dated commitments (label, date as spoken or null, owner or null).
+- quotes: 3-6 verbatim important quotes with speaker (or null) and time.
+- timeline: 5-12 chronological beats, time as MM:SS, short title (2-5 words) and one-sentence detail.
+- topics: 4-8 short tag topics. keywords: 8-15 domain keywords/entities.
+- suggestions: 3-5 concrete AI recommendations for the team's follow-up.
+- sentiment: label positive|neutral|negative|mixed, score in [-1,1], one-sentence rationale.
+- confidence: 0-1 — your confidence in this analysis given transcript quality and completeness.
 
-If the transcript is short or partly unintelligible, still fill every field, and note the limitation inside detailed_text.
+Return empty arrays only when the transcript genuinely has nothing for that field.
 
 TRANSCRIPT:
-"""${t.text.slice(0, 180_000)}"""`;
+"""${body}"""`;
 
     try {
       const raw = await generateJson<unknown>({
         model: SUMMARY_MODEL,
         prompt,
-        schemaName: "meeting_summary",
+        schemaName: "meeting_intelligence",
         schema: SUMMARY_JSON_SCHEMA as unknown as Record<string, unknown>,
       });
       const output = SummarySchema.parse(raw);
@@ -187,9 +230,19 @@ TRANSCRIPT:
         user_id: context.userId,
         short_text: output.short_text,
         detailed_text: output.detailed_text,
+        meeting_minutes: output.meeting_minutes,
+        bullet_points: output.bullet_points,
         key_points: output.key_points,
         action_items: output.action_items,
+        decisions: output.decisions,
+        risks: output.risks,
+        deadlines: output.deadlines,
+        quotes: output.quotes,
+        timeline: output.timeline,
         topics: output.topics,
+        keywords: output.keywords,
+        suggestions: output.suggestions,
+        confidence: output.confidence,
         sentiment: output.sentiment,
         model: SUMMARY_MODEL,
       });
@@ -203,12 +256,52 @@ TRANSCRIPT:
       return output;
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
-      await context.supabase
-        .from("recordings")
-        .update({ status: "failed", error: msg })
-        .eq("id", data.recordingId);
+      await context.supabase.from("recordings").update({ status: "failed", error: msg }).eq("id", data.recordingId);
       throw e;
     }
+  });
+
+/** Grounded Q&A over a single transcript. */
+export const chatWithTranscript = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        recordingId: z.string().uuid(),
+        question: z.string().trim().min(1).max(2000),
+        history: z
+          .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().max(8000) }))
+          .max(20)
+          .default([]),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { generateChat } = await import("./ai-gateway.server");
+    const { data: t, error } = await context.supabase
+      .from("transcripts")
+      .select("text, segments")
+      .eq("recording_id", data.recordingId)
+      .single();
+    if (error || !t?.text) throw new Error("Transcript not ready");
+
+    const segs = (t.segments as { start: number; text: string }[] | null) ?? [];
+    const body = segs.length
+      ? segs.map((s) => `[${clock(s.start)}] ${s.text}`).join("\n").slice(0, 180_000)
+      : t.text.slice(0, 180_000);
+
+    const answer = await generateChat({
+      model: CHAT_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: `You answer questions about ONE meeting transcript. Ground every claim in the transcript, quote short phrases, and cite [MM:SS] timestamps when available. If the transcript does not contain the answer, say so plainly instead of guessing. Answer in concise Markdown.\n\nTRANSCRIPT:\n"""${body}"""`,
+        },
+        ...data.history,
+        { role: "user", content: data.question },
+      ],
+    });
+    return { answer };
   });
 
 export const deleteRecording = createServerFn({ method: "POST" })
@@ -243,6 +336,35 @@ export const updateTranscript = createServerFn({ method: "POST" })
     const { error } = await context.supabase
       .from("transcripts")
       .update({ text: data.text })
+      .eq("recording_id", data.recordingId);
+    if (error) throw error;
+    return { ok: true };
+  });
+
+export const updateActionItems = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        recordingId: z.string().uuid(),
+        items: z
+          .array(
+            z.object({
+              text: z.string().max(600),
+              owner: z.string().max(120).nullable(),
+              deadline: z.string().max(120).nullable(),
+              priority: z.enum(["high", "medium", "low"]),
+              status: z.enum(["open", "in_progress", "done"]),
+            }),
+          )
+          .max(200),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { error } = await context.supabase
+      .from("summaries")
+      .update({ action_items: data.items })
       .eq("recording_id", data.recordingId);
     if (error) throw error;
     return { ok: true };
