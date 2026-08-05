@@ -85,6 +85,34 @@ const clock = (s: number) => {
   return `${String(m).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
 };
 
+type NotifyClient = { from: (t: "notifications") => { insert: (v: unknown) => PromiseLike<unknown> } };
+
+/** Fire-and-forget workspace notification; never breaks the calling pipeline. */
+async function notify(
+  supabase: unknown,
+  row: {
+    user_id: string;
+    recording_id?: string | null;
+    kind: string;
+    level?: "info" | "success" | "warning" | "error";
+    title: string;
+    body?: string;
+  },
+) {
+  try {
+    await (supabase as NotifyClient).from("notifications").insert({
+      user_id: row.user_id,
+      recording_id: row.recording_id ?? null,
+      kind: row.kind,
+      level: row.level ?? "info",
+      title: row.title,
+      body: row.body ?? "",
+    });
+  } catch {
+    /* notifications are best-effort */
+  }
+}
+
 export const transcribeRecording = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ recordingId: z.string().uuid() }).parse(data))
