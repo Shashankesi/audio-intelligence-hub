@@ -12,6 +12,7 @@ const main = [
   { title: "Transcription", url: "/dashboard/transcription", icon: FileText },
   { title: "Summary", url: "/dashboard/summary", icon: Sparkles },
   { title: "History", url: "/dashboard/history", icon: History },
+  { title: "Analytics", url: "/dashboard/analytics", icon: BarChart3 },
 ];
 const secondary = [
   { title: "Evaluation", url: "/dashboard/evaluation", icon: BarChart3 },
