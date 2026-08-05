@@ -25,6 +25,7 @@ import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history
 import { Route as DashboardHelpRouteImport } from './routes/dashboard.help'
 import { Route as DashboardEvaluationRouteImport } from './routes/dashboard.evaluation'
 import { Route as DashboardDatasetsRouteImport } from './routes/dashboard.datasets'
+import { Route as DashboardAnalyticsRouteImport } from './routes/dashboard.analytics'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -106,6 +107,11 @@ const DashboardDatasetsRoute = DashboardDatasetsRouteImport.update({
   path: '/datasets',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAnalyticsRoute = DashboardAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/datasets': typeof DashboardDatasetsRoute
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/datasets': typeof DashboardDatasetsRoute
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/datasets': typeof DashboardDatasetsRoute
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/dashboard/analytics'
     | '/dashboard/datasets'
     | '/dashboard/evaluation'
     | '/dashboard/help'
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/dashboard/analytics'
     | '/dashboard/datasets'
     | '/dashboard/evaluation'
     | '/dashboard/help'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/reset-password'
     | '/signup'
+    | '/dashboard/analytics'
     | '/dashboard/datasets'
     | '/dashboard/evaluation'
     | '/dashboard/help'
@@ -340,10 +352,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDatasetsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/analytics': {
+      id: '/dashboard/analytics'
+      path: '/analytics'
+      fullPath: '/dashboard/analytics'
+      preLoaderRoute: typeof DashboardAnalyticsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
   DashboardDatasetsRoute: typeof DashboardDatasetsRoute
   DashboardEvaluationRoute: typeof DashboardEvaluationRoute
   DashboardHelpRoute: typeof DashboardHelpRoute
@@ -357,6 +377,7 @@ interface DashboardRouteChildren {
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAnalyticsRoute: DashboardAnalyticsRoute,
   DashboardDatasetsRoute: DashboardDatasetsRoute,
   DashboardEvaluationRoute: DashboardEvaluationRoute,
   DashboardHelpRoute: DashboardHelpRoute,
