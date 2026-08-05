@@ -23,17 +23,31 @@ export async function transcribeAudio(params: {
   const key = process.env.LOVABLE_API_KEY;
   if (!key) throw new Error("LOVABLE_API_KEY missing");
 
-  const form = new FormData();
-  form.append("model", params.model || "openai/gpt-4o-mini-transcribe");
-  if (params.language && params.language !== "auto") form.append("language", params.language);
-  form.append("response_format", "verbose_json");
-  form.append("file", new Blob([params.bytes], { type: params.mime || "audio/mpeg" }), params.filename);
+  const post = async (responseFormat: "verbose_json" | "json") => {
+    const form = new FormData();
+    form.append("model", params.model || "openai/gpt-4o-mini-transcribe");
+    if (params.language && params.language !== "auto") form.append("language", params.language);
+    form.append("response_format", responseFormat);
+    form.append("file", new Blob([params.bytes], { type: params.mime || "audio/mpeg" }), params.filename);
+    return fetch("https://ai.gateway.lovable.dev/v1/audio/transcriptions", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}` },
+      body: form,
+    });
+  };
 
-  const res = await fetch("https://ai.gateway.lovable.dev/v1/audio/transcriptions", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${key}` },
-    body: form,
-  });
+  // Not every transcription model supports verbose_json (timestamps); fall back to plain json.
+  let res = await post("verbose_json");
+  if (res.status === 400) {
+    const body = await res.text().catch(() => "");
+    if (/verbose_json|response_format/i.test(body)) {
+      res = await post("json");
+    } else {
+      const err = new Error(`Transcription failed [400] ${body}`) as Error & { status?: number };
+      err.status = 400;
+      throw err;
+    }
+  }
 
   if (!res.ok) {
     const body = await res.text().catch(() => "");
