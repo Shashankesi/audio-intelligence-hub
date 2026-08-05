@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      notifications: {
+        Row: {
+          body: string
+          created_at: string
+          id: string
+          kind: string
+          level: string
+          read: boolean
+          recording_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          level?: string
+          read?: boolean
+          recording_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          level?: string
+          read?: boolean
+          recording_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_recording_id_fkey"
+            columns: ["recording_id"]
+            isOneToOne: false
+            referencedRelation: "recordings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -46,50 +90,71 @@ export type Database = {
       }
       recordings: {
         Row: {
+          archived: boolean
           created_at: string
+          deleted_at: string | null
           duration_sec: number | null
           error: string | null
+          favorite: boolean
+          folder: string
           id: string
           language: string | null
+          last_viewed_at: string | null
           mime: string | null
           model: string | null
           name: string
+          notes: string
           pinned: boolean
           size_bytes: number | null
           status: string
           storage_path: string
+          tags: string[]
           updated_at: string
           user_id: string
         }
         Insert: {
+          archived?: boolean
           created_at?: string
+          deleted_at?: string | null
           duration_sec?: number | null
           error?: string | null
+          favorite?: boolean
+          folder?: string
           id?: string
           language?: string | null
+          last_viewed_at?: string | null
           mime?: string | null
           model?: string | null
           name: string
+          notes?: string
           pinned?: boolean
           size_bytes?: number | null
           status?: string
           storage_path: string
+          tags?: string[]
           updated_at?: string
           user_id: string
         }
         Update: {
+          archived?: boolean
           created_at?: string
+          deleted_at?: string | null
           duration_sec?: number | null
           error?: string | null
+          favorite?: boolean
+          folder?: string
           id?: string
           language?: string | null
+          last_viewed_at?: string | null
           mime?: string | null
           model?: string | null
           name?: string
+          notes?: string
           pinned?: boolean
           size_bytes?: number | null
           status?: string
           storage_path?: string
+          tags?: string[]
           updated_at?: string
           user_id?: string
         }

@@ -4,7 +4,8 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { AppSidebar } from "@/components/site/AppSidebar";
 import { Backdrop } from "@/components/site/Backdrop";
 import { Button } from "@/components/ui/button";
-import { Bell, Command as CommandIcon, LogOut, Loader2, Sparkles } from "lucide-react";
+import { Command as CommandIcon, LogOut, Loader2, Sparkles } from "lucide-react";
+import { NotificationCenter } from "@/components/site/NotificationCenter";
 import { useSession } from "@/lib/use-session";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -80,10 +81,7 @@ function DashboardLayout() {
                 <CommandIcon className="h-4 w-4" />
               </Button>
               <span className="hidden text-xs text-muted-foreground md:inline">{user.email}</span>
-              <Button variant="ghost" size="icon" aria-label="Notifications" className="relative">
-                <Bell className="h-4 w-4" />
-                <span aria-hidden className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse-glow" />
-              </Button>
+              <NotificationCenter />
               <Button variant="outline" size="sm" className="hidden rounded-xl border-white/15 bg-white/5 sm:inline-flex" asChild><Link to="/">Home</Link></Button>
               <Button variant="ghost" size="icon" aria-label="Sign out" onClick={signOut}><LogOut className="h-4 w-4" /></Button>
             </div>
