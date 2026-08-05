@@ -189,10 +189,27 @@ export const transcribeRecording = createServerFn({ method: "POST" })
         .update({ status: "transcribed", error: null })
         .eq("id", rec.id);
 
+      await notify(context.supabase, {
+        user_id: context.userId,
+        recording_id: rec.id,
+        kind: "transcript",
+        level: "success",
+        title: "Transcript ready",
+        body: `${rec.name} was transcribed in ${(latency / 1000).toFixed(1)}s.`,
+      });
+
       return { text, latency_ms: latency, segments: segments.length };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       await context.supabase.from("recordings").update({ status: "failed", error: msg }).eq("id", rec.id);
+      await notify(context.supabase, {
+        user_id: context.userId,
+        recording_id: rec.id,
+        kind: "transcript",
+        level: "error",
+        title: "Transcription failed",
+        body: `${rec.name}: ${msg.slice(0, 240)}`,
+      });
       throw e;
     }
   });
@@ -281,10 +298,27 @@ TRANSCRIPT:
         .update({ status: "done", error: null })
         .eq("id", data.recordingId);
 
+      await notify(context.supabase, {
+        user_id: context.userId,
+        recording_id: data.recordingId,
+        kind: "summary",
+        level: "success",
+        title: "Summary ready",
+        body: output.short_text.slice(0, 240),
+      });
+
       return output;
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       await context.supabase.from("recordings").update({ status: "failed", error: msg }).eq("id", data.recordingId);
+      await notify(context.supabase, {
+        user_id: context.userId,
+        recording_id: data.recordingId,
+        kind: "summary",
+        level: "error",
+        title: "Summary failed",
+        body: msg.slice(0, 240),
+      });
       throw e;
     }
   });
