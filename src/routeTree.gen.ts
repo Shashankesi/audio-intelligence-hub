@@ -25,6 +25,7 @@ import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history
 import { Route as DashboardHelpRouteImport } from './routes/dashboard.help'
 import { Route as DashboardEvaluationRouteImport } from './routes/dashboard.evaluation'
 import { Route as DashboardDatasetsRouteImport } from './routes/dashboard.datasets'
+import { Route as DashboardBenchmarksRouteImport } from './routes/dashboard.benchmarks'
 import { Route as DashboardAnalyticsRouteImport } from './routes/dashboard.analytics'
 
 const SignupRoute = SignupRouteImport.update({
@@ -107,6 +108,11 @@ const DashboardDatasetsRoute = DashboardDatasetsRouteImport.update({
   path: '/datasets',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardBenchmarksRoute = DashboardBenchmarksRouteImport.update({
+  id: '/benchmarks',
+  path: '/benchmarks',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardAnalyticsRoute = DashboardAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/benchmarks': typeof DashboardBenchmarksRoute
   '/dashboard/datasets': typeof DashboardDatasetsRoute
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
@@ -139,6 +146,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/benchmarks': typeof DashboardBenchmarksRoute
   '/dashboard/datasets': typeof DashboardDatasetsRoute
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
@@ -159,6 +167,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
   '/dashboard/analytics': typeof DashboardAnalyticsRoute
+  '/dashboard/benchmarks': typeof DashboardBenchmarksRoute
   '/dashboard/datasets': typeof DashboardDatasetsRoute
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard/analytics'
+    | '/dashboard/benchmarks'
     | '/dashboard/datasets'
     | '/dashboard/evaluation'
     | '/dashboard/help'
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard/analytics'
+    | '/dashboard/benchmarks'
     | '/dashboard/datasets'
     | '/dashboard/evaluation'
     | '/dashboard/help'
@@ -217,6 +228,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/signup'
     | '/dashboard/analytics'
+    | '/dashboard/benchmarks'
     | '/dashboard/datasets'
     | '/dashboard/evaluation'
     | '/dashboard/help'
@@ -352,6 +364,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardDatasetsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/benchmarks': {
+      id: '/dashboard/benchmarks'
+      path: '/benchmarks'
+      fullPath: '/dashboard/benchmarks'
+      preLoaderRoute: typeof DashboardBenchmarksRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/analytics': {
       id: '/dashboard/analytics'
       path: '/analytics'
@@ -364,6 +383,7 @@ declare module '@tanstack/react-router' {
 
 interface DashboardRouteChildren {
   DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
+  DashboardBenchmarksRoute: typeof DashboardBenchmarksRoute
   DashboardDatasetsRoute: typeof DashboardDatasetsRoute
   DashboardEvaluationRoute: typeof DashboardEvaluationRoute
   DashboardHelpRoute: typeof DashboardHelpRoute
@@ -378,6 +398,7 @@ interface DashboardRouteChildren {
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAnalyticsRoute: DashboardAnalyticsRoute,
+  DashboardBenchmarksRoute: DashboardBenchmarksRoute,
   DashboardDatasetsRoute: DashboardDatasetsRoute,
   DashboardEvaluationRoute: DashboardEvaluationRoute,
   DashboardHelpRoute: DashboardHelpRoute,
@@ -405,13 +426,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
