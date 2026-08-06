@@ -1,0 +1,12 @@
+# Reference evaluation harness for AudioInsight AI.
+# Install into a local Python 3.10+ virtualenv:  pip install -r requirements.txt
+jiwer==3.0.4
+rouge-score==0.1.2
+bert-score==0.3.13
+faster-whisper==1.0.3
+datasets==2.20.0
+soundfile==0.12.1
+psutil==6.0.0
+matplotlib==3.9.2
+pandas==2.2.2
+requests==2.32.3
