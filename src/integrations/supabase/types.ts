@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      evaluation_references: {
+        Row: {
+          created_at: string
+          recording_id: string
+          reference_summary: string
+          reference_transcript: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          recording_id: string
+          reference_summary?: string
+          reference_transcript?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          recording_id?: string
+          reference_summary?: string
+          reference_transcript?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evaluation_references_recording_id_fkey"
+            columns: ["recording_id"]
+            isOneToOne: true
+            referencedRelation: "recordings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      evaluation_runs: {
+        Row: {
+          created_at: string
+          duration_ms: number | null
+          id: string
+          items: Json
+          label: string
+          metrics: Json
+          scope: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          items?: Json
+          label?: string
+          metrics?: Json
+          scope?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          items?: Json
+          label?: string
+          metrics?: Json
+          scope?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           body: string

@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Upload, History, BarChart3, Database, UserRound, Settings as SettingsIcon, LifeBuoy, Waves, FileText, Sparkles, Zap } from "lucide-react";
+import { LayoutDashboard, Upload, History, BarChart3, Database, UserRound, Settings as SettingsIcon, LifeBuoy, Waves, FileText, Sparkles, Zap, FlaskConical } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSession } from "@/lib/use-session";
@@ -16,6 +16,7 @@ const main = [
 ];
 const secondary = [
   { title: "Evaluation", url: "/dashboard/evaluation", icon: BarChart3 },
+  { title: "Benchmarks", url: "/dashboard/benchmarks", icon: FlaskConical },
   { title: "Datasets", url: "/dashboard/datasets", icon: Database },
   { title: "Profile", url: "/dashboard/profile", icon: UserRound },
   { title: "Settings", url: "/dashboard/settings", icon: SettingsIcon },

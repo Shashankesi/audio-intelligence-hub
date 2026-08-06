@@ -187,6 +187,7 @@ export function CommandPalette({ open, onOpenChange }: Props) {
         <CommandSeparator />
         <CommandGroup heading="Workspace">
           <CommandItem onSelect={() => go("/dashboard/evaluation")}><BarChart3 className="mr-2 h-4 w-4" />Evaluation</CommandItem>
+          <CommandItem onSelect={() => go("/dashboard/benchmarks")}><BarChart3 className="mr-2 h-4 w-4" />Benchmarks</CommandItem>
           <CommandItem onSelect={() => go("/dashboard/datasets")}><Database className="mr-2 h-4 w-4" />Datasets</CommandItem>
           <CommandItem onSelect={() => go("/dashboard/profile")}><UserRound className="mr-2 h-4 w-4" />Profile</CommandItem>
           <CommandItem onSelect={() => go("/dashboard/settings")}><SettingsIcon className="mr-2 h-4 w-4" />Settings</CommandItem>
