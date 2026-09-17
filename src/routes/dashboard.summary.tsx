@@ -19,6 +19,8 @@ import { downloadSummaryPdf } from "@/lib/summary-pdf";
 import { motion } from "framer-motion";
 import { TranscriptChat } from "@/components/audio/TranscriptChat";
 import { cn } from "@/lib/utils";
+import { pct, scoreSummary } from "@/lib/metrics";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 type ActionItem = {
   text: string;
@@ -67,6 +69,19 @@ function SummaryPage() {
       const r = await (supabase.from("summaries") as any).select("*, recordings(name,duration_sec)").eq("recording_id", id).maybeSingle();
       if (r.error) throw r.error;
       return r.data as any;
+    },
+  });
+
+  const { data: accuracyReference, isLoading: isAccuracyLoading } = useQuery({
+    queryKey: ["summary-accuracy-reference", id],
+    enabled: !!id,
+    queryFn: async () => {
+      const r = await (supabase.from("evaluation_references") as any)
+        .select("reference_summary")
+        .eq("recording_id", id)
+        .maybeSingle();
+      if (r.error) throw r.error;
+      return r.data as { reference_summary: string } | null;
     },
   });
 
@@ -152,6 +167,21 @@ function SummaryPage() {
   const neutral = Math.max(0, 100 - positive - negative);
   const arr = (k: string): any[] => (Array.isArray(data?.[k]) ? data[k] : []);
   const confidence = typeof data?.confidence === "number" ? Math.round(data.confidence * 100) : null;
+  const generatedSummary = data?.detailed_text || data?.short_text || "";
+  const referenceSummary = accuracyReference?.reference_summary?.trim() || "";
+  const accuracyScores = referenceSummary && generatedSummary.trim()
+    ? scoreSummary(referenceSummary, generatedSummary)
+    : null;
+  const accuracyData = accuracyScores
+    ? [
+        { metric: "ROUGE-1", score: pct(accuracyScores.rouge1.f1) },
+        { metric: "ROUGE-2", score: pct(accuracyScores.rouge2.f1) },
+        { metric: "ROUGE-L", score: pct(accuracyScores.rougeL.f1) },
+      ]
+    : [];
+  const averageAccuracy = accuracyData.length
+    ? accuracyData.reduce((total, item) => total + item.score, 0) / accuracyData.length
+    : null;
 
   return (
     <PageShell
@@ -242,6 +272,7 @@ function SummaryPage() {
                   ["quotes", "Quotes"],
                   ["topics", "Topics"],
                   ["sentiment", "Sentiment"],
+                   ["accuracy", "Accuracy"],
                   ["chat", "Ask AI"],
                 ].map(([v, l]) => (
                   <TabsTrigger key={v} value={v} className="data-[state=active]:bg-gradient-brand data-[state=active]:text-white">
@@ -570,6 +601,58 @@ function SummaryPage() {
                     <p className="pt-2 text-xs text-muted-foreground">
                       Analysis confidence: <span className="font-semibold text-foreground">{confidence}%</span> — based on transcript quality and completeness.
                     </p>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="accuracy" className="mt-6">
+              <Card className="glass border-white/10">
+                <CardContent className="p-6 md:p-8">
+                  {isAccuracyLoading ? (
+                    <div className="h-72 animate-pulse rounded-2xl bg-white/[0.04]" />
+                  ) : accuracyData.length > 0 ? (
+                    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-center">
+                      <div>
+                        <div className="mb-1 text-[10px] uppercase tracking-widest text-muted-foreground">Verified summary accuracy</div>
+                        <h3 className="text-lg font-semibold">Ground-truth similarity</h3>
+                        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+                          These scores compare this generated summary with your saved reference summary. Higher percentages indicate stronger content overlap.
+                        </p>
+                        <div className="mt-5 h-64 w-full" role="img" aria-label="Bar chart of ROUGE-1, ROUGE-2, and ROUGE-L summary accuracy scores">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={accuracyData} layout="vertical" margin={{ top: 6, right: 24, left: 8, bottom: 6 }} accessibilityLayer>
+                              <CartesianGrid stroke="oklch(1 0 0 / 0.07)" horizontal={false} />
+                              <XAxis type="number" domain={[0, 100]} tickFormatter={(value) => `${value}%`} stroke="oklch(1 0 0 / 0.45)" fontSize={11} />
+                              <YAxis type="category" dataKey="metric" width={72} stroke="oklch(1 0 0 / 0.55)" fontSize={11} />
+                              <Tooltip
+                                formatter={(value) => [`${Number(value).toFixed(2)}%`, "Score"]}
+                                contentStyle={{ background: "oklch(0.2 0.03 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 }}
+                              />
+                              <Bar dataKey="score" fill="oklch(0.78 0.16 175)" radius={[0, 7, 7, 0]} animationDuration={700} />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+                      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center">
+                        <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Average ROUGE</div>
+                        <div className="mt-2 text-4xl font-bold text-gradient">{averageAccuracy?.toFixed(1)}%</div>
+                        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+                          ROUGE-1 measures word overlap, ROUGE-2 phrase overlap, and ROUGE-L sequence similarity.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="py-8 text-center">
+                      <Gauge className="mx-auto h-8 w-8 text-muted-foreground" />
+                      <h3 className="mt-3 font-semibold">Ground truth required</h3>
+                      <p className="mx-auto mt-1 max-w-lg text-sm text-muted-foreground">
+                        Add a human-written reference summary before measuring accuracy. AI confidence is not used as an accuracy score.
+                      </p>
+                      <Button asChild variant="outline" className="mt-5 border-white/15 bg-white/5">
+                        <Link to="/dashboard/benchmarks">Add reference in Benchmarks</Link>
+                      </Button>
+                    </div>
                   )}
                 </CardContent>
               </Card>
