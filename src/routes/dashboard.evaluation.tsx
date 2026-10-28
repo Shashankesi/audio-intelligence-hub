@@ -145,7 +145,7 @@ function EvalPage() {
                   <PolarGrid stroke="oklch(1 0 0 / 0.1)" />
                   <PolarAngleAxis dataKey="m" stroke="oklch(1 0 0 / 0.5)" fontSize={11} />
                   <Tooltip contentStyle={tip} />
-                  <Radar dataKey="v" stroke="oklch(0.78 0.16 175)" fill="oklch(0.78 0.16 175)" fillOpacity={0.35} />
+                  <Radar dataKey="v" stroke="oklch(0.6 0.075 205)" fill="oklch(0.6 0.075 205)" fillOpacity={0.35} />
                 </RadarChart>
               </ResponsiveContainer></div>
             </CardContent></Card>

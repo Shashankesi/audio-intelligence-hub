@@ -44,7 +44,7 @@ export const Route = createFileRoute("/dashboard/benchmarks")({
 });
 
 const tip = { background: "oklch(0.2 0.03 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 };
-const BRAND = ["oklch(0.72 0.19 295)", "oklch(0.78 0.16 175)", "oklch(0.8 0.15 85)", "oklch(0.7 0.2 15)"];
+const BRAND = ["oklch(0.51 0.105 255)", "oklch(0.6 0.075 205)", "oklch(0.55 0.09 65)", "oklch(0.47 0.08 248)"];
 
 type HarnessEntry = { slug: string; task: string; dataset: string; generated_at: string; systems: string[] };
 type HarnessSystem = Record<string, string | number | null>;

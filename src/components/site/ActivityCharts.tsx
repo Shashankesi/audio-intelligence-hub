@@ -58,7 +58,7 @@ export const UploadsBar = memo(function UploadsBar({ data }: { data: ActivityPoi
 const PIE_COLORS = [
   "oklch(0.76 0.18 300)",
   "oklch(0.80 0.15 200)",
-  "oklch(0.78 0.16 150)",
+  "oklch(0.6 0.075 205)",
   "oklch(0.82 0.15 80)",
   "oklch(0.72 0.17 20)",
   "oklch(0.70 0.12 260)",
