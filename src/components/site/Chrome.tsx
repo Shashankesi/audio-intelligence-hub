@@ -61,7 +61,6 @@ export function QuickUploadFab() {
         aria-label="Quick upload audio"
         className="group relative grid h-14 w-14 place-items-center rounded-full bg-gradient-brand text-white shadow-glow transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <span aria-hidden className="absolute inset-0 rounded-full bg-gradient-brand opacity-60 blur-lg transition-opacity group-hover:opacity-90" />
         <Plus className="relative h-6 w-6 transition-transform duration-300 group-hover:rotate-90" />
       </Link>
     </motion.div>

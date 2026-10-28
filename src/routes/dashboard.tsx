@@ -62,7 +62,7 @@ function DashboardLayout() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset className="bg-transparent">
-          <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border/70 bg-background/55 px-3 backdrop-blur-xl md:px-4">
+          <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-card/80 px-3 backdrop-blur-xl md:px-4">
             <SidebarTrigger />
             <Breadcrumbs />
             <button
