@@ -11,9 +11,9 @@ function Fallback() {
         className="absolute inset-0 rounded-full"
         style={{
           background:
-            "radial-gradient(circle at 30% 30%, oklch(0.95 0.02 260), oklch(0.72 0.19 295) 40%, oklch(0.35 0.15 275) 70%, transparent 72%)",
+            "radial-gradient(circle at 30% 30%, oklch(0.95 0.02 260), oklch(0.51 0.105 255) 40%, oklch(0.4 0.07 260) 70%, transparent 72%)",
           boxShadow:
-            "0 30px 80px -20px oklch(0.72 0.19 295 / 0.7), inset -30px -40px 80px oklch(0.2 0.05 260 / 0.6)",
+            "0 30px 80px -20px oklch(0.51 0.105 255 / 0.35), inset -30px -40px 80px oklch(0.35 0.05 260 / 0.35)",
         }}
         animate={{ rotate: 360 }}
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}

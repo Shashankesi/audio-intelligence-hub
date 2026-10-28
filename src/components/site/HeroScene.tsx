@@ -39,16 +39,16 @@ function CrystalCore() {
           distortionScale={0.4}
           temporalDistortion={0.15}
           ior={1.42}
-          color="#c7b8ff"
-          attenuationColor="#7c3aed"
+          color="#c3d6ea"
+          attenuationColor="#3a6ea5"
           attenuationDistance={2.2}
         />
       </mesh>
       <mesh ref={inner} scale={0.75}>
         <icosahedronGeometry args={[1, 1]} />
         <meshStandardMaterial
-          color="#8b5cf6"
-          emissive="#06b6d4"
+          color="#4c7fb8"
+          emissive="#2f8fa3"
           emissiveIntensity={1.6}
           wireframe
           transparent
@@ -67,9 +67,9 @@ function Orbits() {
   });
   const rings = useMemo(
     () => [
-      { r: 2.3, rot: [1.4, 0.2, 0] as const, c: "#7C3AED" },
+      { r: 2.3, rot: [1.4, 0.2, 0] as const, c: "#3A6EA5" },
       { r: 2.7, rot: [0.5, 1.1, 0.4] as const, c: "#06B6D4" },
-      { r: 3.05, rot: [1.9, 0.6, 1.2] as const, c: "#14F195" },
+      { r: 3.05, rot: [1.9, 0.6, 1.2] as const, c: "#3aa9a0" },
     ],
     [],
   );
@@ -88,14 +88,14 @@ function Inner() {
   return (
     <>
       <ambientLight intensity={0.35} />
-      <pointLight position={[4, 4, 4]} intensity={3} color="#c4b5fd" />
-      <pointLight position={[-4, -3, -2]} intensity={2} color="#67e8f9" />
-      <pointLight position={[0, -4, 3]} intensity={1.2} color="#14f195" />
+      <pointLight position={[4, 4, 4]} intensity={3} color="#c3d6ea" />
+      <pointLight position={[-4, -3, -2]} intensity={2} color="#7fcfd4" />
+      <pointLight position={[0, -4, 3]} intensity={1.2} color="#3aa9a0" />
       <Float speed={1.1} rotationIntensity={0.25} floatIntensity={1.1}>
         <CrystalCore />
       </Float>
       <Orbits />
-      <Sparkles count={70} scale={7} size={2.4} speed={0.35} opacity={0.5} color="#a5b4fc" />
+      <Sparkles count={70} scale={7} size={2.4} speed={0.35} opacity={0.5} color="#b9cde3" />
       <Environment preset="night" />
     </>
   );
