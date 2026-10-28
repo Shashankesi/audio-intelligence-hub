@@ -51,8 +51,8 @@ export function TranscriptChat({ recordingId }: { recordingId: string }) {
     <div className="flex h-full flex-col">
       <div className="max-h-[46vh] flex-1 space-y-4 overflow-auto pr-1">
         {messages.length === 0 && (
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-muted-foreground">
-            <MessageSquareText className="mb-2 h-5 w-5 text-fuchsia-300" />
+          <div className="rounded-xl border border-border/70 bg-muted/50 p-5 text-sm text-muted-foreground">
+            <MessageSquareText className="mb-2 h-5 w-5 text-rose-700" />
             Ask anything about this meeting. Answers are grounded in the transcript and cite timestamps when available.
           </div>
         )}
@@ -84,7 +84,7 @@ export function TranscriptChat({ recordingId }: { recordingId: string }) {
             <button
               key={s}
               onClick={() => void send(s)}
-              className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-muted-foreground transition hover:border-white/25 hover:text-foreground"
+              className="rounded-full border border-border/70 bg-muted/70 px-3 py-1.5 text-xs text-muted-foreground transition hover:border-white/25 hover:text-foreground"
             >
               {s}
             </button>
@@ -110,7 +110,7 @@ export function TranscriptChat({ recordingId }: { recordingId: string }) {
           }}
           placeholder="Ask about decisions, owners, deadlines…"
           aria-label="Ask about this meeting"
-          className="min-h-[52px] resize-none bg-white/[0.03]"
+          className="min-h-[52px] resize-none bg-muted/50"
         />
         <Button type="submit" disabled={busy || !input.trim()} size="icon" className="h-[52px] w-12 shrink-0 bg-gradient-brand text-white shadow-glow">
           {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}

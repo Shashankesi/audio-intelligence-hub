@@ -114,7 +114,7 @@ function Transcription() {
   if (!id)
     return (
       <PageShell title="Transcription" description="Open a recording to view its transcript.">
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="p-10 text-center text-sm text-muted-foreground">
             No recording selected. Head to{" "}
             <Link to="/dashboard/history" className="text-foreground underline">
@@ -136,29 +136,29 @@ function Transcription() {
       description={data?.recordings?.name || "Edit, search and export your transcript."}
       actions={
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" className="border-white/15 bg-white/5" asChild>
+          <Button variant="outline" className="border-border bg-muted/70" asChild>
             <Link to="/dashboard/summary" search={{ id } as any}>
               <Sparkles className="mr-2 h-4 w-4" /> Summary
             </Link>
           </Button>
-          <Button variant="outline" className="border-white/15 bg-white/5" onClick={copy}>
-            {copied ? <Check className="mr-2 h-4 w-4 text-emerald-300" /> : <Copy className="mr-2 h-4 w-4" />}
+          <Button variant="outline" className="border-border bg-muted/70" onClick={copy}>
+            {copied ? <Check className="mr-2 h-4 w-4 text-emerald-700" /> : <Copy className="mr-2 h-4 w-4" />}
             {copied ? "Copied" : "Copy"}
           </Button>
-          <Button variant="outline" className="border-white/15 bg-white/5" onClick={() => download("txt")}>
+          <Button variant="outline" className="border-border bg-muted/70" onClick={() => download("txt")}>
             <Download className="mr-2 h-4 w-4" /> TXT
           </Button>
           {segments.length > 0 && (
-            <Button variant="outline" className="border-white/15 bg-white/5" onClick={() => download("srt")}>
+            <Button variant="outline" className="border-border bg-muted/70" onClick={() => download("srt")}>
               <Download className="mr-2 h-4 w-4" /> SRT
             </Button>
           )}
-          <Button variant="outline" className="border-white/15 bg-white/5" onClick={() => download("md")}>
+          <Button variant="outline" className="border-border bg-muted/70" onClick={() => download("md")}>
             <Download className="mr-2 h-4 w-4" /> MD
           </Button>
           <Button
             variant={editing ? "default" : "outline"}
-            className={editing ? "bg-gradient-brand text-white shadow-glow" : "border-white/15 bg-white/5"}
+            className={editing ? "bg-gradient-brand text-white shadow-glow" : "border-border bg-muted/70"}
             onClick={() => setEditing((v) => !v)}
           >
             <Pencil className="mr-2 h-4 w-4" /> {editing ? "Reading view" : "Edit"}
@@ -180,7 +180,7 @@ function Transcription() {
       />
 
       <div className="grid gap-6 xl:grid-cols-3">
-        <Card className="glass border-white/10 xl:col-span-2">
+        <Card className="glass border-border/70 xl:col-span-2">
           <CardContent className="p-5">
             <div className="relative mb-4">
               <Search className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -189,13 +189,13 @@ function Transcription() {
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 aria-label="Search transcript"
-                className="h-9 bg-white/5 pl-9"
+                className="h-9 bg-muted/70 pl-9"
               />
             </div>
             {isLoading ? (
               <div className="space-y-2">
                 {Array.from({ length: 8 }).map((_, i) => (
-                  <div key={i} className="h-10 animate-pulse rounded-xl bg-white/[0.04]" />
+                  <div key={i} className="h-10 animate-pulse rounded-xl bg-muted/50" />
                 ))}
               </div>
             ) : editing ? (
@@ -212,7 +212,7 @@ function Transcription() {
         </Card>
 
         <div className="space-y-6">
-          <Card className="glass border-white/10">
+          <Card className="glass border-border/70">
             <CardContent className="space-y-3 p-5 text-sm">
               <Stat label="Words" value={words.toLocaleString()} />
               <Stat label="Segments" value={segments.length ? segments.length.toString() : "—"} />
@@ -222,10 +222,10 @@ function Transcription() {
             </CardContent>
           </Card>
 
-          <Card className="glass border-white/10">
+          <Card className="glass border-border/70">
             <CardContent className="p-5">
               <Tabs defaultValue="chat">
-                <TabsList className="border border-white/10 bg-white/5">
+                <TabsList className="border border-border/70 bg-muted/70">
                   <TabsTrigger value="chat" className="data-[state=active]:bg-gradient-brand data-[state=active]:text-white">
                     <MessagesSquare className="mr-1.5 h-3.5 w-3.5" /> Ask AI
                   </TabsTrigger>
@@ -245,9 +245,9 @@ function Transcription() {
                           <button
                             key={i}
                             onClick={() => seekRef.current?.(s.start)}
-                            className="flex w-full gap-2 rounded-lg px-2 py-1.5 text-left text-xs transition hover:bg-white/5"
+                            className="flex w-full gap-2 rounded-lg px-2 py-1.5 text-left text-xs transition hover:bg-muted/70"
                           >
-                            <span className="font-mono tabular-nums text-fuchsia-300">{formatClock(s.start)}</span>
+                            <span className="font-mono tabular-nums text-rose-700">{formatClock(s.start)}</span>
                             <span className="line-clamp-1 text-muted-foreground">{s.text}</span>
                           </button>
                         ))}
@@ -269,7 +269,7 @@ function Transcription() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+    <div className="flex items-center justify-between rounded-lg border border-border/70 bg-muted/50 px-3 py-2">
       <span className="text-xs uppercase tracking-widest text-muted-foreground">{label}</span>
       <span className="font-semibold tabular-nums">{value}</span>
     </div>

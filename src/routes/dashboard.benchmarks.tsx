@@ -44,7 +44,7 @@ export const Route = createFileRoute("/dashboard/benchmarks")({
 });
 
 const tip = { background: "oklch(0.2 0.03 265)", border: "1px solid oklch(1 0 0 / 0.1)", borderRadius: 8 };
-const BRAND = ["oklch(0.72 0.19 295)", "oklch(0.78 0.16 175)", "oklch(0.8 0.15 85)", "oklch(0.7 0.2 15)"];
+const BRAND = ["oklch(0.51 0.105 255)", "oklch(0.6 0.075 205)", "oklch(0.55 0.09 65)", "oklch(0.47 0.08 248)"];
 
 type HarnessEntry = { slug: string; task: string; dataset: string; generated_at: string; systems: string[] };
 type HarnessSystem = Record<string, string | number | null>;
@@ -58,7 +58,7 @@ function BenchmarksPage() {
       actions={<Badge className="bg-gradient-brand text-white"><FlaskConical className="mr-1 h-3 w-3" /> Research mode</Badge>}
     >
       <Tabs defaultValue="live">
-        <TabsList className="glass mb-5 border border-white/10">
+        <TabsList className="glass mb-5 border border-border/70">
           <TabsTrigger value="live">Live evaluation</TabsTrigger>
           <TabsTrigger value="references">Ground truth</TabsTrigger>
           <TabsTrigger value="history">Run history</TabsTrigger>
@@ -111,12 +111,12 @@ function LiveEvaluation() {
 
   return (
     <div className="space-y-5">
-      <Card className="glass border-white/10">
+      <Card className="glass border-border/70">
         <CardContent className="flex flex-wrap items-end gap-3 p-5">
           <div className="min-w-56 flex-1">
             <label className="mb-1.5 block text-[11px] uppercase tracking-widest text-muted-foreground">Evaluation set</label>
             <Select value={scope} onValueChange={setScope}>
-              <SelectTrigger className="glass border-white/10"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="glass border-border/70"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All referenced recordings ({withRefs.length})</SelectItem>
                 {withRefs.map((r) => (
@@ -130,12 +130,12 @@ function LiveEvaluation() {
           </Button>
           {result && (
             <>
-              <Button variant="outline" className="border-white/15" onClick={() => downloadFile("evaluation.csv", runToCsv(result), "text/csv")}>
+              <Button variant="outline" className="border-border" onClick={() => downloadFile("evaluation.csv", runToCsv(result), "text/csv")}>
                 <Download className="mr-2 h-4 w-4" /> CSV
               </Button>
               <Button
                 variant="outline"
-                className="border-white/15"
+                className="border-border"
                 onClick={() => downloadFile("evaluation.md", runToMarkdown({ label: "Live evaluation", ...result }), "text/markdown")}
               >
                 <FileText className="mr-2 h-4 w-4" /> Markdown
@@ -146,7 +146,7 @@ function LiveEvaluation() {
       </Card>
 
       {progress && (
-        <Card className="glass border-white/10"><CardContent className="p-5">
+        <Card className="glass border-border/70"><CardContent className="p-5">
           <div className="mb-2 flex justify-between text-xs text-muted-foreground">
             <span>Scoring “{progress.label}”</span>
             <span>{progress.done}/{progress.total}</span>
@@ -156,7 +156,7 @@ function LiveEvaluation() {
       )}
 
       {!withRefs.length && !progress && (
-        <Card className="glass border-white/10"><CardContent className="p-10 text-center text-sm text-muted-foreground">
+        <Card className="glass border-border/70"><CardContent className="p-10 text-center text-sm text-muted-foreground">
           No ground truth yet. Open the <strong>Ground truth</strong> tab and paste a verified transcript or reference summary for at least one recording — metrics can only be computed against real references.
         </CardContent></Card>
       )}
@@ -184,7 +184,7 @@ function ResultView({ metrics, items }: { metrics: EvalMetrics; items: EvalItem[
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {cards.map((c) => (
-          <Card key={c.label} className="glass border-white/10"><CardContent className="p-4">
+          <Card key={c.label} className="glass border-border/70"><CardContent className="p-4">
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{c.label}</div>
             <div className="mt-1 text-2xl font-bold text-gradient">
               {c.value === null ? "—" : `${pct(c.value)}${c.suffix}`}
@@ -194,7 +194,7 @@ function ResultView({ metrics, items }: { metrics: EvalMetrics; items: EvalItem[
         ))}
       </div>
 
-      <Card className="glass border-white/10"><CardContent className="p-5">
+      <Card className="glass border-border/70"><CardContent className="p-5">
         <h3 className="mb-3 text-sm font-semibold">Per-item quality (%)</h3>
         <div className="h-64"><ResponsiveContainer>
           <BarChart data={chart}>
@@ -209,11 +209,11 @@ function ResultView({ metrics, items }: { metrics: EvalMetrics; items: EvalItem[
         </ResponsiveContainer></div>
       </CardContent></Card>
 
-      <Card className="glass border-white/10"><CardContent className="p-0">
+      <Card className="glass border-border/70"><CardContent className="p-0">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="border-white/10">
+              <TableRow className="border-border/70">
                 <TableHead>Recording</TableHead><TableHead>Model</TableHead>
                 <TableHead className="text-right">WER</TableHead><TableHead className="text-right">CER</TableHead>
                 <TableHead className="text-right">R-1</TableHead><TableHead className="text-right">R-2</TableHead>
@@ -257,12 +257,12 @@ function References() {
   const summaryValue = summary ?? existing?.reference_summary ?? "";
 
   if (!recordings.length) {
-    return <Card className="glass border-white/10"><CardContent className="p-10 text-center text-sm text-muted-foreground">Upload and process a recording first.</CardContent></Card>;
+    return <Card className="glass border-border/70"><CardContent className="p-10 text-center text-sm text-muted-foreground">Upload and process a recording first.</CardContent></Card>;
   }
 
   return (
     <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
-      <Card className="glass border-white/10"><CardContent className="max-h-[70vh] space-y-1 overflow-auto p-3">
+      <Card className="glass border-border/70"><CardContent className="max-h-[70vh] space-y-1 overflow-auto p-3">
         {recordings.map((r) => {
           const has = refs.some((f) => f.recording_id === r.id);
           const active = current?.id === r.id;
@@ -270,16 +270,16 @@ function References() {
             <button
               key={r.id}
               onClick={() => { setSelected(r.id); setTranscript(null); setSummary(null); }}
-              className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-xs transition ${active ? "bg-white/[0.08]" : "hover:bg-white/[0.04]"}`}
+              className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-xs transition ${active ? "bg-muted" : "hover:bg-muted/50"}`}
             >
               <span className="truncate">{r.name}</span>
-              {has && <Badge variant="outline" className="border-emerald-400/40 text-[9px] text-emerald-300">ref</Badge>}
+              {has && <Badge variant="outline" className="border-emerald-400/40 text-[9px] text-emerald-700">ref</Badge>}
             </button>
           );
         })}
       </CardContent></Card>
 
-      <Card className="glass border-white/10"><CardContent className="space-y-4 p-5">
+      <Card className="glass border-border/70"><CardContent className="space-y-4 p-5">
         <div>
           <h3 className="text-sm font-semibold">{current?.name}</h3>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -288,11 +288,11 @@ function References() {
         </div>
         <div>
           <label className="mb-1.5 block text-[11px] uppercase tracking-widest text-muted-foreground">Ground-truth transcript</label>
-          <Textarea rows={10} value={transcriptValue} onChange={(e) => setTranscript(e.target.value)} className="glass border-white/10 font-mono text-xs" placeholder="Verified transcript…" />
+          <Textarea rows={10} value={transcriptValue} onChange={(e) => setTranscript(e.target.value)} className="glass border-border/70 font-mono text-xs" placeholder="Verified transcript…" />
         </div>
         <div>
           <label className="mb-1.5 block text-[11px] uppercase tracking-widest text-muted-foreground">Reference summary</label>
-          <Textarea rows={6} value={summaryValue} onChange={(e) => setSummary(e.target.value)} className="glass border-white/10 text-xs" placeholder="Human-written summary…" />
+          <Textarea rows={6} value={summaryValue} onChange={(e) => setSummary(e.target.value)} className="glass border-border/70 text-xs" placeholder="Human-written summary…" />
         </div>
         <Button
           className="bg-gradient-brand text-white"
@@ -315,8 +315,8 @@ function History() {
   const { data: runs = [], isLoading } = useEvaluationRuns();
   const del = useDeleteRun();
 
-  if (isLoading) return <Card className="glass border-white/10"><CardContent className="p-10 text-center text-sm text-muted-foreground">Loading…</CardContent></Card>;
-  if (!runs.length) return <Card className="glass border-white/10"><CardContent className="p-10 text-center text-sm text-muted-foreground">No evaluation runs saved yet.</CardContent></Card>;
+  if (isLoading) return <Card className="glass border-border/70"><CardContent className="p-10 text-center text-sm text-muted-foreground">Loading…</CardContent></Card>;
+  if (!runs.length) return <Card className="glass border-border/70"><CardContent className="p-10 text-center text-sm text-muted-foreground">No evaluation runs saved yet.</CardContent></Card>;
 
   const trend = runs
     .slice()
@@ -329,7 +329,7 @@ function History() {
 
   return (
     <div className="space-y-5">
-      <Card className="glass border-white/10"><CardContent className="p-5">
+      <Card className="glass border-border/70"><CardContent className="p-5">
         <h3 className="mb-3 text-sm font-semibold">Quality over time (%)</h3>
         <div className="h-56"><ResponsiveContainer>
           <BarChart data={trend}>
@@ -346,7 +346,7 @@ function History() {
 
       <div className="space-y-3">
         {runs.map((r) => (
-          <Card key={r.id} className="glass border-white/10"><CardContent className="flex flex-wrap items-center gap-4 p-4">
+          <Card key={r.id} className="glass border-border/70"><CardContent className="flex flex-wrap items-center gap-4 p-4">
             <div className="min-w-48 flex-1">
               <div className="text-sm font-medium">{r.label}</div>
               <div className="text-[11px] text-muted-foreground">
@@ -355,16 +355,16 @@ function History() {
             </div>
             <div className="flex flex-wrap gap-2 text-[11px]">
               {(["wer", "rouge1", "rouge2", "rougeL"] as const).map((k) => (
-                <span key={k} className="rounded-lg border border-white/10 bg-white/[0.03] px-2 py-1">
+                <span key={k} className="rounded-lg border border-border/70 bg-muted/50 px-2 py-1">
                   {k.toUpperCase()}: {r.metrics[k] === null ? "—" : `${pct(r.metrics[k] as number)}%`}
                 </span>
               ))}
             </div>
             <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="border-white/15" onClick={() => downloadFile(`${r.label}.csv`, runToCsv(r), "text/csv")}>
+              <Button size="sm" variant="outline" className="border-border" onClick={() => downloadFile(`${r.label}.csv`, runToCsv(r), "text/csv")}>
                 <Download className="h-3.5 w-3.5" />
               </Button>
-              <Button size="sm" variant="outline" className="border-white/15" onClick={() => downloadFile(`${r.label}.md`, runToMarkdown(r), "text/markdown")}>
+              <Button size="sm" variant="outline" className="border-border" onClick={() => downloadFile(`${r.label}.md`, runToMarkdown(r), "text/markdown")}>
                 <FileText className="h-3.5 w-3.5" />
               </Button>
               <Button size="sm" variant="ghost" onClick={() => del.mutate(r.id)} aria-label="Delete run">
@@ -408,18 +408,18 @@ function Harness() {
     return candidates.filter((k) => result.systems.some((s) => typeof s[k] === "number"));
   }, [result]);
 
-  if (isLoading) return <Card className="glass border-white/10"><CardContent className="p-10 text-center text-sm text-muted-foreground">Loading…</CardContent></Card>;
+  if (isLoading) return <Card className="glass border-border/70"><CardContent className="p-10 text-center text-sm text-muted-foreground">Loading…</CardContent></Card>;
 
   if (!index.length) {
     return (
-      <Card className="glass border-white/10"><CardContent className="space-y-3 p-8 text-sm">
+      <Card className="glass border-border/70"><CardContent className="space-y-3 p-8 text-sm">
         <h3 className="text-base font-semibold">No harness results published yet</h3>
         <p className="text-muted-foreground">
           Paper-grade metrics (WER on AMI, ROUGE + BERTScore on SAMSum/QMSum, Whisper base vs small, CPU time and peak memory) are produced by the Python
           harness in <code className="rounded bg-white/10 px-1">scripts/eval</code>. Those libraries cannot run inside this serverless app, so you run them
           locally and commit the output — this page then renders only what actually exists.
         </p>
-        <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-[11px] leading-relaxed">
+        <pre className="overflow-x-auto rounded-xl border border-border/70 bg-black/40 p-4 text-[11px] leading-relaxed">
 {`pip install -r scripts/eval/requirements.txt
 python scripts/eval/download_datasets.py --dataset samsum --limit 50
 python scripts/eval/run_eval.py --task summarization --dataset samsum --limit 50
@@ -436,11 +436,11 @@ python scripts/eval/run_eval.py --task asr --dataset ami --models base,small --l
 
   return (
     <div className="space-y-5">
-      <Card className="glass border-white/10"><CardContent className="flex flex-wrap items-end gap-3 p-5">
+      <Card className="glass border-border/70"><CardContent className="flex flex-wrap items-end gap-3 p-5">
         <div className="min-w-64 flex-1">
           <label className="mb-1.5 block text-[11px] uppercase tracking-widest text-muted-foreground">Benchmark run</label>
           <Select value={active} onValueChange={setSlug}>
-            <SelectTrigger className="glass border-white/10"><SelectValue /></SelectTrigger>
+            <SelectTrigger className="glass border-border/70"><SelectValue /></SelectTrigger>
             <SelectContent>
               {index.map((e) => (
                 <SelectItem key={e.slug} value={e.slug}>
@@ -453,7 +453,7 @@ python scripts/eval/run_eval.py --task asr --dataset ami --models base,small --l
         {result && (
           <Button
             variant="outline"
-            className="border-white/15"
+            className="border-border"
             onClick={() => {
               const keys = Object.keys(result.systems[0] ?? {});
               const csv = [keys.join(","), ...result.systems.map((s) => keys.map((k) => `"${String(s[k] ?? "")}"`).join(","))].join("\n");
@@ -469,7 +469,7 @@ python scripts/eval/run_eval.py --task asr --dataset ami --models base,small --l
         <>
           <div className="grid gap-4 lg:grid-cols-2">
             {metricKeys.slice(0, 4).map((key) => (
-              <Card key={key} className="glass border-white/10"><CardContent className="p-5">
+              <Card key={key} className="glass border-border/70"><CardContent className="p-5">
                 <h3 className="mb-3 text-sm font-semibold">{key}</h3>
                 <div className="h-56"><ResponsiveContainer>
                   <BarChart data={result.systems.map((s) => ({ system: String(s.system), value: Number(s[key] ?? 0) }))}>
@@ -486,10 +486,10 @@ python scripts/eval/run_eval.py --task asr --dataset ami --models base,small --l
             ))}
           </div>
 
-          <Card className="glass border-white/10"><CardContent className="overflow-x-auto p-0">
+          <Card className="glass border-border/70"><CardContent className="overflow-x-auto p-0">
             <Table>
               <TableHeader>
-                <TableRow className="border-white/10">
+                <TableRow className="border-border/70">
                   <TableHead>System</TableHead>
                   {metricKeys.map((k) => <TableHead key={k} className="text-right">{k}</TableHead>)}
                 </TableRow>

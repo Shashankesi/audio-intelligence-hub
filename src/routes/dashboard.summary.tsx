@@ -46,9 +46,9 @@ export const Route = createFileRoute("/dashboard/summary")({
 });
 
 const PRIORITY_STYLES: Record<string, string> = {
-  high: "bg-red-400/15 text-red-200 border-red-400/25",
-  medium: "bg-amber-400/15 text-amber-200 border-amber-400/25",
-  low: "bg-emerald-400/15 text-emerald-200 border-emerald-400/25",
+  high: "bg-red-100 text-red-200 border-red-400/25",
+  medium: "bg-amber-100 text-amber-700 border-amber-400/25",
+  low: "bg-emerald-100 text-emerald-700 border-emerald-400/25",
 };
 const STATUS_NEXT: Record<ActionItem["status"], ActionItem["status"]> = {
   open: "in_progress",
@@ -124,7 +124,7 @@ function SummaryPage() {
   if (!id)
     return (
       <PageShell title="Summary" description="Open a recording to view its summary.">
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="p-10 text-center text-sm text-muted-foreground">
             No recording selected. Head to{" "}
             <Link to="/dashboard/history" className="text-foreground underline">
@@ -189,17 +189,17 @@ function SummaryPage() {
       description={data?.recordings?.name || "AI-generated insights."}
       actions={
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="border-white/15 bg-white/5" asChild>
+          <Button variant="outline" className="border-border bg-muted/70" asChild>
             <Link to="/dashboard/transcription" search={{ id } as any}>
               <FileText className="mr-2 h-4 w-4" /> Transcript
             </Link>
           </Button>
-          <Button variant="outline" className="border-white/15 bg-white/5" onClick={copy}>
+          <Button variant="outline" className="border-border bg-muted/70" onClick={copy}>
             <Copy className="mr-2 h-4 w-4" /> Copy
           </Button>
           <Button
             variant="outline"
-            className="border-white/15 bg-white/5"
+            className="border-border bg-muted/70"
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
               toast.success("Link copied");
@@ -207,7 +207,7 @@ function SummaryPage() {
           >
             <Share2 className="mr-2 h-4 w-4" /> Share
           </Button>
-          <Button variant="outline" disabled={!data} className="border-white/15 bg-white/5" onClick={exportPdf}>
+          <Button variant="outline" disabled={!data} className="border-border bg-muted/70" onClick={exportPdf}>
             <Download className="mr-2 h-4 w-4" /> PDF
           </Button>
           <Button disabled={regen.isPending} className="bg-gradient-brand text-white shadow-glow" onClick={() => regen.mutate()}>
@@ -219,11 +219,11 @@ function SummaryPage() {
       {isLoading ? (
         <div className="grid gap-4 md:grid-cols-2">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-40 animate-pulse rounded-3xl bg-white/[0.04]" />
+            <div key={i} className="h-40 animate-pulse rounded-3xl bg-muted/50" />
           ))}
         </div>
       ) : !data ? (
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="p-10 text-center text-sm text-muted-foreground">
             No summary yet.
             <Button size="sm" variant="link" onClick={() => regen.mutate()} className="px-1 text-foreground">
@@ -241,7 +241,7 @@ function SummaryPage() {
               { icon: Sparkles, label: "Confidence", value: confidence != null ? `${confidence}%` : "—" },
             ].map((m, i) => (
               <motion.div key={m.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                <Card className="glass border-white/10">
+                <Card className="glass border-border/70">
                   <CardContent className="flex items-center gap-3 p-4">
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-brand text-white">
                       <m.icon className="h-4 w-4" />
@@ -258,7 +258,7 @@ function SummaryPage() {
 
           <Tabs defaultValue="short">
             <div className="-mx-1 overflow-x-auto pb-1">
-              <TabsList className="border border-white/10 bg-white/5 backdrop-blur">
+              <TabsList className="border border-border/70 bg-muted/70 backdrop-blur">
                 {[
                   ["short", "Executive"],
                   ["detailed", "Detailed"],
@@ -283,7 +283,7 @@ function SummaryPage() {
             </div>
 
             <TabsContent value="short" className="mt-6">
-              <Card className="glass relative overflow-hidden border-white/10">
+              <Card className="glass relative overflow-hidden border-border/70">
                 <div className="absolute inset-x-0 top-0 h-24 bg-gradient-brand opacity-20 blur-3xl" />
                 <CardContent className="relative p-6 md:p-8">
                   <div className="mb-2 text-[10px] uppercase tracking-widest text-muted-foreground">Executive summary</div>
@@ -294,13 +294,13 @@ function SummaryPage() {
                     ))}
                   </div>
                   {arr("suggestions").length > 0 && (
-                    <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                    <div className="mt-6 rounded-2xl border border-border/70 bg-muted/50 p-4">
                       <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                        <Lightbulb className="h-3.5 w-3.5 text-amber-300" /> AI suggestions
+                        <Lightbulb className="h-3.5 w-3.5 text-amber-700" /> AI suggestions
                       </div>
                       <ul className="space-y-1.5 text-sm">
                         {arr("suggestions").map((x: string, i: number) => (
-                          <li key={i} className="flex gap-2"><span className="text-fuchsia-300">→</span>{x}</li>
+                          <li key={i} className="flex gap-2"><span className="text-rose-700">→</span>{x}</li>
                         ))}
                       </ul>
                     </div>
@@ -310,7 +310,7 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="detailed" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="p-6 md:p-8">
                   <div className="prose-summary max-w-none text-sm leading-relaxed">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.detailed_text || ""}</ReactMarkdown>
@@ -320,7 +320,7 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="minutes" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="p-6 md:p-8">
                   {data.meeting_minutes ? (
                     <div className="prose-summary max-w-none text-sm leading-relaxed">
@@ -334,13 +334,13 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="bullets" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="grid gap-6 p-6 lg:grid-cols-2">
                   <div>
                     <SectionTitle>Quick bullets</SectionTitle>
                     <ul className="space-y-2 text-sm">
                       {(arr("bullet_points").length ? arr("bullet_points") : arr("key_points")).map((k: string, i: number) => (
-                        <li key={i} className="flex gap-2"><span className="text-fuchsia-300">•</span>{k}</li>
+                        <li key={i} className="flex gap-2"><span className="text-rose-700">•</span>{k}</li>
                       ))}
                     </ul>
                   </div>
@@ -348,7 +348,7 @@ function SummaryPage() {
                     <SectionTitle>Key points</SectionTitle>
                     <ul className="grid gap-2.5">
                       {arr("key_points").map((k: string, i: number) => (
-                        <li key={i} className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm">
+                        <li key={i} className="flex gap-3 rounded-xl border border-border/70 bg-muted/50 p-3 text-sm">
                           <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-gradient-brand text-[10px] font-bold text-white">{i + 1}</span>
                           <span>{k}</span>
                         </li>
@@ -360,14 +360,14 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="actions" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="p-6">
                   {items.length === 0 ? (
                     <Empty text="No action items identified in this meeting." />
                   ) : (
                     <div className="space-y-2">
                       {items.map((a, i) => (
-                        <div key={i} className="grid gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-3 md:grid-cols-[1fr_auto] md:items-center">
+                        <div key={i} className="grid gap-2 rounded-xl border border-border/70 bg-muted/50 p-3 md:grid-cols-[1fr_auto] md:items-center">
                           <div className="space-y-2">
                             <Input
                               value={a.text}
@@ -378,7 +378,7 @@ function SummaryPage() {
                                 setItems(next);
                                 setDirty(true);
                               }}
-                              className="h-9 border-transparent bg-transparent px-0 text-sm focus-visible:border-white/20 focus-visible:px-3"
+                              className="h-9 border-transparent bg-transparent px-0 text-sm focus-visible:border-border focus-visible:px-3"
                             />
                             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                               <Input
@@ -391,7 +391,7 @@ function SummaryPage() {
                                   setItems(next);
                                   setDirty(true);
                                 }}
-                                className="h-7 w-32 bg-white/5 text-xs"
+                                className="h-7 w-32 bg-muted/70 text-xs"
                               />
                               <Input
                                 value={a.deadline ?? ""}
@@ -403,7 +403,7 @@ function SummaryPage() {
                                   setItems(next);
                                   setDirty(true);
                                 }}
-                                className="h-7 w-36 bg-white/5 text-xs"
+                                className="h-7 w-36 bg-muted/70 text-xs"
                               />
                             </div>
                           </div>
@@ -430,10 +430,10 @@ function SummaryPage() {
                               className={cn(
                                 "rounded-full border px-2.5 py-1 text-[11px] font-semibold capitalize transition",
                                 a.status === "done"
-                                  ? "border-emerald-400/25 bg-emerald-400/15 text-emerald-200"
+                                  ? "border-emerald-400/25 bg-emerald-100 text-emerald-700"
                                   : a.status === "in_progress"
-                                    ? "border-sky-400/25 bg-sky-400/15 text-sky-200"
-                                    : "border-white/15 bg-white/5 text-muted-foreground",
+                                    ? "border-sky-400/25 bg-sky-100 text-sky-700"
+                                    : "border-border bg-muted/70 text-muted-foreground",
                               )}
                             >
                               {a.status.replace("_", " ")}
@@ -454,19 +454,19 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="timeline" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="p-6">
                   {arr("timeline").length === 0 ? (
                     <Empty text="No timeline available. Regenerate the summary to build one." />
                   ) : (
-                    <ol className="relative space-y-5 border-l border-white/10 pl-6">
+                    <ol className="relative space-y-5 border-l border-border/70 pl-6">
                       {arr("timeline").map((e: any, i: number) => (
                         <li key={i} className="relative">
                           <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full bg-gradient-brand shadow-glow" />
                           <Link
                             to="/dashboard/transcription"
                             search={{ id, t: toSeconds(e.time) } as any}
-                            className="font-mono text-xs text-fuchsia-300 hover:underline"
+                            className="font-mono text-xs text-rose-700 hover:underline"
                           >
                             {e.time}
                           </Link>
@@ -481,14 +481,14 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="decisions" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="space-y-3 p-6">
                   {arr("decisions").length === 0 ? (
                     <Empty text="No explicit decisions were recorded." />
                   ) : (
                     arr("decisions").map((d: any, i: number) => (
-                      <div key={i} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                        <div className="flex gap-2 text-sm font-medium"><GitBranch className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />{d.text}</div>
+                      <div key={i} className="rounded-xl border border-border/70 bg-muted/50 p-4">
+                        <div className="flex gap-2 text-sm font-medium"><GitBranch className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />{d.text}</div>
                         {d.rationale && <p className="mt-1.5 pl-6 text-xs text-muted-foreground">{d.rationale}</p>}
                       </div>
                     ))
@@ -498,14 +498,14 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="risks" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="space-y-3 p-6">
                   {arr("risks").length === 0 ? (
                     <Empty text="No risks or blockers were raised." />
                   ) : (
                     arr("risks").map((r: any, i: number) => (
-                      <div key={i} className="flex items-start justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm">
-                        <span className="flex gap-2"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />{r.text}</span>
+                      <div key={i} className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-muted/50 p-4 text-sm">
+                        <span className="flex gap-2"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />{r.text}</span>
                         <Badge className={cn("shrink-0 border capitalize", PRIORITY_STYLES[r.severity ?? "medium"])}>{r.severity}</Badge>
                       </div>
                     ))
@@ -515,14 +515,14 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="deadlines" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="space-y-3 p-6">
                   {arr("deadlines").length === 0 ? (
                     <Empty text="No dated commitments were mentioned." />
                   ) : (
                     arr("deadlines").map((d: any, i: number) => (
-                      <div key={i} className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm">
-                        <span className="flex gap-2"><CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />{d.label}</span>
+                      <div key={i} className="flex items-center justify-between gap-3 rounded-xl border border-border/70 bg-muted/50 p-4 text-sm">
+                        <span className="flex gap-2"><CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-sky-700" />{d.label}</span>
                         <span className="shrink-0 text-xs text-muted-foreground">
                           {d.date ?? "date not stated"}{d.owner ? ` · ${d.owner}` : ""}
                         </span>
@@ -534,19 +534,19 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="quotes" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="grid gap-3 p-6 md:grid-cols-2">
                   {arr("quotes").length === 0 ? (
                     <Empty text="No standout quotes were captured." />
                   ) : (
                     arr("quotes").map((q: any, i: number) => (
-                      <blockquote key={i} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-                        <Quote className="mb-2 h-4 w-4 text-fuchsia-300" />
+                      <blockquote key={i} className="rounded-2xl border border-border/70 bg-muted/50 p-4">
+                        <Quote className="mb-2 h-4 w-4 text-rose-700" />
                         <p className="text-sm italic leading-relaxed">“{q.text}”</p>
                         <footer className="mt-2 text-xs text-muted-foreground">
                           {q.speaker ?? "Unattributed"}
                           {q.time && q.time !== "--:--" && (
-                            <Link to="/dashboard/transcription" search={{ id, t: toSeconds(q.time) } as any} className="ml-2 font-mono text-fuchsia-300 hover:underline">
+                            <Link to="/dashboard/transcription" search={{ id, t: toSeconds(q.time) } as any} className="ml-2 font-mono text-rose-700 hover:underline">
                               {q.time}
                             </Link>
                           )}
@@ -559,7 +559,7 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="topics" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="space-y-5 p-6">
                   <div>
                     <SectionTitle>Topics</SectionTitle>
@@ -584,7 +584,7 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="sentiment" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="space-y-3 p-6 text-sm">
                   {sentiment && (
                     <div className="mb-2 text-muted-foreground">
@@ -607,10 +607,10 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="accuracy" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="p-6 md:p-8">
                   {isAccuracyLoading ? (
-                    <div className="h-72 animate-pulse rounded-2xl bg-white/[0.04]" />
+                    <div className="h-72 animate-pulse rounded-2xl bg-muted/50" />
                   ) : accuracyData.length > 0 ? (
                     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-center">
                       <div>
@@ -634,7 +634,7 @@ function SummaryPage() {
                           </ResponsiveContainer>
                         </div>
                       </div>
-                      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center">
+                      <div className="rounded-2xl border border-border/70 bg-muted/50 p-5 text-center">
                         <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Average ROUGE</div>
                         <div className="mt-2 text-4xl font-bold text-gradient">{averageAccuracy?.toFixed(1)}%</div>
                         <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
@@ -649,7 +649,7 @@ function SummaryPage() {
                       <p className="mx-auto mt-1 max-w-lg text-sm text-muted-foreground">
                         Add a human-written reference summary before measuring accuracy. AI confidence is not used as an accuracy score.
                       </p>
-                      <Button asChild variant="outline" className="mt-5 border-white/15 bg-white/5">
+                      <Button asChild variant="outline" className="mt-5 border-border bg-muted/70">
                         <Link to="/dashboard/benchmarks">Add reference in Benchmarks</Link>
                       </Button>
                     </div>
@@ -659,7 +659,7 @@ function SummaryPage() {
             </TabsContent>
 
             <TabsContent value="chat" className="mt-6">
-              <Card className="glass border-white/10">
+              <Card className="glass border-border/70">
                 <CardContent className="p-6">
                   <TranscriptChat recordingId={id} />
                 </CardContent>

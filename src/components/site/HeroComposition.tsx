@@ -13,8 +13,8 @@ function Fallback() {
         className="absolute inset-[12%] rounded-full blur-[2px]"
         style={{
           background:
-            "radial-gradient(circle at 32% 28%, oklch(0.98 0.02 260 / 0.9), oklch(0.62 0.21 293) 42%, oklch(0.3 0.14 275) 72%, transparent 74%)",
-          boxShadow: "0 40px 120px -30px oklch(0.55 0.25 295 / 0.8)",
+            "radial-gradient(circle at 32% 28%, oklch(0.98 0.02 260 / 0.9), oklch(0.51 0.105 255) 42%, oklch(0.35 0.06 260) 72%, transparent 74%)",
+          boxShadow: "0 40px 120px -30px oklch(0.51 0.105 255 / 0.35)",
         }}
         animate={{ rotate: 360 }}
         transition={{ duration: 46, repeat: Infinity, ease: "linear" }}
@@ -60,7 +60,7 @@ export function HeroComposition() {
       {/* background glow */}
       <div
         className="pointer-events-none absolute inset-[8%] rounded-full opacity-70 blur-[90px] animate-pulse-glow"
-        style={{ background: "conic-gradient(from 90deg, oklch(0.55 0.25 295/0.6), oklch(0.62 0.19 258/0.45), oklch(0.86 0.21 160/0.3), oklch(0.55 0.25 295/0.6))" }}
+        style={{ background: "conic-gradient(from 90deg, oklch(0.51 0.105 255/0.4), oklch(0.47 0.08 248/0.35), oklch(0.6 0.075 205/0.3), oklch(0.51 0.105 255/0.4))" }}
       />
       {/* concentric halo rings */}
       {[0, 1, 2].map((i) => (
@@ -119,7 +119,7 @@ export function HeroComposition() {
         </p>
         <div className="mt-2 flex flex-wrap gap-1">
           {["Streaming", "Pricing", "Q4"].map((t) => (
-            <span key={t} className="rounded-full border border-white/10 bg-white/5 px-2 py-0.5 text-[9px] text-muted-foreground">{t}</span>
+            <span key={t} className="rounded-full border border-border/70 bg-muted/70 px-2 py-0.5 text-[9px] text-muted-foreground">{t}</span>
           ))}
         </div>
       </FloatCard>

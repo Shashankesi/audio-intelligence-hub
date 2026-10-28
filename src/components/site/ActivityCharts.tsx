@@ -21,15 +21,15 @@ export const MinutesArea = memo(function MinutesArea({ data }: { data: ActivityP
       <AreaChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
         <defs>
           <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="oklch(0.72 0.19 295)" stopOpacity={0.7} />
-            <stop offset="100%" stopColor="oklch(0.72 0.19 295)" stopOpacity={0} />
+            <stop offset="0%" stopColor="oklch(0.51 0.105 255)" stopOpacity={0.7} />
+            <stop offset="100%" stopColor="oklch(0.51 0.105 255)" stopOpacity={0} />
           </linearGradient>
         </defs>
         <CartesianGrid stroke="oklch(1 0 0 / 0.05)" vertical={false} />
         <XAxis dataKey="d" {...axis} />
         <YAxis {...axis} width={38} />
         <Tooltip cursor={{ stroke: "oklch(1 0 0 / 0.15)" }} contentStyle={tooltipStyle} />
-        <Area type="monotone" dataKey="minutes" stroke="oklch(0.78 0.17 295)" strokeWidth={2} fill="url(#g1)" animationDuration={900} />
+        <Area type="monotone" dataKey="minutes" stroke="oklch(0.51 0.105 255)" strokeWidth={2} fill="url(#g1)" animationDuration={900} />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -58,7 +58,7 @@ export const UploadsBar = memo(function UploadsBar({ data }: { data: ActivityPoi
 const PIE_COLORS = [
   "oklch(0.76 0.18 300)",
   "oklch(0.80 0.15 200)",
-  "oklch(0.78 0.16 150)",
+  "oklch(0.6 0.075 205)",
   "oklch(0.82 0.15 80)",
   "oklch(0.72 0.17 20)",
   "oklch(0.70 0.12 260)",

@@ -16,12 +16,12 @@ function Core() {
       <mesh ref={ref} scale={1.15}>
         <icosahedronGeometry args={[1, 32]} />
         <MeshDistortMaterial
-          color="#8b5cf6"
+          color="#4c7fb8"
           distort={0.5}
           speed={2.6}
           roughness={0.1}
           metalness={0.85}
-          emissive="#312e81"
+          emissive="#1e3a5f"
           emissiveIntensity={0.5}
         />
       </mesh>
@@ -40,10 +40,10 @@ function Rings() {
   return (
     <group ref={ref}>
       <Torus args={[1.9, 0.012, 16, 128]} rotation={[Math.PI / 2.4, 0, 0]}>
-        <meshStandardMaterial color="#67e8f9" emissive="#0891b2" emissiveIntensity={1.6} />
+        <meshStandardMaterial color="#7fcfd4" emissive="#2f8fa3" emissiveIntensity={1.6} />
       </Torus>
       <Torus args={[2.35, 0.008, 16, 128]} rotation={[Math.PI / 1.7, 0.4, 0]}>
-        <meshStandardMaterial color="#c4b5fd" emissive="#7c3aed" emissiveIntensity={1.4} />
+        <meshStandardMaterial color="#c3d6ea" emissive="#3a6ea5" emissiveIntensity={1.4} />
       </Torus>
     </group>
   );
@@ -58,11 +58,11 @@ export default function AuthScene() {
       style={{ background: "transparent" }}
     >
       <ambientLight intensity={0.35} />
-      <pointLight position={[4, 4, 4]} intensity={2.4} color="#c4b5fd" />
-      <pointLight position={[-4, -3, -2]} intensity={1.6} color="#67e8f9" />
+      <pointLight position={[4, 4, 4]} intensity={2.4} color="#c3d6ea" />
+      <pointLight position={[-4, -3, -2]} intensity={1.6} color="#7fcfd4" />
       <Core />
       <Rings />
-      <Sparkles count={70} scale={7} size={2.5} speed={0.3} color="#a5b4fc" />
+      <Sparkles count={70} scale={7} size={2.5} speed={0.3} color="#b9cde3" />
       <Environment preset="night" />
     </Canvas>
   );

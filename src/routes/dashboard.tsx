@@ -62,13 +62,13 @@ function DashboardLayout() {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset className="bg-transparent">
-          <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-3 rounded-2xl border border-white/10 bg-background/55 px-3 backdrop-blur-xl md:px-4">
+          <header className="sticky top-0 z-30 mx-3 mt-3 flex h-14 items-center gap-3 rounded-2xl border border-border bg-card/80 px-3 backdrop-blur-xl md:px-4">
             <SidebarTrigger />
             <Breadcrumbs />
             <button
               onClick={() => setOpen(true)}
               aria-label="Open command palette"
-              className="group ml-2 hidden h-9 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 text-xs text-muted-foreground transition-all duration-300 hover:border-white/20 hover:bg-white/[0.08] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:flex lg:w-64 xl:w-80"
+              className="group ml-2 hidden h-9 items-center gap-2 rounded-xl border border-border/70 bg-muted/70 px-3 text-xs text-muted-foreground transition-all duration-300 hover:border-border hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:flex lg:w-64 xl:w-80"
             >
               <CommandIcon className="h-3.5 w-3.5" />
               <span>Search or jump to…</span>
@@ -83,7 +83,7 @@ function DashboardLayout() {
               </Button>
               <span className="hidden text-xs text-muted-foreground md:inline">{user.email}</span>
               <NotificationCenter />
-              <Button variant="outline" size="sm" className="hidden rounded-xl border-white/15 bg-white/5 sm:inline-flex" asChild><Link to="/">Home</Link></Button>
+              <Button variant="outline" size="sm" className="hidden rounded-xl border-border bg-muted/70 sm:inline-flex" asChild><Link to="/">Home</Link></Button>
               <Button variant="ghost" size="icon" aria-label="Sign out" onClick={signOut}><LogOut className="h-4 w-4" /></Button>
             </div>
           </header>

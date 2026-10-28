@@ -53,7 +53,7 @@ function ResetPage() {
     <div className="relative grid min-h-screen place-items-center px-6">
       <Backdrop />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="p-8">
             <h2 className="text-xl font-semibold">Set a new password</h2>
             <p className="mt-1 text-sm text-muted-foreground">

@@ -18,7 +18,7 @@ function DatasetsPage() {
     <PageShell title="Datasets" description="Reference corpora used for evaluation and fine-tuning." actions={<Button className="bg-gradient-brand text-white shadow-glow"><Plus className="mr-2 h-4 w-4" /> New dataset</Button>}>
       <div className="grid gap-4 md:grid-cols-2">
         {sets.map(s => (
-          <Card key={s.name} className="glass border-white/10 transition hover:-translate-y-0.5 hover:shadow-glow">
+          <Card key={s.name} className="glass border-border/70 transition hover:-translate-y-0.5 hover:shadow-glow">
             <CardContent className="flex items-center gap-4 p-5">
               <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-brand shadow-glow"><Database className="h-5 w-5 text-white" /></span>
               <div className="flex-1">

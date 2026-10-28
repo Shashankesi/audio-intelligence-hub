@@ -56,7 +56,7 @@ export function Navbar() {
               className="relative rounded-full px-3.5 py-1.5 transition-colors duration-300 hover:text-foreground"
             >
               <span className="relative z-10">{l.label}</span>
-              <span className="absolute inset-0 scale-90 rounded-full bg-white/5 opacity-0 transition-all duration-300 hover:scale-100 hover:opacity-100" />
+              <span className="absolute inset-0 scale-90 rounded-full bg-muted/70 opacity-0 transition-all duration-300 hover:scale-100 hover:opacity-100" />
             </a>
           ))}
         </nav>
@@ -77,7 +77,7 @@ export function Navbar() {
           <button
             aria-label="Toggle menu"
             onClick={() => setOpen((v) => !v)}
-            className="grid h-9 w-9 place-items-center rounded-full border border-white/10 text-muted-foreground transition hover:text-foreground md:hidden"
+            className="grid h-9 w-9 place-items-center rounded-full border border-border/70 text-muted-foreground transition hover:text-foreground md:hidden"
           >
             {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
@@ -93,11 +93,11 @@ export function Navbar() {
             className="mx-auto mt-2 grid max-w-6xl gap-1 rounded-3xl glass-strong p-3 text-sm md:hidden"
           >
             {LINKS.map((l) => (
-              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-xl px-3 py-2 text-muted-foreground transition hover:bg-white/5 hover:text-foreground">
+              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="rounded-xl px-3 py-2 text-muted-foreground transition hover:bg-muted/70 hover:text-foreground">
                 {l.label}
               </a>
             ))}
-            <Link to="/login" onClick={() => setOpen(false)} className="rounded-xl px-3 py-2 text-muted-foreground transition hover:bg-white/5 hover:text-foreground">
+            <Link to="/login" onClick={() => setOpen(false)} className="rounded-xl px-3 py-2 text-muted-foreground transition hover:bg-muted/70 hover:text-foreground">
               Sign in
             </Link>
           </motion.nav>
