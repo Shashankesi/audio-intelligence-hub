@@ -56,7 +56,7 @@ export function TranscriptView({
 
   if (!segments.length) {
     return (
-      <div className="max-h-[62vh] overflow-auto whitespace-pre-wrap rounded-xl border border-white/10 bg-white/[0.02] p-4 text-sm leading-7">
+      <div className="max-h-[62vh] overflow-auto whitespace-pre-wrap rounded-xl border border-border/70 bg-white/[0.02] p-4 text-sm leading-7">
         {highlight(plainText, query)}
       </div>
     );
@@ -78,7 +78,7 @@ export function TranscriptView({
             data-seg={i}
             className={cn(
               "group flex gap-3 rounded-xl border border-transparent px-3 py-2 transition-colors",
-              active ? "border-white/15 bg-white/[0.07]" : "hover:bg-white/[0.04]",
+              active ? "border-border bg-muted/70" : "hover:bg-muted/50",
             )}
           >
             <button
@@ -87,7 +87,7 @@ export function TranscriptView({
               aria-label={`Jump to ${formatClock(s.start)}`}
               className={cn(
                 "h-fit shrink-0 rounded-md px-2 py-0.5 font-mono text-[11px] tabular-nums transition",
-                active ? "bg-gradient-brand text-white" : "bg-white/8 text-muted-foreground hover:bg-white/15 hover:text-foreground",
+                active ? "bg-gradient-brand text-white" : "bg-muted text-muted-foreground hover:bg-white/15 hover:text-foreground",
               )}
             >
               {formatClock(s.start)}

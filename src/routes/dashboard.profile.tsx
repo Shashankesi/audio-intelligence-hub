@@ -81,7 +81,7 @@ function ProfilePage() {
   return (
     <PageShell title="Profile" description="Your account, usage and recent activity.">
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="glass relative overflow-hidden border-white/10 lg:col-span-1">
+        <Card className="glass relative overflow-hidden border-border/70 lg:col-span-1">
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-brand opacity-30 blur-2xl" />
           <CardContent className="relative p-6 text-center">
             <Avatar className="mx-auto h-24 w-24 ring-2 ring-white/20">
@@ -91,7 +91,7 @@ function ProfilePage() {
             <div className="text-xs text-muted-foreground">{user?.email}</div>
             <div className="mt-2 flex justify-center gap-2">
               <Badge className="bg-gradient-brand text-white">Pro</Badge>
-              <Badge variant="outline" className="border-white/15">Member since {memberSince}</Badge>
+              <Badge variant="outline" className="border-border">Member since {memberSince}</Badge>
             </div>
 
             <div className="mt-6 grid grid-cols-3 gap-3 text-center">
@@ -100,7 +100,7 @@ function ProfilePage() {
                 [done, "Completed"],
                 [Math.round(minutes), "Minutes"],
               ].map(([v, l]) => (
-                <div key={l as string} className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+                <div key={l as string} className="rounded-lg border border-border/70 bg-muted/50 p-3">
                   <div className="text-lg font-bold text-gradient"><AnimatedCounter value={v as number} /></div>
                   <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{l}</div>
                 </div>
@@ -117,21 +117,21 @@ function ProfilePage() {
         </Card>
 
         <div className="space-y-6 lg:col-span-2">
-          <Card className="glass border-white/10">
+          <Card className="glass border-border/70">
             <CardContent className="space-y-4 p-6">
               <h3 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4" /> Account</h3>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2"><Label>Display name</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className="bg-white/5" /></div>
-                <div className="space-y-2"><Label>Email</Label><Input value={user?.email ?? ""} disabled className="bg-white/5" /></div>
-                <div className="space-y-2"><Label>Default model</Label><Input value={(profile?.default_model ?? "").split("/").pop() ?? "—"} disabled className="bg-white/5" /></div>
-                <div className="space-y-2"><Label>Default language</Label><Input value={profile?.default_language ?? "auto"} disabled className="bg-white/5" /></div>
+                <div className="space-y-2"><Label>Display name</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Your name" className="bg-muted/70" /></div>
+                <div className="space-y-2"><Label>Email</Label><Input value={user?.email ?? ""} disabled className="bg-muted/70" /></div>
+                <div className="space-y-2"><Label>Default model</Label><Input value={(profile?.default_model ?? "").split("/").pop() ?? "—"} disabled className="bg-muted/70" /></div>
+                <div className="space-y-2"><Label>Default language</Label><Input value={profile?.default_language ?? "auto"} disabled className="bg-muted/70" /></div>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button disabled={saving} className="bg-gradient-brand text-white shadow-glow" onClick={save}>
                   {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Save changes
                 </Button>
-                <Button variant="outline" className="border-white/15 bg-white/5" asChild><Link to="/dashboard/settings">Change defaults</Link></Button>
-                <Button variant="outline" className="border-white/15 bg-white/5" onClick={resetPassword}><ShieldCheck className="mr-2 h-4 w-4" /> Reset password</Button>
+                <Button variant="outline" className="border-border bg-muted/70" asChild><Link to="/dashboard/settings">Change defaults</Link></Button>
+                <Button variant="outline" className="border-border bg-muted/70" onClick={resetPassword}><ShieldCheck className="mr-2 h-4 w-4" /> Reset password</Button>
                 <Button variant="ghost" className="text-muted-foreground" onClick={async () => { await supabase.auth.signOut(); window.location.href = "/login"; }}>
                   <LogOut className="mr-2 h-4 w-4" /> Sign out
                 </Button>
@@ -139,7 +139,7 @@ function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="glass border-white/10">
+          <Card className="glass border-border/70">
             <CardContent className="p-6">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold"><Clock className="h-4 w-4" /> Recent activity</h3>
               {recs.length === 0 ? (
@@ -151,12 +151,12 @@ function ProfilePage() {
                       key={r.id}
                       to="/dashboard/summary"
                       search={{ id: r.id } as any}
-                      className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-sm transition hover:bg-white/[0.07]"
+                      className="flex items-center justify-between rounded-lg border border-border/70 bg-muted/50 px-3 py-2 text-sm transition hover:bg-muted/70"
                     >
                       <span className="truncate pr-3">{r.name}</span>
                       <span className="flex items-center gap-3 text-xs text-muted-foreground">
                         <span>{new Date(r.created_at).toLocaleDateString()}</span>
-                        <Badge variant="outline" className="border-white/15 capitalize">{r.status}</Badge>
+                        <Badge variant="outline" className="border-border capitalize">{r.status}</Badge>
                       </span>
                     </Link>
                   ))}

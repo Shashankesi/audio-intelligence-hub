@@ -24,7 +24,7 @@ const secondary = [
 ];
 
 const navItemClass =
-  "relative rounded-xl transition-all duration-300 hover:bg-white/[0.06] hover:text-foreground data-[active=true]:bg-white/[0.08] data-[active=true]:shadow-[inset_0_1px_0_oklch(1_0_0/0.08)] data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-5 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-gradient-brand";
+  "relative rounded-xl transition-all duration-300 hover:bg-muted/70 hover:text-foreground data-[active=true]:bg-muted data-[active=true]:shadow-[inset_0_1px_0_oklch(1_0_0/0.08)] data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-5 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-gradient-brand";
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
@@ -44,7 +44,7 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-[28px] [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-white/10 [&>[data-sidebar=sidebar]]:glass"
+      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-[28px] [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-border/70 [&>[data-sidebar=sidebar]]:glass"
     >
       <SidebarHeader>
         <Link to="/" className="group flex items-center gap-2.5 px-2 py-2">
@@ -91,9 +91,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="mx-2 mb-2 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+        <div className="mx-2 mb-2 rounded-xl border border-border/70 bg-muted/50 p-3">
           <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 border border-white/10">
+            <Avatar className="h-8 w-8 border border-border/70">
               <AvatarFallback className="bg-gradient-brand text-xs font-semibold text-white">{initial}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
@@ -101,7 +101,7 @@ export function AppSidebar() {
               <div className="truncate text-[10px] text-muted-foreground">{user?.email ?? "—"}</div>
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between rounded-lg bg-white/5 px-2 py-1.5 text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">
+          <div className="mt-2 flex items-center justify-between rounded-lg bg-muted/70 px-2 py-1.5 text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">
             <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-fuchsia-300" /> {count} recordings</span>
             <span className="rounded bg-emerald-400/15 px-1.5 py-0.5 text-emerald-300">Pro</span>
           </div>

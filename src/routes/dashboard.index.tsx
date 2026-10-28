@@ -78,9 +78,9 @@ function Overview() {
       actions={<Button asChild className="bg-gradient-brand text-white shadow-glow"><Link to="/dashboard/upload"><Upload className="mr-2 h-4 w-4" /> New upload</Link></Button>}
     >
       <div className="mb-6 grid gap-4 lg:grid-cols-3">
-        <Card className="glass rounded-[28px] border-white/10 lg:col-span-2 overflow-hidden">
+        <Card className="glass rounded-[28px] border-border/70 lg:col-span-2 overflow-hidden">
           <CardContent className="relative p-0">
-            <Suspense fallback={<Skeleton className="h-56 w-full rounded-none bg-white/5" />}>
+            <Suspense fallback={<Skeleton className="h-56 w-full rounded-none bg-muted/70" />}>
               <DashboardScene className="!h-56 !rounded-none !border-0" />
             </Suspense>
             <div className="pointer-events-none absolute inset-0 z-20 flex flex-col justify-end p-6">
@@ -89,7 +89,7 @@ function Overview() {
             </div>
           </CardContent>
         </Card>
-        <Card className="glass rounded-[28px] border-white/10">
+        <Card className="glass rounded-[28px] border-border/70">
           <CardContent className="p-5">
             <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
               <span>Momentum</span><TrendingUp className="h-4 w-4" />
@@ -98,7 +98,7 @@ function Overview() {
               <AnimatedCounter value={done} />
             </div>
             <div className="text-xs text-muted-foreground">completed recordings</div>
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/5">
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted/70">
               <motion.div
                 className="h-full bg-gradient-brand"
                 initial={{ width: 0 }}
@@ -117,7 +117,7 @@ function Overview() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((s, i) => (
           <motion.div key={s.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-            <Card className="group glass relative overflow-hidden rounded-[28px] border-white/10 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform hover:-translate-y-1 hover:border-white/20 hover:shadow-glow">
+            <Card className="group glass relative overflow-hidden rounded-[28px] border-border/70 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-transform hover:-translate-y-1 hover:border-border hover:shadow-glow">
               <div className={`pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br ${s.tint} opacity-70 blur-2xl transition group-hover:opacity-100`} />
               <CardContent className="relative p-5">
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
@@ -137,24 +137,24 @@ function Overview() {
       </div>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-3">
-        <Card className="glass rounded-[28px] border-white/10 lg:col-span-2">
+        <Card className="glass rounded-[28px] border-border/70 lg:col-span-2">
           <CardContent className="p-5">
             <div className="mb-2 flex items-center justify-between">
               <h3 className="text-sm font-semibold">Processing activity</h3>
               <span className="text-xs text-muted-foreground">Last 14 days</span>
             </div>
             <div className="h-64">
-              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-muted/70" />}>
                 <MinutesArea data={data} />
               </Suspense>
             </div>
           </CardContent>
         </Card>
-        <Card className="glass rounded-[28px] border-white/10">
+        <Card className="glass rounded-[28px] border-border/70">
           <CardContent className="p-5">
             <h3 className="mb-2 text-sm font-semibold">Uploads per day</h3>
             <div className="h-64">
-              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-muted/70" />}>
                 <UploadsBar data={data} />
               </Suspense>
             </div>
@@ -162,7 +162,7 @@ function Overview() {
         </Card>
       </div>
 
-      <Card className="mt-6 glass rounded-[28px] border-white/10">
+      <Card className="mt-6 glass rounded-[28px] border-border/70">
         <CardContent className="p-5">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-sm font-semibold">Recent activity</h3>

@@ -10,7 +10,7 @@ export function SectionHeading({ eyebrow, title, subtitle }: { eyebrow?: string;
       className="mx-auto max-w-2xl text-center"
     >
       {eyebrow && (
-        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-widest text-muted-foreground">
+        <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-muted/70 px-3 py-1 text-xs uppercase tracking-widest text-muted-foreground">
           {eyebrow}
         </span>
       )}

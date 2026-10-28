@@ -11,7 +11,7 @@ export function Footer() {
   const [email, setEmail] = useState("");
 
   return (
-    <footer className="relative mt-40 overflow-hidden border-t border-white/10">
+    <footer className="relative mt-40 overflow-hidden border-t border-border/70">
       <div className="pointer-events-none absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
       <div className="pointer-events-none absolute left-1/2 top-0 h-[26rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]" style={{ background: "var(--gradient-brand)" }} />
 
@@ -39,7 +39,7 @@ export function Footer() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@company.com"
-              className="h-11 rounded-full border-white/10 bg-white/5"
+              className="h-11 rounded-full border-border/70 bg-muted/70"
               aria-label="Email address"
             />
             <Button type="submit" className="h-11 shrink-0 rounded-full bg-gradient-brand px-5 text-white shadow-glow">
@@ -69,7 +69,7 @@ export function Footer() {
                   key={i}
                   href="#"
                   whileHover={{ y: -3, scale: 1.06 }}
-                  className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/5 text-muted-foreground transition hover:text-foreground"
+                  className="grid h-9 w-9 place-items-center rounded-xl border border-border/70 bg-muted/70 text-muted-foreground transition hover:text-foreground"
                   aria-label="Social link"
                 >
                   <Icon className="h-4 w-4" />
@@ -103,7 +103,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-muted-foreground md:flex-row">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border/70 pt-8 text-xs text-muted-foreground md:flex-row">
           <p>© {new Date().getFullYear()} AudioInsight AI. All rights reserved.</p>
           <p>Crafted for research, product and the future of listening.</p>
         </div>

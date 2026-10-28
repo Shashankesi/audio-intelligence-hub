@@ -51,7 +51,7 @@ function Scene() {
 
 export function DashboardScene({ className = "" }: { className?: string }) {
   return (
-    <div className={"relative h-56 w-full overflow-hidden rounded-2xl border border-white/10 " + className}>
+    <div className={"relative h-56 w-full overflow-hidden rounded-2xl border border-border/70 " + className}>
       <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl" style={{ background: "radial-gradient(circle at 20% 20%, oklch(0.72 0.19 295 / 0.15), transparent 60%)" }} />
       <ClientOnly fallback={<div className="h-full w-full bg-gradient-to-br from-fuchsia-500/20 via-purple-500/10 to-cyan-500/20" />}>
         <Scene />

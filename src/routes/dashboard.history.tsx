@@ -110,7 +110,7 @@ function HistoryPage() {
       description="Search, organise and bulk-manage every meeting you've processed."
       actions={<Button asChild className="bg-gradient-brand text-white shadow-glow"><Link to="/dashboard/upload">New upload</Link></Button>}
     >
-      <Card className="glass rounded-[28px] border-white/10">
+      <Card className="glass rounded-[28px] border-border/70">
         <CardContent className="p-4">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <div className="relative min-w-56 flex-1">
@@ -119,11 +119,11 @@ function HistoryPage() {
                 value={q}
                 onChange={(e) => { setQ(e.target.value); setPage(0); }}
                 placeholder="Search by name, tag or folder…"
-                className="h-9 bg-white/5 pl-9"
+                className="h-9 bg-muted/70 pl-9"
                 aria-label="Search recordings"
               />
             </div>
-            <div className="flex rounded-xl border border-white/10 bg-white/5 p-0.5" role="tablist">
+            <div className="flex rounded-xl border border-border/70 bg-muted/70 p-0.5" role="tablist">
               {(["all", "favorites", "archived"] as View[]).map((v) => (
                 <button
                   key={v}
@@ -137,7 +137,7 @@ function HistoryPage() {
               ))}
             </div>
             <Select value={status} onValueChange={(v) => { setStatus(v); setPage(0); }}>
-              <SelectTrigger className="h-9 w-36 bg-white/5"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectTrigger className="h-9 w-36 bg-muted/70"><SelectValue placeholder="Status" /></SelectTrigger>
               <SelectContent>
                 {["any", "uploaded", "transcribed", "done", "failed"].map((s) => (
                   <SelectItem key={s} value={s} className="capitalize">{s === "any" ? "Any status" : s}</SelectItem>
@@ -145,7 +145,7 @@ function HistoryPage() {
               </SelectContent>
             </Select>
             <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-              <SelectTrigger className="h-9 w-36 bg-white/5"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="h-9 w-36 bg-muted/70"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="recent">Newest first</SelectItem>
                 <SelectItem value="oldest">Oldest first</SelectItem>
@@ -154,13 +154,13 @@ function HistoryPage() {
                 <SelectItem value="longest">Longest audio</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="outline" size="sm" className="h-9 border-white/10 bg-white/5" onClick={exportCsv}>
+            <Button variant="outline" size="sm" className="h-9 border-border/70 bg-muted/70" onClick={exportCsv}>
               <Download className="mr-2 h-4 w-4" /> CSV
             </Button>
           </div>
 
           {selected.length > 0 && (
-            <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-xs">
+            <div className="mb-3 flex flex-wrap items-center gap-2 rounded-2xl border border-border/70 bg-muted/70 px-3 py-2 text-xs">
               <span className="font-medium">{selected.length} selected</span>
               <Button size="sm" variant="ghost" className="h-7" onClick={() => bulk({ favorite: true }, "Added to favorites")}><Star className="mr-1 h-3.5 w-3.5" />Favorite</Button>
               <Button size="sm" variant="ghost" className="h-7" onClick={() => bulk({ archived: view !== "archived" }, view === "archived" ? "Restored" : "Archived")}>
@@ -177,7 +177,7 @@ function HistoryPage() {
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
-                <TableRow className="border-white/10">
+                <TableRow className="border-border/70">
                   <TableHead className="w-8"><Checkbox checked={allOnPage} onCheckedChange={toggleAll} aria-label="Select all on page" /></TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead className="hidden md:table-cell">Duration</TableHead>
@@ -195,7 +195,7 @@ function HistoryPage() {
                   </TableCell></TableRow>
                 )}
                 {pageRows.map((r) => (
-                  <TableRow key={r.id} className="border-white/10">
+                  <TableRow key={r.id} className="border-border/70">
                     <TableCell><Checkbox checked={selected.includes(r.id)} onCheckedChange={(v) => setSelected(v ? [...selected, r.id] : selected.filter((i) => i !== r.id))} aria-label={`Select ${r.name}`} /></TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -205,7 +205,7 @@ function HistoryPage() {
                       </div>
                       {(r.tags ?? []).length > 0 && (
                         <div className="mt-1 flex flex-wrap gap-1">
-                          {r.tags.slice(0, 3).map((t) => <span key={t} className="rounded-full bg-white/5 px-2 py-0.5 text-[10px] text-muted-foreground">#{t}</span>)}
+                          {r.tags.slice(0, 3).map((t) => <span key={t} className="rounded-full bg-muted/70 px-2 py-0.5 text-[10px] text-muted-foreground">#{t}</span>)}
                         </div>
                       )}
                     </TableCell>

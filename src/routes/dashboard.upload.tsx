@@ -132,13 +132,13 @@ function UploadPage() {
   return (
     <PageShell title="Upload audio" description="Drop a file or browse. We'll transcribe and summarize automatically.">
       <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="glass border-white/10 lg:col-span-2">
+        <Card className="glass border-border/70 lg:col-span-2">
           <CardContent className="p-6">
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={onDrop}
               onClick={() => inputRef.current?.click()}
-              className="cursor-pointer rounded-2xl border-2 border-dashed border-white/15 bg-white/[0.02] p-10 text-center transition hover:border-white/30 hover:bg-white/[0.04]"
+              className="cursor-pointer rounded-2xl border-2 border-dashed border-border bg-white/[0.02] p-10 text-center transition hover:border-white/30 hover:bg-muted/50"
             >
               <input ref={inputRef} type="file" accept="audio/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setPhase("idle"); setProgress(0); setFile(f); } }} />
               <UploadCloud className="mx-auto h-10 w-10 text-muted-foreground" />
@@ -148,7 +148,7 @@ function UploadPage() {
 
             <AnimatePresence>
               {file && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-6 rounded-xl border border-border/70 bg-muted/50 p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <span className="grid h-10 w-10 place-items-center rounded-lg bg-gradient-brand shadow-glow"><FileAudio className="h-5 w-5 text-white" /></span>
@@ -180,11 +180,11 @@ function UploadPage() {
           </CardContent>
         </Card>
 
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="p-6">
             <h3 className="text-sm font-semibold">Supported formats</h3>
             <ul className="mt-3 grid grid-cols-2 gap-2 text-sm">
-              {["MP3","WAV","FLAC","OGG","M4A"].map(f => <li key={f} className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-center">{f}</li>)}
+              {["MP3","WAV","FLAC","OGG","M4A"].map(f => <li key={f} className="rounded-lg border border-border/70 bg-muted/50 px-3 py-2 text-center">{f}</li>)}
             </ul>
             <h3 className="mt-6 text-sm font-semibold">Tips</h3>
             <ul className="mt-2 space-y-2 text-xs text-muted-foreground">

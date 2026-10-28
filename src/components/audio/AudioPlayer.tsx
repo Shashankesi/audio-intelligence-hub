@@ -125,7 +125,7 @@ export function AudioPlayer({
   const bars = peaks.length ? peaks : Array.from({ length: 120 }, (_, i) => 0.25 + 0.2 * Math.sin(i / 4));
 
   return (
-    <div className={cn("rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-xl", className)}>
+    <div className={cn("rounded-2xl border border-border/70 bg-muted/50 p-4 backdrop-blur-xl", className)}>
       {parts[index] && (
         <audio
           ref={audioRef}
@@ -206,7 +206,7 @@ export function AudioPlayer({
         <button
           type="button"
           onClick={() => setSpeed(SPEEDS[(SPEEDS.indexOf(speed) + 1) % SPEEDS.length])}
-          className="shrink-0 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-semibold tabular-nums transition hover:bg-white/10"
+          className="shrink-0 rounded-lg border border-border/70 bg-muted/70 px-2.5 py-1.5 text-xs font-semibold tabular-nums transition hover:bg-white/10"
           aria-label="Playback speed"
         >
           {speed}×

@@ -105,14 +105,14 @@ function EvalPage() {
       actions={<Badge className="bg-gradient-brand text-white">{recs.length} runs analysed</Badge>}
     >
       {empty ? (
-        <Card className="glass border-white/10"><CardContent className="p-10 text-center text-sm text-muted-foreground">
+        <Card className="glass border-border/70"><CardContent className="p-10 text-center text-sm text-muted-foreground">
           Upload a recording to start collecting evaluation data.
         </CardContent></Card>
       ) : (
         <>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
             {cards.map((m) => (
-              <Card key={m.label} className="glass border-white/10">
+              <Card key={m.label} className="glass border-border/70">
                 <CardContent className="p-4">
                   <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{m.label}</div>
                   <div className="mt-1 text-2xl font-bold text-gradient">
@@ -125,7 +125,7 @@ function EvalPage() {
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            <Card className="glass border-white/10"><CardContent className="p-5">
+            <Card className="glass border-border/70"><CardContent className="p-5">
               <h3 className="mb-2 text-sm font-semibold">Latency per run (seconds)</h3>
               <div className="h-64"><ResponsiveContainer>
                 <LineChart data={trend}>
@@ -138,7 +138,7 @@ function EvalPage() {
               </ResponsiveContainer></div>
             </CardContent></Card>
 
-            <Card className="glass border-white/10"><CardContent className="p-5">
+            <Card className="glass border-border/70"><CardContent className="p-5">
               <h3 className="mb-2 text-sm font-semibold">Workspace profile</h3>
               <div className="h-64"><ResponsiveContainer>
                 <RadarChart data={radar}>
@@ -150,7 +150,7 @@ function EvalPage() {
               </ResponsiveContainer></div>
             </CardContent></Card>
 
-            <Card className="glass border-white/10"><CardContent className="p-5">
+            <Card className="glass border-border/70"><CardContent className="p-5">
               <h3 className="mb-2 text-sm font-semibold">Avg latency by model (s)</h3>
               <div className="h-56"><ResponsiveContainer>
                 <BarChart data={byModel}>
@@ -163,7 +163,7 @@ function EvalPage() {
               </ResponsiveContainer></div>
             </CardContent></Card>
 
-            <Card className="glass border-white/10"><CardContent className="p-5">
+            <Card className="glass border-border/70"><CardContent className="p-5">
               <h3 className="mb-3 text-sm font-semibold">Derived research metrics</h3>
               <div className="space-y-3 text-sm">
                 {[
@@ -173,7 +173,7 @@ function EvalPage() {
                   ["Action items extracted", `${sums.reduce((a, s) => a + ((s.action_items ?? []).length), 0)}`],
                   ["Unique topics detected", `${new Set(sums.flatMap((s) => s.topics ?? [])).size}`],
                 ].map(([k, v]) => (
-                  <div key={k} className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+                  <div key={k} className="flex items-center justify-between rounded-lg border border-border/70 bg-muted/50 px-3 py-2">
                     <span className="text-muted-foreground">{k}</span>
                     <span className="font-medium">{v}</span>
                   </div>

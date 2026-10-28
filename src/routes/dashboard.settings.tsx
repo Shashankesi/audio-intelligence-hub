@@ -97,7 +97,7 @@ function SettingsPage() {
       }
     >
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="space-y-5 p-6">
             <div className="flex items-center gap-2">
               <span className="rounded-lg bg-gradient-brand p-2 text-white"><Sparkles className="h-4 w-4" /></span>
@@ -110,7 +110,7 @@ function SettingsPage() {
             <div className="space-y-2">
               <Label>Speech-to-text model</Label>
               <Select value={model} onValueChange={setModel}>
-                <SelectTrigger className="bg-white/5"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-muted/70"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {MODELS.map((m) => <SelectItem key={m.id} value={m.id}>{m.label}</SelectItem>)}
                 </SelectContent>
@@ -121,7 +121,7 @@ function SettingsPage() {
             <div className="space-y-2">
               <Label>Spoken language</Label>
               <Select value={lang} onValueChange={setLang}>
-                <SelectTrigger className="bg-white/5"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="bg-muted/70"><SelectValue /></SelectTrigger>
                 <SelectContent>
                   {LANGS.map(([v, l]) => <SelectItem key={v} value={v}>{l}</SelectItem>)}
                 </SelectContent>
@@ -129,14 +129,14 @@ function SettingsPage() {
               <p className="text-[11px] text-muted-foreground">Auto-detect works well for most meetings.</p>
             </div>
 
-            <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-[11px] text-muted-foreground">
+            <div className="rounded-lg border border-border/70 bg-muted/50 p-3 text-[11px] text-muted-foreground">
               <ShieldCheck className="mr-1 inline h-3.5 w-3.5" />
               Transcription and summarization run on our managed AI backend. Your audio never leaves your workspace.
             </div>
           </CardContent>
         </Card>
 
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="space-y-4 p-6">
             <div className="flex items-center gap-2">
               <span className="rounded-lg bg-white/10 p-2"><Sliders className="h-4 w-4" /></span>
@@ -151,7 +151,7 @@ function SettingsPage() {
               ["weekly", "Weekly usage summary"],
               ["compactTables", "Compact table density"],
             ] as [keyof Prefs, string][]).map(([k, l]) => (
-              <div key={k} className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3">
+              <div key={k} className="flex items-center justify-between rounded-lg border border-border/70 bg-muted/50 px-4 py-3">
                 <span className="text-sm">{l}</span>
                 <Switch checked={prefs[k]} onCheckedChange={(v) => setPref(k, v)} />
               </div>
@@ -159,7 +159,7 @@ function SettingsPage() {
             <div className="flex gap-2 pt-1">
               <Button
                 variant="outline"
-                className="border-white/15 bg-white/5"
+                className="border-border bg-muted/70"
                 onClick={() => { setPrefs(DEFAULT_PREFS); localStorage.setItem(PREF_KEY, JSON.stringify(DEFAULT_PREFS)); toast.success("Preferences reset"); }}
               >
                 Reset to defaults

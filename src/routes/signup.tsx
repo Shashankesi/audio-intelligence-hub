@@ -71,18 +71,18 @@ function SignupPage() {
               "Executive summaries, key points and owned action items",
               "Searchable history, exports and evaluation dashboards",
             ].map((t) => (
-              <li key={t} className="glass flex items-start gap-3 rounded-xl border border-white/10 px-4 py-3 text-sm text-muted-foreground">
+              <li key={t} className="glass flex items-start gap-3 rounded-xl border border-border/70 px-4 py-3 text-sm text-muted-foreground">
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-brand" />{t}
               </li>
             ))}
           </ul>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 0.1, type: "spring", stiffness: 90, damping: 16 }} className="relative z-10">
-          <Card className="glass border-white/10 shadow-glow">
+          <Card className="glass border-border/70 shadow-glow">
             <CardContent className="p-8">
               <h2 className="text-xl font-semibold">Create account</h2>
               <p className="mt-1 text-sm text-muted-foreground">Start transcribing in seconds.</p>
-              <Button type="button" variant="outline" onClick={google} className="mt-6 w-full border-white/15 bg-white/5">
+              <Button type="button" variant="outline" onClick={google} className="mt-6 w-full border-border bg-muted/70">
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.4-1.68 4.1-5.5 4.1-3.3 0-6-2.73-6-6.1s2.7-6.1 6-6.1c1.88 0 3.14.8 3.86 1.5l2.63-2.53C16.86 3.4 14.66 2.4 12 2.4 6.9 2.4 2.8 6.5 2.8 11.6s4.1 9.2 9.2 9.2c5.31 0 8.83-3.73 8.83-8.99 0-.6-.06-1.06-.14-1.51H12z"/></svg>
                 Continue with Google
               </Button>

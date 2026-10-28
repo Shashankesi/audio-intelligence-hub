@@ -105,7 +105,7 @@ function AnalyticsPage() {
     <PageShell title="Analytics" description="Understand how your workspace processes meetings over time.">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
-          <Card key={s.label} className="glass rounded-[28px] border-white/10">
+          <Card key={s.label} className="glass rounded-[28px] border-border/70">
             <CardContent className="p-5">
               <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
                 <span>{s.label}</span><s.icon className="h-4 w-4" />
@@ -119,42 +119,42 @@ function AnalyticsPage() {
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="glass rounded-[28px] border-white/10 lg:col-span-2">
+        <Card className="glass rounded-[28px] border-border/70 lg:col-span-2">
           <CardContent className="p-5">
             <h2 className="mb-2 text-sm font-semibold">Minutes processed · last 30 days</h2>
             <div className="h-64">
-              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}><TrendLine data={trend} label="minutes" /></Suspense>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-muted/70" />}><TrendLine data={trend} label="minutes" /></Suspense>
             </div>
           </CardContent>
         </Card>
-        <Card className="glass rounded-[28px] border-white/10">
+        <Card className="glass rounded-[28px] border-border/70">
           <CardContent className="p-5">
             <h2 className="mb-2 text-sm font-semibold">Pipeline status</h2>
             <div className="h-64">
-              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}><DistributionPie data={statusData} /></Suspense>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-muted/70" />}><DistributionPie data={statusData} /></Suspense>
             </div>
           </CardContent>
         </Card>
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="glass rounded-[28px] border-white/10 lg:col-span-2">
+        <Card className="glass rounded-[28px] border-border/70 lg:col-span-2">
           <CardContent className="p-5">
             <h2 className="mb-2 text-sm font-semibold">Most discussed topics</h2>
             <div className="h-72">
               {topicData.length === 0 ? (
                 <p className="grid h-full place-items-center text-xs text-muted-foreground">Generate a few summaries to unlock topic intelligence.</p>
               ) : (
-                <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}><HorizontalBars data={topicData} /></Suspense>
+                <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-muted/70" />}><HorizontalBars data={topicData} /></Suspense>
               )}
             </div>
           </CardContent>
         </Card>
-        <Card className="glass rounded-[28px] border-white/10">
+        <Card className="glass rounded-[28px] border-border/70">
           <CardContent className="relative p-5">
             <h2 className="mb-2 text-sm font-semibold">Storage</h2>
             <div className="relative h-52">
-              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-white/5" />}>
+              <Suspense fallback={<Skeleton className="h-full w-full rounded-2xl bg-muted/70" />}>
                 <RadialGauge value={totalBytes} max={STORAGE_QUOTA_BYTES} />
               </Suspense>
               <div className="pointer-events-none absolute inset-0 grid place-items-center text-center">

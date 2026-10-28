@@ -101,13 +101,13 @@ function LandingPage() {
       <section id="demo" className="mx-auto max-w-6xl px-6 py-24">
         <SectionHeading eyebrow="Live demo" title="See the intelligence in action" subtitle="A realistic preview of how AudioInsight processes a weekly product sync." />
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
-          <Card className="glass border-white/10">
+          <Card className="glass border-border/70">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="text-sm font-semibold">product-sync-w42.wav</div>
                 <Badge variant="secondary" className="bg-white/10 text-xs">32:14</Badge>
               </div>
-              <div className="mt-4 rounded-xl border border-dashed border-white/15 bg-white/[0.02] p-6">
+              <div className="mt-4 rounded-xl border border-dashed border-border bg-white/[0.02] p-6">
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <UploadCloud className="h-4 w-4" /> Drop audio here or click to upload
                 </div>
@@ -118,15 +118,15 @@ function LandingPage() {
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-3 gap-2 text-center text-xs">
-                <div className="rounded-lg bg-white/5 p-3"><div className="font-semibold">Whisper</div><div className="text-muted-foreground">Small</div></div>
-                <div className="rounded-lg bg-white/5 p-3"><div className="font-semibold">EN</div><div className="text-muted-foreground">Detected</div></div>
-                <div className="rounded-lg bg-white/5 p-3"><div className="font-semibold">Groq</div><div className="text-muted-foreground">Llama-3.1</div></div>
+                <div className="rounded-lg bg-muted/70 p-3"><div className="font-semibold">Whisper</div><div className="text-muted-foreground">Small</div></div>
+                <div className="rounded-lg bg-muted/70 p-3"><div className="font-semibold">EN</div><div className="text-muted-foreground">Detected</div></div>
+                <div className="rounded-lg bg-muted/70 p-3"><div className="font-semibold">Groq</div><div className="text-muted-foreground">Llama-3.1</div></div>
               </div>
             </CardContent>
           </Card>
 
           <div className="space-y-4">
-            <Card className="glass border-white/10">
+            <Card className="glass border-border/70">
               <CardContent className="p-6">
                 <div className="mb-3 flex items-center gap-2 text-sm font-semibold"><FileText className="h-4 w-4" /> Transcript</div>
                 <p className="text-sm leading-relaxed text-muted-foreground">
@@ -137,7 +137,7 @@ function LandingPage() {
                 </p>
               </CardContent>
             </Card>
-            <Card className="glass border-white/10">
+            <Card className="glass border-border/70">
               <CardContent className="p-6">
                 <div className="mb-3 flex items-center gap-2 text-sm font-semibold"><Sparkles className="h-4 w-4" /> Summary</div>
                 <p className="text-sm text-muted-foreground">
@@ -147,15 +147,15 @@ function LandingPage() {
               </CardContent>
             </Card>
             <div className="grid gap-4 sm:grid-cols-3">
-              <Card className="glass border-white/10"><CardContent className="p-4">
+              <Card className="glass border-border/70"><CardContent className="p-4">
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold"><ListChecks className="h-4 w-4" /> Action items</div>
                 <ul className="space-y-1 text-xs text-muted-foreground"><li>• Marco: extend A/B one week</li><li>• Priya: publish latency notes</li><li>• Ana: draft Q4 doc</li></ul>
               </CardContent></Card>
-              <Card className="glass border-white/10"><CardContent className="p-4">
+              <Card className="glass border-border/70"><CardContent className="p-4">
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold"><Layers className="h-4 w-4" /> Topics</div>
                 <div className="flex flex-wrap gap-1.5">{["Streaming","Pricing","Roadmap","Latency"].map(t => <Badge key={t} variant="secondary" className="bg-white/10 text-[10px]">{t}</Badge>)}</div>
               </CardContent></Card>
-              <Card className="glass border-white/10"><CardContent className="p-4">
+              <Card className="glass border-border/70"><CardContent className="p-4">
                 <div className="mb-2 flex items-center gap-2 text-xs font-semibold"><ClipboardCheck className="h-4 w-4" /> Decisions</div>
                 <ul className="space-y-1 text-xs text-muted-foreground"><li>• Delay broad pricing rollout</li><li>• Ship streaming to all users</li></ul>
               </CardContent></Card>
@@ -192,7 +192,7 @@ function LandingPage() {
         <SectionHeading eyebrow="Product" title="A workspace built for your voice" />
         <div className="mt-12">
           <Tabs defaultValue="dashboard" className="w-full">
-            <TabsList className="mx-auto flex w-fit border border-white/10 bg-white/5 backdrop-blur">
+            <TabsList className="mx-auto flex w-fit border border-border/70 bg-muted/70 backdrop-blur">
               {["dashboard","transcript","summary","evaluation","history"].map(t => (
                 <TabsTrigger key={t} value={t} className="capitalize data-[state=active]:bg-gradient-brand data-[state=active]:text-white">{t}</TabsTrigger>
               ))}
@@ -218,7 +218,7 @@ function LandingPage() {
         <div className="mt-10 glass rounded-2xl px-2 py-1">
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((f, i) => (
-              <AccordionItem key={i} value={"i" + i} className="border-white/10 px-4">
+              <AccordionItem key={i} value={"i" + i} className="border-border/70 px-4">
                 <AccordionTrigger className="text-left">{f.q}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{f.a}</AccordionContent>
               </AccordionItem>
@@ -236,7 +236,7 @@ function LandingPage() {
           <p className="mx-auto mt-3 max-w-xl text-sm text-muted-foreground md:text-base">Get accurate transcripts and structured summaries the moment your call ends.</p>
           <div className="mt-6 flex justify-center gap-3">
             <Button size="lg" className="bg-gradient-brand text-white shadow-glow" asChild><Link to="/signup">Create free account</Link></Button>
-            <Button size="lg" variant="outline" className="border-white/15 bg-white/5" asChild><Link to="/dashboard">Explore dashboard</Link></Button>
+            <Button size="lg" variant="outline" className="border-border bg-muted/70" asChild><Link to="/dashboard">Explore dashboard</Link></Button>
           </div>
         </div>
       </section>
@@ -259,7 +259,7 @@ function Hero() {
       <motion.div style={{ y: yText }} className="grid w-full items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
         <div>
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
-            <Badge className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
+            <Badge className="rounded-full border border-border/70 bg-muted/70 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
               <span className="mr-2 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-4" />
               Faster-Whisper transcription · LLM summaries
             </Badge>
@@ -299,7 +299,7 @@ function Hero() {
               </Button>
             </Magnetic>
             <Magnetic strength={0.2}>
-              <Button size="lg" variant="outline" className="h-12 rounded-full border-white/15 bg-white/5 px-6 backdrop-blur transition hover:bg-white/10" asChild>
+              <Button size="lg" variant="outline" className="h-12 rounded-full border-border bg-muted/70 px-6 backdrop-blur transition hover:bg-white/10" asChild>
                 <a href="#demo"><Play className="mr-2 h-4 w-4" /> Watch the flow</a>
               </Button>
             </Magnetic>
@@ -369,7 +369,7 @@ function FeatureBento() {
             </div>
             <div className="mt-8 space-y-2">
               {["Decisions", "Owners", "Deadlines"].map((t, i) => (
-                <div key={t} className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-xs">
+                <div key={t} className="flex items-center justify-between rounded-xl border border-border/70 bg-muted/50 px-3 py-2 text-xs">
                   <span className="text-muted-foreground">{t}</span>
                   <span className="font-medium text-gradient">{[6, 4, 3][i]}</span>
                 </div>
@@ -443,7 +443,7 @@ function TimelineStep({ step, index }: { step: (typeof steps)[number]; index: nu
       <motion.span
         animate={inView ? { scale: [0.6, 1.15, 1], opacity: 1 } : { opacity: 0.3 }}
         transition={{ duration: 0.6, ease: EASE }}
-        className="absolute -left-10 top-6 grid h-7 w-7 place-items-center rounded-full border border-white/15 bg-background text-[10px] font-semibold shadow-glow md:-left-16"
+        className="absolute -left-10 top-6 grid h-7 w-7 place-items-center rounded-full border border-border bg-background text-[10px] font-semibold shadow-glow md:-left-16"
       >
         {index + 1}
       </motion.span>
@@ -515,13 +515,13 @@ function MockDashboard() {
   return (
     <div className="grid gap-3 p-4 md:grid-cols-4">
       {["Total Uploads","Summaries","Avg Time","Storage"].map((k, i) => (
-        <div key={k} className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+        <div key={k} className="rounded-lg border border-border/70 bg-muted/50 p-3">
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{k}</div>
           <div className="mt-1 text-lg font-bold">{["248","231","42s","3.2 GB"][i]}</div>
           <div className="mt-2 h-1.5 rounded-full bg-white/10"><div className="h-1.5 rounded-full bg-gradient-brand" style={{ width: [70,64,80,55][i] + "%" }} /></div>
         </div>
       ))}
-      <div className="md:col-span-4 rounded-lg border border-white/10 bg-white/[0.03] p-4">
+      <div className="md:col-span-4 rounded-lg border border-border/70 bg-muted/50 p-4">
         <div className="mb-2 text-xs font-semibold">Activity</div>
         <div className="flex h-24 items-end gap-2">
           {Array.from({ length: 24 }).map((_, i) => (
@@ -535,14 +535,14 @@ function MockDashboard() {
 function MockTranscript() {
   return (
     <div className="grid gap-3 p-4 md:grid-cols-3">
-      <div className="md:col-span-2 rounded-lg border border-white/10 bg-white/[0.03] p-4 text-sm leading-relaxed">
+      <div className="md:col-span-2 rounded-lg border border-border/70 bg-muted/50 p-4 text-sm leading-relaxed">
         <p><span className="text-gradient font-semibold">00:12</span> Priya: The streaming release looked healthy through the weekend.</p>
         <p className="mt-2"><span className="text-gradient font-semibold">00:37</span> Marco: I'm inclined to hold the pricing copy for another week.</p>
         <p className="mt-2"><span className="text-gradient font-semibold">01:04</span> Ana: I'll pull the numbers and share Thursday.</p>
       </div>
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+      <div className="rounded-lg border border-border/70 bg-muted/50 p-4">
         <div className="text-xs font-semibold">Search transcript</div>
-        <div className="mt-2 h-8 rounded bg-white/5" />
+        <div className="mt-2 h-8 rounded bg-muted/70" />
         <div className="mt-4 text-xs text-muted-foreground">Words 1,204 · Speakers 3 · 32:14</div>
       </div>
     </div>
@@ -551,11 +551,11 @@ function MockTranscript() {
 function MockSummary() {
   return (
     <div className="grid gap-3 p-4 md:grid-cols-2">
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+      <div className="rounded-lg border border-border/70 bg-muted/50 p-4">
         <div className="text-xs font-semibold">Short Summary</div>
         <p className="mt-2 text-sm text-muted-foreground">Streaming ships broadly; pricing A/B extends one week.</p>
       </div>
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+      <div className="rounded-lg border border-border/70 bg-muted/50 p-4">
         <div className="text-xs font-semibold">Action Items</div>
         <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
           <li>• Marco — extend pricing A/B</li><li>• Priya — publish latency notes</li><li>• Ana — draft Q4 doc</li>
@@ -568,12 +568,12 @@ function MockEvaluation() {
   return (
     <div className="grid grid-cols-5 gap-2 p-4">
       {["WER","ROUGE","BERT","Time","CPU"].map((m) => (
-        <div key={m} className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-center">
+        <div key={m} className="rounded-lg border border-border/70 bg-muted/50 p-3 text-center">
           <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{m}</div>
           <div className="mt-1 text-lg font-bold text-gradient">—</div>
         </div>
       ))}
-      <div className="col-span-5 flex h-28 items-end gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] p-3">
+      <div className="col-span-5 flex h-28 items-end gap-1.5 rounded-lg border border-border/70 bg-muted/50 p-3">
         {Array.from({ length: 40 }).map((_, i) => <div key={i} className="flex-1 rounded-t bg-gradient-brand" style={{ height: 10 + ((i * 7) % 90) + "%" }} />)}
       </div>
     </div>
@@ -582,9 +582,9 @@ function MockEvaluation() {
 function MockHistory() {
   return (
     <div className="p-4">
-      <div className="rounded-lg border border-white/10 bg-white/[0.03]">
+      <div className="rounded-lg border border-border/70 bg-muted/50">
         {["team-sync.wav","interview-anna.mp3","lecture-cnn.m4a","podcast-ep41.mp3"].map((n, i) => (
-          <div key={n} className={"flex items-center justify-between px-4 py-3 text-sm " + (i ? "border-t border-white/10" : "")}>
+          <div key={n} className={"flex items-center justify-between px-4 py-3 text-sm " + (i ? "border-t border-border/70" : "")}>
             <span className="flex items-center gap-2"><Waves className="h-4 w-4" /> {n}</span>
             <span className="text-xs text-muted-foreground">{["12:04","28:11","54:22","41:07"][i]}</span>
             <span className="text-xs text-muted-foreground">Ready</span>

@@ -35,12 +35,12 @@ function ForgotPage() {
     <div className="relative grid min-h-screen place-items-center px-6">
       <Backdrop />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
-        <Card className="glass border-white/10">
+        <Card className="glass border-border/70">
           <CardContent className="p-8">
             <h2 className="text-xl font-semibold">Forgot your password?</h2>
             <p className="mt-1 text-sm text-muted-foreground">We'll email you a secure reset link.</p>
             {sent ? (
-              <div className="mt-6 rounded-lg border border-white/10 bg-white/5 p-4 text-sm text-muted-foreground">
+              <div className="mt-6 rounded-lg border border-border/70 bg-muted/70 p-4 text-sm text-muted-foreground">
                 If an account exists for <span className="text-foreground">{email}</span>, a reset link is on its way.
               </div>
             ) : (

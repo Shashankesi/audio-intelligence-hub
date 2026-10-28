@@ -36,8 +36,8 @@ export function NotificationCenter() {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[min(92vw,24rem)] rounded-2xl border-white/10 bg-background/85 p-0 backdrop-blur-xl">
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+      <PopoverContent align="end" className="w-[min(92vw,24rem)] rounded-2xl border-border/70 bg-background/85 p-0 backdrop-blur-xl">
+        <div className="flex items-center justify-between border-b border-border/70 px-4 py-3">
           <div className="text-sm font-semibold">Notifications</div>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={markAllRead} disabled={!unread}>
@@ -69,7 +69,7 @@ export function NotificationCenter() {
 function Row({ n, onRead }: { n: AppNotification; onRead: () => void }) {
   const Icon = ICONS[n.level] ?? Info;
   const body = (
-    <div className="flex gap-3 px-4 py-3 transition hover:bg-white/[0.04]">
+    <div className="flex gap-3 px-4 py-3 transition hover:bg-muted/50">
       <Icon className={`mt-0.5 h-4 w-4 shrink-0 ${TONE[n.level] ?? TONE.info}`} />
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
