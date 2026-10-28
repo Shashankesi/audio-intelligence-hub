@@ -52,7 +52,7 @@ export function TranscriptChat({ recordingId }: { recordingId: string }) {
       <div className="max-h-[46vh] flex-1 space-y-4 overflow-auto pr-1">
         {messages.length === 0 && (
           <div className="rounded-xl border border-border/70 bg-muted/50 p-5 text-sm text-muted-foreground">
-            <MessageSquareText className="mb-2 h-5 w-5 text-fuchsia-300" />
+            <MessageSquareText className="mb-2 h-5 w-5 text-rose-700" />
             Ask anything about this meeting. Answers are grounded in the transcript and cite timestamps when available.
           </div>
         )}

@@ -44,7 +44,7 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-[28px] [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-border/70 [&>[data-sidebar=sidebar]]:glass"
+      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-xl [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-border/70 [&>[data-sidebar=sidebar]]:glass"
     >
       <SidebarHeader>
         <Link to="/" className="group flex items-center gap-2.5 px-2 py-2">
@@ -102,8 +102,8 @@ export function AppSidebar() {
             </div>
           </div>
           <div className="mt-2 flex items-center justify-between rounded-lg bg-muted/70 px-2 py-1.5 text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">
-            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-fuchsia-300" /> {count} recordings</span>
-            <span className="rounded bg-emerald-400/15 px-1.5 py-0.5 text-emerald-300">Pro</span>
+            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-rose-700" /> {count} recordings</span>
+            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-emerald-700">Pro</span>
           </div>
         </div>
       </SidebarFooter>

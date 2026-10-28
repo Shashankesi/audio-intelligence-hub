@@ -102,7 +102,7 @@ function HistoryPage() {
     setSelected(allOnPage ? selected.filter((id) => !pageRows.some((r) => r.id === id)) : [...new Set([...selected, ...pageRows.map((r) => r.id)])]);
 
   const statusColor = (s: string) =>
-    s === "done" ? "bg-emerald-500/15 text-emerald-300" : s === "failed" ? "bg-red-500/15 text-red-300" : "bg-amber-500/15 text-amber-300";
+    s === "done" ? "bg-emerald-500/15 text-emerald-700" : s === "failed" ? "bg-red-500/15 text-red-300" : "bg-amber-500/15 text-amber-700";
 
   return (
     <PageShell
@@ -110,7 +110,7 @@ function HistoryPage() {
       description="Search, organise and bulk-manage every meeting you've processed."
       actions={<Button asChild className="bg-gradient-brand text-white shadow-glow"><Link to="/dashboard/upload">New upload</Link></Button>}
     >
-      <Card className="glass rounded-[28px] border-border/70">
+      <Card className="glass rounded-xl border-border/70">
         <CardContent className="p-4">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <div className="relative min-w-56 flex-1">
@@ -199,9 +199,9 @@ function HistoryPage() {
                     <TableCell><Checkbox checked={selected.includes(r.id)} onCheckedChange={(v) => setSelected(v ? [...selected, r.id] : selected.filter((i) => i !== r.id))} aria-label={`Select ${r.name}`} /></TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        {r.pinned && <Pin className="h-3.5 w-3.5 shrink-0 text-cyan-300" />}
+                        {r.pinned && <Pin className="h-3.5 w-3.5 shrink-0 text-cyan-700" />}
                         <Link to="/dashboard/summary" search={{ id: r.id } as never} className="max-w-[220px] truncate font-medium hover:underline">{r.name}</Link>
-                        {duplicates.has(r.id) && <Badge variant="outline" className="border-amber-400/30 text-[10px] text-amber-300"><Copy className="mr-1 h-3 w-3" />dup</Badge>}
+                        {duplicates.has(r.id) && <Badge variant="outline" className="border-amber-400/30 text-[10px] text-amber-700"><Copy className="mr-1 h-3 w-3" />dup</Badge>}
                       </div>
                       {(r.tags ?? []).length > 0 && (
                         <div className="mt-1 flex flex-wrap gap-1">
@@ -218,7 +218,7 @@ function HistoryPage() {
                     </TableCell>
                     <TableCell className="text-right whitespace-nowrap">
                       <Button size="icon" variant="ghost" aria-label="Toggle favorite" onClick={() => patch.mutate({ ids: [r.id], patch: { favorite: !r.favorite } })}>
-                        <Star className={`h-4 w-4 ${r.favorite ? "fill-amber-300 text-amber-300" : ""}`} />
+                        <Star className={`h-4 w-4 ${r.favorite ? "fill-amber-300 text-amber-700" : ""}`} />
                       </Button>
                       <Button size="icon" variant="ghost" asChild aria-label="Open transcript"><Link to="/dashboard/transcription" search={{ id: r.id } as never}><FileText className="h-4 w-4" /></Link></Button>
                       <Button size="icon" variant="ghost" asChild aria-label="Open summary"><Link to="/dashboard/summary" search={{ id: r.id } as never}><Sparkles className="h-4 w-4" /></Link></Button>

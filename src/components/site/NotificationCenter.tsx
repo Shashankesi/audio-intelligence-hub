@@ -13,10 +13,10 @@ const ICONS = {
 } as const;
 
 const TONE = {
-  success: "text-emerald-300",
+  success: "text-emerald-700",
   error: "text-red-300",
-  warning: "text-amber-300",
-  info: "text-sky-300",
+  warning: "text-amber-700",
+  info: "text-sky-700",
 } as const;
 
 export function NotificationCenter() {

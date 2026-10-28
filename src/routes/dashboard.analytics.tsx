@@ -105,7 +105,7 @@ function AnalyticsPage() {
     <PageShell title="Analytics" description="Understand how your workspace processes meetings over time.">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {stats.map((s) => (
-          <Card key={s.label} className="glass rounded-[28px] border-border/70">
+          <Card key={s.label} className="glass rounded-xl border-border/70">
             <CardContent className="p-5">
               <div className="flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
                 <span>{s.label}</span><s.icon className="h-4 w-4" />
@@ -119,7 +119,7 @@ function AnalyticsPage() {
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="glass rounded-[28px] border-border/70 lg:col-span-2">
+        <Card className="glass rounded-xl border-border/70 lg:col-span-2">
           <CardContent className="p-5">
             <h2 className="mb-2 text-sm font-semibold">Minutes processed · last 30 days</h2>
             <div className="h-64">
@@ -127,7 +127,7 @@ function AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="glass rounded-[28px] border-border/70">
+        <Card className="glass rounded-xl border-border/70">
           <CardContent className="p-5">
             <h2 className="mb-2 text-sm font-semibold">Pipeline status</h2>
             <div className="h-64">
@@ -138,7 +138,7 @@ function AnalyticsPage() {
       </div>
 
       <div className="mt-4 grid gap-4 lg:grid-cols-3">
-        <Card className="glass rounded-[28px] border-border/70 lg:col-span-2">
+        <Card className="glass rounded-xl border-border/70 lg:col-span-2">
           <CardContent className="p-5">
             <h2 className="mb-2 text-sm font-semibold">Most discussed topics</h2>
             <div className="h-72">
@@ -150,7 +150,7 @@ function AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="glass rounded-[28px] border-border/70">
+        <Card className="glass rounded-xl border-border/70">
           <CardContent className="relative p-5">
             <h2 className="mb-2 text-sm font-semibold">Storage</h2>
             <div className="relative h-52">

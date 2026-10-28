@@ -9,7 +9,7 @@ function highlight(text: string, q: string) {
   const parts = text.split(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"));
   return parts.map((p, i) =>
     p.toLowerCase() === q.toLowerCase() ? (
-      <mark key={i} className="rounded bg-fuchsia-400/30 px-0.5 text-foreground">
+      <mark key={i} className="rounded bg-fuchsia-100 px-0.5 text-foreground">
         {p}
       </mark>
     ) : (

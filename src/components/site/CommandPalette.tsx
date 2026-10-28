@@ -128,7 +128,7 @@ export function CommandPalette({ open, onOpenChange }: Props) {
           <CommandGroup heading={q ? "Meetings" : "Pinned & favorites"}>
             {fileMatches.map((r) => (
               <CommandItem key={r.id} value={`file-${r.id}-${r.name}`} onSelect={() => openRecording(r.id, r.name, "/dashboard/summary")}>
-                {r.favorite ? <Star className="mr-2 h-4 w-4 text-amber-300" /> : <Waves className="mr-2 h-4 w-4" />}
+                {r.favorite ? <Star className="mr-2 h-4 w-4 text-amber-700" /> : <Waves className="mr-2 h-4 w-4" />}
                 <span className="truncate">{r.name}</span>
                 <CommandShortcut>{new Date(r.created_at).toLocaleDateString()}</CommandShortcut>
               </CommandItem>
@@ -144,7 +144,7 @@ export function CommandPalette({ open, onOpenChange }: Props) {
                 value={`hit-${h.id}-${h.where}-${i}`}
                 onSelect={() => openRecording(h.id, h.name, h.where === "Transcript" ? "/dashboard/transcription" : "/dashboard/summary")}
               >
-                <Hash className="mr-2 h-4 w-4 text-fuchsia-300" />
+                <Hash className="mr-2 h-4 w-4 text-rose-700" />
                 <span className="min-w-0">
                   <span className="block truncate text-xs font-medium">{h.name} · {h.where}</span>
                   <span className="block truncate text-[11px] text-muted-foreground">{h.snippet}</span>

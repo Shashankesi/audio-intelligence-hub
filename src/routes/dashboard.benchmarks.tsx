@@ -273,7 +273,7 @@ function References() {
               className={`flex w-full items-center justify-between gap-2 rounded-xl px-3 py-2 text-left text-xs transition ${active ? "bg-muted" : "hover:bg-muted/50"}`}
             >
               <span className="truncate">{r.name}</span>
-              {has && <Badge variant="outline" className="border-emerald-400/40 text-[9px] text-emerald-300">ref</Badge>}
+              {has && <Badge variant="outline" className="border-emerald-400/40 text-[9px] text-emerald-700">ref</Badge>}
             </button>
           );
         })}

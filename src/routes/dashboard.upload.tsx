@@ -165,7 +165,7 @@ function UploadPage() {
                     <Progress value={progress} className="h-2" />
                   </div>
                   {phase === "done" && (
-                    <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="mt-4 flex items-center gap-2 text-sm text-emerald-300">
+                    <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="mt-4 flex items-center gap-2 text-sm text-emerald-700">
                       <Check className="h-4 w-4" /> Done — opening summary.
                     </motion.div>
                   )}

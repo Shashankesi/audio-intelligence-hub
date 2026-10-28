@@ -142,7 +142,7 @@ function Transcription() {
             </Link>
           </Button>
           <Button variant="outline" className="border-border bg-muted/70" onClick={copy}>
-            {copied ? <Check className="mr-2 h-4 w-4 text-emerald-300" /> : <Copy className="mr-2 h-4 w-4" />}
+            {copied ? <Check className="mr-2 h-4 w-4 text-emerald-700" /> : <Copy className="mr-2 h-4 w-4" />}
             {copied ? "Copied" : "Copy"}
           </Button>
           <Button variant="outline" className="border-border bg-muted/70" onClick={() => download("txt")}>
@@ -247,7 +247,7 @@ function Transcription() {
                             onClick={() => seekRef.current?.(s.start)}
                             className="flex w-full gap-2 rounded-lg px-2 py-1.5 text-left text-xs transition hover:bg-muted/70"
                           >
-                            <span className="font-mono tabular-nums text-fuchsia-300">{formatClock(s.start)}</span>
+                            <span className="font-mono tabular-nums text-rose-700">{formatClock(s.start)}</span>
                             <span className="line-clamp-1 text-muted-foreground">{s.text}</span>
                           </button>
                         ))}

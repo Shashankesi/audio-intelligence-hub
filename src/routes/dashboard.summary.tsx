@@ -46,9 +46,9 @@ export const Route = createFileRoute("/dashboard/summary")({
 });
 
 const PRIORITY_STYLES: Record<string, string> = {
-  high: "bg-red-400/15 text-red-200 border-red-400/25",
-  medium: "bg-amber-400/15 text-amber-200 border-amber-400/25",
-  low: "bg-emerald-400/15 text-emerald-200 border-emerald-400/25",
+  high: "bg-red-100 text-red-200 border-red-400/25",
+  medium: "bg-amber-100 text-amber-700 border-amber-400/25",
+  low: "bg-emerald-100 text-emerald-700 border-emerald-400/25",
 };
 const STATUS_NEXT: Record<ActionItem["status"], ActionItem["status"]> = {
   open: "in_progress",
@@ -296,11 +296,11 @@ function SummaryPage() {
                   {arr("suggestions").length > 0 && (
                     <div className="mt-6 rounded-2xl border border-border/70 bg-muted/50 p-4">
                       <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
-                        <Lightbulb className="h-3.5 w-3.5 text-amber-300" /> AI suggestions
+                        <Lightbulb className="h-3.5 w-3.5 text-amber-700" /> AI suggestions
                       </div>
                       <ul className="space-y-1.5 text-sm">
                         {arr("suggestions").map((x: string, i: number) => (
-                          <li key={i} className="flex gap-2"><span className="text-fuchsia-300">→</span>{x}</li>
+                          <li key={i} className="flex gap-2"><span className="text-rose-700">→</span>{x}</li>
                         ))}
                       </ul>
                     </div>
@@ -340,7 +340,7 @@ function SummaryPage() {
                     <SectionTitle>Quick bullets</SectionTitle>
                     <ul className="space-y-2 text-sm">
                       {(arr("bullet_points").length ? arr("bullet_points") : arr("key_points")).map((k: string, i: number) => (
-                        <li key={i} className="flex gap-2"><span className="text-fuchsia-300">•</span>{k}</li>
+                        <li key={i} className="flex gap-2"><span className="text-rose-700">•</span>{k}</li>
                       ))}
                     </ul>
                   </div>
@@ -430,9 +430,9 @@ function SummaryPage() {
                               className={cn(
                                 "rounded-full border px-2.5 py-1 text-[11px] font-semibold capitalize transition",
                                 a.status === "done"
-                                  ? "border-emerald-400/25 bg-emerald-400/15 text-emerald-200"
+                                  ? "border-emerald-400/25 bg-emerald-100 text-emerald-700"
                                   : a.status === "in_progress"
-                                    ? "border-sky-400/25 bg-sky-400/15 text-sky-200"
+                                    ? "border-sky-400/25 bg-sky-100 text-sky-700"
                                     : "border-border bg-muted/70 text-muted-foreground",
                               )}
                             >
@@ -466,7 +466,7 @@ function SummaryPage() {
                           <Link
                             to="/dashboard/transcription"
                             search={{ id, t: toSeconds(e.time) } as any}
-                            className="font-mono text-xs text-fuchsia-300 hover:underline"
+                            className="font-mono text-xs text-rose-700 hover:underline"
                           >
                             {e.time}
                           </Link>
@@ -488,7 +488,7 @@ function SummaryPage() {
                   ) : (
                     arr("decisions").map((d: any, i: number) => (
                       <div key={i} className="rounded-xl border border-border/70 bg-muted/50 p-4">
-                        <div className="flex gap-2 text-sm font-medium"><GitBranch className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />{d.text}</div>
+                        <div className="flex gap-2 text-sm font-medium"><GitBranch className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />{d.text}</div>
                         {d.rationale && <p className="mt-1.5 pl-6 text-xs text-muted-foreground">{d.rationale}</p>}
                       </div>
                     ))
@@ -505,7 +505,7 @@ function SummaryPage() {
                   ) : (
                     arr("risks").map((r: any, i: number) => (
                       <div key={i} className="flex items-start justify-between gap-3 rounded-xl border border-border/70 bg-muted/50 p-4 text-sm">
-                        <span className="flex gap-2"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />{r.text}</span>
+                        <span className="flex gap-2"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />{r.text}</span>
                         <Badge className={cn("shrink-0 border capitalize", PRIORITY_STYLES[r.severity ?? "medium"])}>{r.severity}</Badge>
                       </div>
                     ))
@@ -522,7 +522,7 @@ function SummaryPage() {
                   ) : (
                     arr("deadlines").map((d: any, i: number) => (
                       <div key={i} className="flex items-center justify-between gap-3 rounded-xl border border-border/70 bg-muted/50 p-4 text-sm">
-                        <span className="flex gap-2"><CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-sky-300" />{d.label}</span>
+                        <span className="flex gap-2"><CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-sky-700" />{d.label}</span>
                         <span className="shrink-0 text-xs text-muted-foreground">
                           {d.date ?? "date not stated"}{d.owner ? ` · ${d.owner}` : ""}
                         </span>
@@ -541,12 +541,12 @@ function SummaryPage() {
                   ) : (
                     arr("quotes").map((q: any, i: number) => (
                       <blockquote key={i} className="rounded-2xl border border-border/70 bg-muted/50 p-4">
-                        <Quote className="mb-2 h-4 w-4 text-fuchsia-300" />
+                        <Quote className="mb-2 h-4 w-4 text-rose-700" />
                         <p className="text-sm italic leading-relaxed">“{q.text}”</p>
                         <footer className="mt-2 text-xs text-muted-foreground">
                           {q.speaker ?? "Unattributed"}
                           {q.time && q.time !== "--:--" && (
-                            <Link to="/dashboard/transcription" search={{ id, t: toSeconds(q.time) } as any} className="ml-2 font-mono text-fuchsia-300 hover:underline">
+                            <Link to="/dashboard/transcription" search={{ id, t: toSeconds(q.time) } as any} className="ml-2 font-mono text-rose-700 hover:underline">
                               {q.time}
                             </Link>
                           )}
