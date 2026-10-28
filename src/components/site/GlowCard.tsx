@@ -36,7 +36,7 @@ export function GlowCard({ children, className, tilt = true, spotlight = true }:
   const bg = useTransform(
     [px, py],
     ([a, b]: number[]) =>
-      `radial-gradient(340px circle at ${a}px ${b}px, oklch(0.62 0.21 293 / 0.22), transparent 70%)`,
+      `radial-gradient(340px circle at ${a}px ${b}px, oklch(0.51 0.105 255 / 0.10), transparent 70%)`,
   );
 
   return (

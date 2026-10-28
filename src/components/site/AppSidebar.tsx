@@ -28,7 +28,7 @@ const secondary = [
 ];
 
 const navItemClass =
-  "relative rounded-lg transition-colors hover:bg-white/[0.06] hover:text-white data-[active=true]:bg-white/[0.10] data-[active=true]:text-white data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-4 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-primary-300";
+  "relative rounded-lg transition-colors hover:bg-white/[0.06] hover:text-white data-[active=true]:bg-white/[0.10] data-[active=true]:text-white data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-4 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-white/70";
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
@@ -52,7 +52,7 @@ export function AppSidebar() {
     >
       <SidebarHeader>
         <Link to="/" className="group flex items-center gap-2.5 px-2 py-2">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary-600 transition-transform duration-200 group-hover:scale-105">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary transition-transform duration-200 group-hover:scale-105">
             <Waves className="h-4 w-4 text-white" />
           </span>
           <span className="truncate text-sm font-semibold tracking-tight text-white group-data-[collapsible=icon]:hidden">AudioInsight</span>
@@ -115,14 +115,14 @@ export function AppSidebar() {
         <div className="mx-2 mb-2 rounded-lg border border-white/10 bg-white/[0.04] p-3">
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8 border border-white/10">
-              <AvatarFallback className="bg-primary-600 text-xs font-semibold text-white">{initial}</AvatarFallback>
+              <AvatarFallback className="bg-primary text-xs font-semibold text-white">{initial}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
               <div className="truncate text-xs font-medium text-white">{name}</div>
-              <div className="truncate text-[10px] text-sidebar-foreground/70">{user?.email ?? "—"}</div>
+              <div className="truncate text-[10px] text-white/60">{user?.email ?? "—"}</div>
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between rounded-md bg-white/[0.06] px-2 py-1.5 text-[10px] text-sidebar-foreground/80 group-data-[collapsible=icon]:hidden">
+          <div className="mt-2 flex items-center justify-between rounded-md bg-white/[0.06] px-2 py-1.5 text-[10px] text-white/70 group-data-[collapsible=icon]:hidden">
             <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-teal-300" /> {count} recordings</span>
             <span className="rounded bg-white/10 px-1.5 py-0.5 text-white/90">Pro</span>
           </div>
