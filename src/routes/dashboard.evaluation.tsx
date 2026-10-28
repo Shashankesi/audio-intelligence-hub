@@ -133,7 +133,7 @@ function EvalPage() {
                   <XAxis dataKey="run" stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
                   <YAxis stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
                   <Tooltip contentStyle={tip} />
-                  <Line type="monotone" dataKey="latency" stroke="oklch(0.72 0.19 295)" strokeWidth={3} dot={false} />
+                  <Line type="monotone" dataKey="latency" stroke="oklch(0.51 0.105 255)" strokeWidth={3} dot={false} />
                 </LineChart>
               </ResponsiveContainer></div>
             </CardContent></Card>
@@ -158,7 +158,7 @@ function EvalPage() {
                   <XAxis dataKey="model" stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
                   <YAxis stroke="oklch(1 0 0 / 0.4)" fontSize={11} />
                   <Tooltip contentStyle={tip} />
-                  <Bar dataKey="latency" fill="oklch(0.72 0.19 295)" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="latency" fill="oklch(0.51 0.105 255)" radius={[6, 6, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer></div>
             </CardContent></Card>

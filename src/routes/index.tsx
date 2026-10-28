@@ -417,7 +417,7 @@ function HowItWorks() {
         <div className="absolute left-[13px] top-0 h-full w-px bg-white/10 md:left-[27px]" />
         <motion.div
           className="absolute left-[13px] top-0 w-px origin-top md:left-[27px]"
-          style={{ height: lineHeight, background: "var(--gradient-brand)", boxShadow: "0 0 18px oklch(0.62 0.21 293 / 0.8)" }}
+          style={{ height: lineHeight, background: "var(--gradient-brand)", boxShadow: "0 0 12px oklch(0.51 0.105 255 / 0.35)" }}
         />
         <ol className="space-y-6">
           {steps.map((s, i) => (
