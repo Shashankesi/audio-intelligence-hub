@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Upload, History, BarChart3, Database, UserRound, Settings as SettingsIcon, LifeBuoy, Waves, FileText, Sparkles, Zap, FlaskConical } from "lucide-react";
+import { LayoutDashboard, Upload, History, BarChart3, Database, UserRound, Settings as SettingsIcon, LifeBuoy, Waves, FileText, Sparkles, Zap, FlaskConical, BookOpen, Gauge } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useSession } from "@/lib/use-session";
@@ -14,9 +14,13 @@ const main = [
   { title: "History", url: "/dashboard/history", icon: History },
   { title: "Analytics", url: "/dashboard/analytics", icon: BarChart3 },
 ];
-const secondary = [
+const research = [
+  { title: "Summarization Performance", url: "/dashboard/performance", icon: Gauge },
+  { title: "Research Models", url: "/dashboard/research", icon: BookOpen },
   { title: "Evaluation", url: "/dashboard/evaluation", icon: BarChart3 },
   { title: "Benchmarks", url: "/dashboard/benchmarks", icon: FlaskConical },
+];
+const secondary = [
   { title: "Datasets", url: "/dashboard/datasets", icon: Database },
   { title: "Profile", url: "/dashboard/profile", icon: UserRound },
   { title: "Settings", url: "/dashboard/settings", icon: SettingsIcon },
@@ -24,7 +28,7 @@ const secondary = [
 ];
 
 const navItemClass =
-  "relative rounded-xl transition-all duration-300 hover:bg-muted/70 hover:text-foreground data-[active=true]:bg-muted data-[active=true]:shadow-[inset_0_1px_0_oklch(1_0_0/0.08)] data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-5 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-gradient-brand";
+  "relative rounded-lg transition-colors hover:bg-white/[0.06] hover:text-white data-[active=true]:bg-white/[0.10] data-[active=true]:text-white data-[active=true]:before:absolute data-[active=true]:before:left-0 data-[active=true]:before:top-1/2 data-[active=true]:before:h-4 data-[active=true]:before:w-[3px] data-[active=true]:before:-translate-y-1/2 data-[active=true]:before:rounded-full data-[active=true]:before:bg-primary-300";
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
@@ -44,14 +48,14 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-xl [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-border/70 [&>[data-sidebar=sidebar]]:glass"
+      className="border-0 [&>[data-sidebar=sidebar]]:my-3 [&>[data-sidebar=sidebar]]:ml-3 [&>[data-sidebar=sidebar]]:h-[calc(100svh-1.5rem)] [&>[data-sidebar=sidebar]]:rounded-xl [&>[data-sidebar=sidebar]]:border [&>[data-sidebar=sidebar]]:border-black/20 [&>[data-sidebar=sidebar]]:shadow-lg"
     >
       <SidebarHeader>
         <Link to="/" className="group flex items-center gap-2.5 px-2 py-2">
-          <span className="relative grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-brand shadow-glow transition-transform duration-300 group-hover:scale-105">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary-600 transition-transform duration-200 group-hover:scale-105">
             <Waves className="h-4 w-4 text-white" />
           </span>
-          <span className="truncate text-sm font-semibold tracking-tight group-data-[collapsible=icon]:hidden">AudioInsight</span>
+          <span className="truncate text-sm font-semibold tracking-tight text-white group-data-[collapsible=icon]:hidden">AudioInsight</span>
         </Link>
       </SidebarHeader>
       <SidebarContent>
@@ -63,7 +67,24 @@ export function AppSidebar() {
                 <SidebarMenuItem key={i.url}>
                   <SidebarMenuButton asChild isActive={active(i.url, i.exact)} tooltip={i.title} className={navItemClass}>
                     <Link to={i.url}>
-                      <i.icon className="transition-transform duration-300 group-hover/menu-item:scale-110" />
+                      <i.icon className="transition-transform duration-200 group-hover/menu-item:scale-110" />
+                      <span>{i.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Research</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {research.map((i) => (
+                <SidebarMenuItem key={i.url}>
+                  <SidebarMenuButton asChild isActive={active(i.url)} tooltip={i.title} className={navItemClass}>
+                    <Link to={i.url}>
+                      <i.icon className="transition-transform duration-200 group-hover/menu-item:scale-110" />
                       <span>{i.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -80,7 +101,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={i.url}>
                   <SidebarMenuButton asChild isActive={active(i.url)} tooltip={i.title} className={navItemClass}>
                     <Link to={i.url}>
-                      <i.icon className="transition-transform duration-300 group-hover/menu-item:scale-110" />
+                      <i.icon className="transition-transform duration-200 group-hover/menu-item:scale-110" />
                       <span>{i.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -91,19 +112,19 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <div className="mx-2 mb-2 rounded-xl border border-border/70 bg-muted/50 p-3">
+        <div className="mx-2 mb-2 rounded-lg border border-white/10 bg-white/[0.04] p-3">
           <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8 border border-border/70">
-              <AvatarFallback className="bg-gradient-brand text-xs font-semibold text-white">{initial}</AvatarFallback>
+            <Avatar className="h-8 w-8 border border-white/10">
+              <AvatarFallback className="bg-primary-600 text-xs font-semibold text-white">{initial}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1 group-data-[collapsible=icon]:hidden">
-              <div className="truncate text-xs font-medium">{name}</div>
-              <div className="truncate text-[10px] text-muted-foreground">{user?.email ?? "—"}</div>
+              <div className="truncate text-xs font-medium text-white">{name}</div>
+              <div className="truncate text-[10px] text-sidebar-foreground/70">{user?.email ?? "—"}</div>
             </div>
           </div>
-          <div className="mt-2 flex items-center justify-between rounded-lg bg-muted/70 px-2 py-1.5 text-[10px] text-muted-foreground group-data-[collapsible=icon]:hidden">
-            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-rose-700" /> {count} recordings</span>
-            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-emerald-700">Pro</span>
+          <div className="mt-2 flex items-center justify-between rounded-md bg-white/[0.06] px-2 py-1.5 text-[10px] text-sidebar-foreground/80 group-data-[collapsible=icon]:hidden">
+            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-teal-300" /> {count} recordings</span>
+            <span className="rounded bg-white/10 px-1.5 py-0.5 text-white/90">Pro</span>
           </div>
         </div>
       </SidebarFooter>
