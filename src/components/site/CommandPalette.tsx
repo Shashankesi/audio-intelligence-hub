@@ -11,7 +11,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import {
-  LayoutDashboard, Upload, FileText, Sparkles, History, BarChart3,
+  LayoutDashboard, Upload, FileText, Sparkles, History, BarChart3, BookOpen,
   Database, UserRound, Settings as SettingsIcon, LifeBuoy, LogOut, Home, Moon, Sun,
   Waves, Clock3, Star, Hash,
 } from "lucide-react";
