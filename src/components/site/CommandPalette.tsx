@@ -11,7 +11,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import {
-  LayoutDashboard, Upload, FileText, Sparkles, History, BarChart3,
+  LayoutDashboard, Upload, FileText, Sparkles, History, BarChart3, BookOpen,
   Database, UserRound, Settings as SettingsIcon, LifeBuoy, LogOut, Home, Moon, Sun,
   Waves, Clock3, Star, Hash,
 } from "lucide-react";
@@ -187,6 +187,8 @@ export function CommandPalette({ open, onOpenChange }: Props) {
         <CommandSeparator />
         <CommandGroup heading="Workspace">
           <CommandItem onSelect={() => go("/dashboard/evaluation")}><BarChart3 className="mr-2 h-4 w-4" />Evaluation</CommandItem>
+          <CommandItem onSelect={() => go("/dashboard/performance")}><BarChart3 className="mr-2 h-4 w-4" />Summarization Performance</CommandItem>
+          <CommandItem onSelect={() => go("/dashboard/research-models")}><BookOpen className="mr-2 h-4 w-4" />Research Models</CommandItem>
           <CommandItem onSelect={() => go("/dashboard/benchmarks")}><BarChart3 className="mr-2 h-4 w-4" />Benchmarks</CommandItem>
           <CommandItem onSelect={() => go("/dashboard/datasets")}><Database className="mr-2 h-4 w-4" />Datasets</CommandItem>
           <CommandItem onSelect={() => go("/dashboard/profile")}><UserRound className="mr-2 h-4 w-4" />Profile</CommandItem>

@@ -19,6 +19,8 @@ const CRUMBS: Record<string, string> = {
   summary: "Summary",
   history: "History",
   evaluation: "Evaluation",
+  performance: "Summarization Performance",
+  "research-models": "Research Models",
   benchmarks: "Benchmarks",
   datasets: "Datasets",
   profile: "Profile",

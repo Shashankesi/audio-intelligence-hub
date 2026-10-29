@@ -20,7 +20,9 @@ import { Route as DashboardUploadRouteImport } from './routes/dashboard.upload'
 import { Route as DashboardTranscriptionRouteImport } from './routes/dashboard.transcription'
 import { Route as DashboardSummaryRouteImport } from './routes/dashboard.summary'
 import { Route as DashboardSettingsRouteImport } from './routes/dashboard.settings'
+import { Route as DashboardResearchModelsRouteImport } from './routes/dashboard.research-models'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
+import { Route as DashboardPerformanceRouteImport } from './routes/dashboard.performance'
 import { Route as DashboardHistoryRouteImport } from './routes/dashboard.history'
 import { Route as DashboardHelpRouteImport } from './routes/dashboard.help'
 import { Route as DashboardEvaluationRouteImport } from './routes/dashboard.evaluation'
@@ -83,9 +85,19 @@ const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardResearchModelsRoute = DashboardResearchModelsRouteImport.update({
+  id: '/research-models',
+  path: '/research-models',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPerformanceRoute = DashboardPerformanceRouteImport.update({
+  id: '/performance',
+  path: '/performance',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
@@ -132,7 +144,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
   '/dashboard/history': typeof DashboardHistoryRoute
+  '/dashboard/performance': typeof DashboardPerformanceRoute
   '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/research-models': typeof DashboardResearchModelsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/summary': typeof DashboardSummaryRoute
   '/dashboard/transcription': typeof DashboardTranscriptionRoute
@@ -151,7 +165,9 @@ export interface FileRoutesByTo {
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
   '/dashboard/history': typeof DashboardHistoryRoute
+  '/dashboard/performance': typeof DashboardPerformanceRoute
   '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/research-models': typeof DashboardResearchModelsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/summary': typeof DashboardSummaryRoute
   '/dashboard/transcription': typeof DashboardTranscriptionRoute
@@ -172,7 +188,9 @@ export interface FileRoutesById {
   '/dashboard/evaluation': typeof DashboardEvaluationRoute
   '/dashboard/help': typeof DashboardHelpRoute
   '/dashboard/history': typeof DashboardHistoryRoute
+  '/dashboard/performance': typeof DashboardPerformanceRoute
   '/dashboard/profile': typeof DashboardProfileRoute
+  '/dashboard/research-models': typeof DashboardResearchModelsRoute
   '/dashboard/settings': typeof DashboardSettingsRoute
   '/dashboard/summary': typeof DashboardSummaryRoute
   '/dashboard/transcription': typeof DashboardTranscriptionRoute
@@ -194,7 +212,9 @@ export interface FileRouteTypes {
     | '/dashboard/evaluation'
     | '/dashboard/help'
     | '/dashboard/history'
+    | '/dashboard/performance'
     | '/dashboard/profile'
+    | '/dashboard/research-models'
     | '/dashboard/settings'
     | '/dashboard/summary'
     | '/dashboard/transcription'
@@ -213,7 +233,9 @@ export interface FileRouteTypes {
     | '/dashboard/evaluation'
     | '/dashboard/help'
     | '/dashboard/history'
+    | '/dashboard/performance'
     | '/dashboard/profile'
+    | '/dashboard/research-models'
     | '/dashboard/settings'
     | '/dashboard/summary'
     | '/dashboard/transcription'
@@ -233,7 +255,9 @@ export interface FileRouteTypes {
     | '/dashboard/evaluation'
     | '/dashboard/help'
     | '/dashboard/history'
+    | '/dashboard/performance'
     | '/dashboard/profile'
+    | '/dashboard/research-models'
     | '/dashboard/settings'
     | '/dashboard/summary'
     | '/dashboard/transcription'
@@ -329,11 +353,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardSettingsRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/research-models': {
+      id: '/dashboard/research-models'
+      path: '/research-models'
+      fullPath: '/dashboard/research-models'
+      preLoaderRoute: typeof DashboardResearchModelsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/profile': {
       id: '/dashboard/profile'
       path: '/profile'
       fullPath: '/dashboard/profile'
       preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/performance': {
+      id: '/dashboard/performance'
+      path: '/performance'
+      fullPath: '/dashboard/performance'
+      preLoaderRoute: typeof DashboardPerformanceRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/history': {
@@ -388,7 +426,9 @@ interface DashboardRouteChildren {
   DashboardEvaluationRoute: typeof DashboardEvaluationRoute
   DashboardHelpRoute: typeof DashboardHelpRoute
   DashboardHistoryRoute: typeof DashboardHistoryRoute
+  DashboardPerformanceRoute: typeof DashboardPerformanceRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
+  DashboardResearchModelsRoute: typeof DashboardResearchModelsRoute
   DashboardSettingsRoute: typeof DashboardSettingsRoute
   DashboardSummaryRoute: typeof DashboardSummaryRoute
   DashboardTranscriptionRoute: typeof DashboardTranscriptionRoute
@@ -403,7 +443,9 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardEvaluationRoute: DashboardEvaluationRoute,
   DashboardHelpRoute: DashboardHelpRoute,
   DashboardHistoryRoute: DashboardHistoryRoute,
+  DashboardPerformanceRoute: DashboardPerformanceRoute,
   DashboardProfileRoute: DashboardProfileRoute,
+  DashboardResearchModelsRoute: DashboardResearchModelsRoute,
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardSummaryRoute: DashboardSummaryRoute,
   DashboardTranscriptionRoute: DashboardTranscriptionRoute,

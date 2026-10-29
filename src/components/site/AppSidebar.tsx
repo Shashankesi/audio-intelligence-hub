@@ -16,7 +16,7 @@ const main = [
 ];
 const research = [
   { title: "Summarization Performance", url: "/dashboard/performance", icon: Gauge },
-  { title: "Research Models", url: "/dashboard/research", icon: BookOpen },
+  { title: "Research Models", url: "/dashboard/research-models", icon: BookOpen },
   { title: "Evaluation", url: "/dashboard/evaluation", icon: BarChart3 },
   { title: "Benchmarks", url: "/dashboard/benchmarks", icon: FlaskConical },
 ];
