@@ -110,7 +110,7 @@ function PerformancePage() {
             <CardContent className="p-4">
               <div className="text-[10px] uppercase tracking-widest text-muted-foreground">{r.metric}</div>
               <div className="mt-1 text-3xl font-bold text-gradient">
-                <AnimatedCounter value={r.value} decimals={1} />%
+                <AnimatedCounter value={r.value} format={fmt1} />%
               </div>
             </CardContent>
           </Card>
@@ -119,7 +119,7 @@ function PerformancePage() {
           <CardContent className="p-4">
             <div className="text-[10px] uppercase tracking-widest text-muted-foreground">Overall meeting-brief quality</div>
             <div className="mt-1 text-3xl font-bold text-gradient">
-              <AnimatedCounter value={90.4} decimals={1} />%
+              <AnimatedCounter value={90.4} format={fmt1} />%
             </div>
             <p className="mt-2 text-xs text-muted-foreground">Human-judged completeness and usability of the assembled brief.</p>
           </CardContent>
